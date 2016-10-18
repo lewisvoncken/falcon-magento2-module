@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceContainer name="footer" remove="true"/>
+        <referenceContainer name="header.panel" remove="true"/>
+        <referenceContainer name="header-wrapper" remove="true"/>
+        <referenceBlock name="top.search" remove="true"/>
+        <referenceBlock name="minicart" remove="true"/>
+        <referenceBlock name="copyright" remove="true"/>
+        <referenceBlock name="store.menu" remove="true"/>
+
+        <referenceContainer name="page.wrapper">
+            <block class="Magento\Framework\View\Element\Template"
+                   name="hatimeria_link"
+                   before="-"
+                   template="Hatimeria_Reagento::link.phtml"/>
+        </referenceContainer>
+    </body>
+</page>

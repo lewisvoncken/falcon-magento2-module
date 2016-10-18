@@ -1,0 +1,15 @@
+{
+    "name": "hatimeria/reagento-api",
+    "description": "Hatimeria Reagento Rest API",
+    "type": "magento2-module",
+    "version": "0.0.1",
+    "license": "proprietary",
+    "autoload": {
+        "files": [
+            "src/registration.php"
+        ],
+        "psr-4": {
+            "Hatimeria\\Reagento\\": "src"
+        }
+    }
+}

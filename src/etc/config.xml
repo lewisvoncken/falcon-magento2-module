@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <hatimeria>
+            <api>
+                <app_logo_img>http://emperia.ch/logo.png</app_logo_img>
+                <app_home_url>http://emperia.ch/</app_home_url>
+            </api>
+        </hatimeria>
+    </default>
+</config>

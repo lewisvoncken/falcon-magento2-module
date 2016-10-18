@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Webapi:etc/webapi.xsd">
+    <route url="/V1/info" method="GET">
+        <service class="Hatimeria\Reagento\Api\InfoInterface" method="getInfo"/>
+        <resources>
+            <resource ref="anonymous"/>
+        </resources>
+    </route>
+    <route url="/V1/url/:url" method="GET">
+        <service class="Hatimeria\Reagento\Api\UrlInterface" method="getUrl"/>
+        <resources>
+            <resource ref="anonymous"/>
+        </resources>
+    </route>
+    <route url="/V1/categories/homepage" method="GET">
+        <service class="Hatimeria\Reagento\Api\HomeCategoriesInterface" method="getHomepageList"/>
+        <resources>
+            <resource ref="Magento_Catalog::categories"/>
+        </resources>
+    </route>
+</routes>
