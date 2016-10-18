@@ -19,6 +19,6 @@ class Data extends AbstractHelper
 
     private function getConfigValue($key, $scope = ScopeInterface::SCOPE_STORE)
     {
-        return $this->scopeConfig->getValue("hatimeria/api/$key", $scope);
+        return $this->scopeConfig->getValue("hatimeria/reagento/$key", $scope);
     }
 }
