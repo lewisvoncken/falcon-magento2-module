@@ -3,8 +3,8 @@
     <default>
         <hatimeria>
             <reagento>
-                <app_logo_img>http://emperia.ch/logo.png</app_logo_img>
-                <app_home_url>http://emperia.ch/</app_home_url>
+                <app_logo_img>/logo.png</app_logo_img>
+                <app_home_url>/</app_home_url>
             </reagento>
         </hatimeria>
     </default>
