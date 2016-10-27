@@ -5,13 +5,13 @@ namespace Hatimeria\Reagento\Setup;
 use Magento\Eav\Setup\EavSetup;
 use Magento\Eav\Setup\EavSetupFactory;
 use Magento\Framework\Setup\ModuleContextInterface;
-use Magento\Framework\Setup\SchemaSetupInterface;
-use Magento\Framework\Setup\UpgradeSchemaInterface;
+use Magento\Framework\Setup\ModuleDataSetupInterface;
+use Magento\Framework\Setup\UpgradeDataInterface;
 
 /**
  * @package Hatimeria\Reagento\Setup
  */
-class UpgradeSchema implements UpgradeSchemaInterface
+class UpgradeData implements UpgradeDataInterface
 {
     /**
      * EAV setup factory
@@ -21,8 +21,6 @@ class UpgradeSchema implements UpgradeSchemaInterface
     private $eavSetupFactory;
 
     /**
-     * Init
-     *
      * @param EavSetupFactory $eavSetupFactory
      */
     public function __construct(EavSetupFactory $eavSetupFactory)
@@ -30,11 +28,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
         $this->eavSetupFactory = $eavSetupFactory;
     }
 
-    /**
-     * @param SchemaSetupInterface $setup
-     * @param ModuleContextInterface $context
-     */
-    public function upgrade(SchemaSetupInterface $setup, ModuleContextInterface $context)
+    public function upgrade(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {
         $setup->startSetup();
 
