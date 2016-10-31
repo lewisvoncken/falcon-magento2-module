@@ -4,7 +4,7 @@ namespace Hatimeria\Reagento\Model;
 
 use Hatimeria\Reagento\Api\UrlInterface;
 use Magento\Cms\Model\PageRepository;
-use Magento\Cms\Model\ResourceModel\Page;
+use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\UrlRewrite\Model\UrlFinderInterface;
 
@@ -18,7 +18,7 @@ class Url implements UrlInterface
     protected $urlFinder;
 
     public function __construct(
-        \Magento\Framework\Api\DataObjectHelper $dataFactory,
+        DataObjectHelper $dataFactory,
         UrlFinderInterface $urlFinder,
         PageRepository $pageRepository
     ) {
@@ -28,7 +28,9 @@ class Url implements UrlInterface
     }
 
     /**
-     * @return Page
+     * @param string $url
+     * @return \Magento\Cms\Model\Page
+     * @throws NoSuchEntityException
      */
     public function getUrl($url)
     {

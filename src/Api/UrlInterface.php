@@ -9,7 +9,8 @@ interface UrlInterface
 {
     /**
      * @return \Magento\Cms\Api\Data\PageInterface
-     * @param string
+     * @param string $url
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function getUrl($url);
 }
