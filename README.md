@@ -10,3 +10,8 @@ Custom API endpoints provided by this module:
 
 - Put Magento2 application to a subdomain of the main domain (for example `api.example.com`)
 - Set `cookie domain` config value to the domain domain with a leading dot symbol (for example, `.example.com`)
+
+## Local development of Reagento Module (using HAT >= v1.0.5)
+
+Use `hat li --mounted-packages [path-to-reagento-module]` flag to install the project and
+get this module symlinked into your project's dependencies.
