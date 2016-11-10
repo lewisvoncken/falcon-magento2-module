@@ -35,6 +35,18 @@ class UpgradeData implements UpgradeDataInterface
         /** @var EavSetup $eavSetup */
         $eavSetup = $this->eavSetupFactory->create();
 
+        if(version_compare($context->getVersion(), '0.0.1') < 0) {
+            $this->addCategoryShowOnHomeField($eavSetup);
+        }
+
+        $setup->endSetup();
+    }
+
+    /**
+     * @param EavSetup $eavSetup
+     */
+    protected function addCategoryShowOnHomeField($eavSetup)
+    {
         /**
          * Add attributes to the eav/attribute
          */
@@ -57,7 +69,5 @@ class UpgradeData implements UpgradeDataInterface
                 'is_filterable_in_grid' => true,
             ]
         );
-
-        $setup->endSetup();
     }
 }
