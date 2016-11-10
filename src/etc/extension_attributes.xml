@@ -3,5 +3,6 @@
     <extension_attributes for="Magento\Catalog\Api\Data\ProductInterface">
         <attribute code="thumbnail_resized_url" type="string" />
         <attribute code="thumbnail_url" type="string" />
+        <attribute code="media_gallery_sizes" type="Hatimeria\Reagento\Api\Data\GalleryMediaEntrySizeInterface[]" />
     </extension_attributes>
 </config>
