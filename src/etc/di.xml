@@ -2,7 +2,8 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Hatimeria\Reagento\Api\InfoInterface" type="Hatimeria\Reagento\Model\Info" />
     <preference for="Hatimeria\Reagento\Api\UrlInterface" type="Hatimeria\Reagento\Model\Url" />
-    <preference for="Hatimeria\Reagento\Api\Data\InfoDataInterface" type="Hatimeria\Reagento\Model\InfoData" />
     <preference for="Hatimeria\Reagento\Api\HomeCategoriesInterface" type="Hatimeria\Reagento\Model\CategoryRepository" />
     <preference for="Hatimeria\Reagento\Api\Data\CategorySearchResultsInterface" type="Magento\Framework\Api\SearchResults" />
+    <preference for="Hatimeria\Reagento\Api\Data\GalleryMediaEntrySizeInterface" type="Hatimeria\Reagento\Model\GalleryMediaEntrySize" />
+    <preference for="Hatimeria\Reagento\Api\Data\InfoDataInterface" type="Hatimeria\Reagento\Model\InfoData" />
 </config>
