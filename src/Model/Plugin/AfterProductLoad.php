@@ -31,6 +31,7 @@ class AfterProductLoad
     {
         $this->productHelper->addProductImageAttribute($product);
         $this->productHelper->addProductImageAttribute($product, 'product_list_image', 'thumbnail_url');
+        $this->productHelper->addMediaGallerySizes($product);
 
         return $product;
     }

@@ -10,6 +10,14 @@
                 <width>600</width>
                 <height>600</height>
             </image>
+            <image id="product_media_gallery_item" type="thumbnail">
+                <width>1160</width>
+                <height>1000</height>
+            </image>
+            <image id="product_media_gallery_item_thumbnail" type="thumbnail">
+                <width>80</width>
+                <height>50</height>
+            </image>
             <image id="seller_list_image" type="thumbnail">
                 <width>300</width>
                 <height>300</height>

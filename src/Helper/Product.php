@@ -2,12 +2,14 @@
 
 namespace Hatimeria\Reagento\Helper;
 
+use Hatimeria\Reagento\Api\Data\GalleryMediaEntrySizeInterface;
+use Hatimeria\Reagento\Helper\Image as ImageHelper;
 use Magento\Catalog\Api\Data\ProductExtension;
 use Magento\Catalog\Api\Data\ProductExtensionFactory;
-use Magento\Catalog\Helper\Image as ImageHelper;
 use Magento\Catalog\Model\Product as MagentoProduct;
 use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\App\Helper\Context as AppContext;
+use Magento\Framework\ObjectManagerInterface;
 
 /**
  * @package Hatimeria\Reagento\Helper
@@ -20,18 +22,24 @@ class Product extends AbstractHelper
     /** @var ProductExtensionFactory */
     private $productExtensionFactory;
 
+    /** @var ObjectManagerInterface */
+    protected $objectManager;
+
     /**
      * @param AppContext $context
      * @param ProductExtensionFactory $productExtensionFactory
      * @param ImageHelper $imageHelper
+     * @param ObjectManagerInterface $objectManager
      */
     public function __construct(
         AppContext $context,
         ProductExtensionFactory $productExtensionFactory,
-        ImageHelper $imageHelper
+        ImageHelper $imageHelper,
+        ObjectManagerInterface $objectManager
     ) {
         parent::__construct($context);
         $this->productExtensionFactory = $productExtensionFactory;
+        $this->objectManager = $objectManager;
         $this->imageHelper = $imageHelper;
     }
 
@@ -43,13 +51,39 @@ class Product extends AbstractHelper
     public function addProductImageAttribute($product, $size = 'product_list_thumbnail', $attributeName = 'thumbnail_resized_url')
     {
         $productExtension = $this->getProductExtensionAttributes($product);
-        $helper = $this->imageHelper->init($product, $size);
-        $url = $helper
-            ->setImageFile($product->getImage())
-            ->getUrl();
-
-        $productExtension->setData($attributeName, $url);
+        $productExtension->setData($attributeName, $this->imageHelper->getMainProductImageUrl($product, $size));
         $product->setExtensionAttributes($productExtension);
+    }
+
+    /**
+     * @param MagentoProduct $product
+     */
+    public function addMediaGallerySizes($product)
+    {
+        $sizes = [];
+        $mediaGalleryEntries = $product->getMediaGalleryEntries();
+        if(!$mediaGalleryEntries) {
+            return;
+        }
+
+        $extAttrs = $this->getProductExtensionAttributes($product);
+
+        foreach ($mediaGalleryEntries as $mediaGalleryEntry) {
+            if($mediaGalleryEntry->getMediaType() !== 'image' || $mediaGalleryEntry->isDisabled()) {
+                continue;
+            }
+
+            /** @var GalleryMediaEntrySizeInterface $sizesEntry */
+            $sizesEntry = $this->objectManager->create('Hatimeria\Reagento\Api\Data\GalleryMediaEntrySizeInterface');
+
+            $file = $mediaGalleryEntry->getFile();
+            $sizesEntry->setFull($this->imageHelper->getProductImageUrl($product, $file, 'product_media_gallery_item'));
+            $sizesEntry->setThumbnail($this->imageHelper->getProductImageUrl($product, $file, 'product_media_gallery_item_thumbnail'));
+            $sizes[] = $sizesEntry;
+        }
+
+        $extAttrs->setMediaGallerySizes($sizes);
+        $product->setExtensionAttributes($extAttrs);
     }
 
     /**
