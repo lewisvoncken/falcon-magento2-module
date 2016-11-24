@@ -29,6 +29,9 @@ class AfterProductLoad
      */
     public function afterLoad(Product $product)
     {
+        // Changing "priceCalculation" policy to return a base price for configurable product
+        $product->setPriceCalculation(false);
+
         $this->productHelper->addProductImageAttribute($product);
         $this->productHelper->addProductImageAttribute($product, 'product_list_image', 'thumbnail_url');
         $this->productHelper->addMediaGallerySizes($product);

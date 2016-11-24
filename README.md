@@ -15,3 +15,11 @@ Custom API endpoints provided by this module:
 
 Use `hat li --mounted-packages [path-to-reagento-module]` flag to install the project and
 get this module symlinked into your project's dependencies.
+
+## Price for Configurable products
+
+There's an injected code, that allows to get a base price for Configurable products
+
+```
+$product->setPriceCalculation(false);
+```
