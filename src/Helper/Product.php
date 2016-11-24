@@ -87,6 +87,17 @@ class Product extends AbstractHelper
     }
 
     /**
+     * Changing "priceCalculation" policy to return a base price for configurable product
+     * @param MagentoProduct $product
+     */
+    public function ensurePriceForConfigurableProduct($product)
+    {
+        if($product->getTypeId() === 'configurable') {
+            $product->setPriceCalculation(false);
+        }
+    }
+
+    /**
      * @param MagentoProduct $product
      * @return ProductExtension
      */

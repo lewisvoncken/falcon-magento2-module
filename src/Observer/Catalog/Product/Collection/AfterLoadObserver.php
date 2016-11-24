@@ -34,6 +34,9 @@ class AfterLoadObserver implements ObserverInterface
 
         foreach ($collection as $item) {
             /** @var Product $item */
+
+            $this->productHelper->ensurePriceForConfigurableProduct($item);
+
             $this->productHelper->addProductImageAttribute($item);
             $this->productHelper->addProductImageAttribute($item, 'product_list_image', 'thumbnail_url');
             $this->productHelper->addMediaGallerySizes($item);
