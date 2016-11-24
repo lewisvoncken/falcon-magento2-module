@@ -35,8 +35,7 @@ class AfterLoadObserver implements ObserverInterface
         foreach ($collection as $item) {
             /** @var Product $item */
 
-            // Changing "priceCalculation" policy to return a base price for configurable product
-            $item->setPriceCalculation(false);
+            $this->productHelper->ensurePriceForConfigurableProduct($item);
 
             $this->productHelper->addProductImageAttribute($item);
             $this->productHelper->addProductImageAttribute($item, 'product_list_image', 'thumbnail_url');
