@@ -7,6 +7,7 @@ use Hatimeria\Reagento\Helper\Image as ImageHelper;
 use Magento\Catalog\Api\Data\ProductExtension;
 use Magento\Catalog\Api\Data\ProductExtensionFactory;
 use Magento\Catalog\Model\Product as MagentoProduct;
+use Magento\Catalog\Model\Product\Gallery\ReadHandler as GalleryReadHandler;
 use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\App\Helper\Context as AppContext;
 use Magento\Framework\ObjectManagerInterface;
@@ -25,6 +26,9 @@ class Product extends AbstractHelper
     /** @var ObjectManagerInterface */
     protected $objectManager;
 
+    /** @var GalleryReadHandler */
+    protected $galleryReadHandler;
+
     /**
      * @param AppContext $context
      * @param ProductExtensionFactory $productExtensionFactory
@@ -35,12 +39,14 @@ class Product extends AbstractHelper
         AppContext $context,
         ProductExtensionFactory $productExtensionFactory,
         ImageHelper $imageHelper,
+        GalleryReadHandler $galleryReadHandler,
         ObjectManagerInterface $objectManager
     ) {
         parent::__construct($context);
         $this->productExtensionFactory = $productExtensionFactory;
         $this->objectManager = $objectManager;
         $this->imageHelper = $imageHelper;
+        $this->galleryReadHandler = $galleryReadHandler;
     }
 
     /**
@@ -60,6 +66,8 @@ class Product extends AbstractHelper
      */
     public function addMediaGallerySizes($product)
     {
+        $this->galleryReadHandler->execute($product);
+
         $sizes = [];
         $mediaGalleryEntries = $product->getMediaGalleryEntries();
         if(!$mediaGalleryEntries) {
@@ -99,7 +107,40 @@ class Product extends AbstractHelper
 
     /**
      * @param MagentoProduct $product
-     * @return ProductExtension
+     */
+    public function ensureOptionsForConfigurableProduct($product)
+    {
+        if($product->getTypeId() === 'configurable') {
+            $productExtension = $this->getProductExtensionAttributes($product);
+            $configurableProductOptions = [];
+            $options = $product->getTypeInstance()->getConfigurableAttributesAsArray($product);
+
+            foreach ($options as $optionItem) {
+                $configurableProductOptions[$optionItem['attribute_id']] = [
+                    'id' => $optionItem['id'],
+                    'attribute_id' => $optionItem['attribute_id'],
+                    'label' => $optionItem['label'],
+                    'position' => $optionItem['position'],
+                    'product_id' => $product->getId(),
+                    'values' => [],
+                ];
+
+                foreach ($optionItem['values'] as $optionItemValue) {
+                    $configurableProductOptions[$optionItem['attribute_id']]['values'][] = [
+                        'value_index' => $optionItemValue['value_index'],
+                        'label' => $optionItemValue['label']
+                    ];
+                }
+            }
+
+            $productExtension->setConfigurableProductOptions($configurableProductOptions);
+            $product->setExtensionAttributes($productExtension);
+        }
+    }
+
+    /**
+     * @param MagentoProduct $product
+     * @return ProductExtension|\Magento\Catalog\Api\Data\ProductExtensionInterface
      */
     protected function getProductExtensionAttributes($product)
     {
