@@ -6,6 +6,7 @@
     <preference for="Hatimeria\Reagento\Api\Data\CategorySearchResultsInterface" type="Magento\Framework\Api\SearchResults" />
     <preference for="Hatimeria\Reagento\Api\Data\GalleryMediaEntrySizeInterface" type="Hatimeria\Reagento\Model\GalleryMediaEntrySize" />
     <preference for="Hatimeria\Reagento\Api\Data\InfoDataInterface" type="Hatimeria\Reagento\Model\InfoData" />
+    <preference for="Hatimeria\Reagento\Api\Data\UrlDataInterface" type="Hatimeria\Reagento\Model\UrlData" />
     <preference for="Hatimeria\Reagento\Api\CategoryBreadcrumbsInterface" type="Hatimeria\Reagento\Model\CategoryBreadcrumbs" />
     <type name="Magento\Catalog\Model\ProductRepository">
         <arguments>

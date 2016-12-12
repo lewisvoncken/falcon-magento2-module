@@ -6,7 +6,7 @@
             <resource ref="anonymous"/>
         </resources>
     </route>
-    <route url="/V1/url/:url" method="GET">
+    <route url="/V1/url" method="GET">
         <service class="Hatimeria\Reagento\Api\UrlInterface" method="getUrl"/>
         <resources>
             <resource ref="anonymous"/>
