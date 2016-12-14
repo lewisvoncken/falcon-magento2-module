@@ -8,9 +8,9 @@ namespace Hatimeria\Reagento\Api;
 interface UrlInterface
 {
     /**
-     * @return \Magento\Cms\Api\Data\PageInterface
-     * @param string $url
+     * @return \Hatimeria\Reagento\Api\Data\UrlDataInterface
+     * @param string $requestPath
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    public function getUrl($url);
+    public function getUrl($requestPath);
 }
