@@ -4,7 +4,7 @@
         <attribute code="thumbnail_resized_url" type="string" />
         <attribute code="thumbnail_url" type="string" />
         <attribute code="media_gallery_sizes" type="Hatimeria\Reagento\Api\Data\GalleryMediaEntrySizeInterface[]" />
-        <attribute code="stock_item" type="Magento\CatalogInventory\Api\Data\StockItemInterface">
+        <!--<attribute code="stock_item" type="Magento\CatalogInventory\Api\Data\StockItemInterface">
             <join reference_table="cataloginventory_stock_item" reference_field="product_id" join_on_field="entity_id">
                 <field>item_id</field>
                 <field>product_id</field>
@@ -33,6 +33,6 @@
                 <field>is_decimal_divided</field>
                 <field>website_id</field>
             </join>
-        </attribute>
+        </attribute>-->
     </extension_attributes>
 </config>
