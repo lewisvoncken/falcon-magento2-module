@@ -4,5 +4,35 @@
         <attribute code="thumbnail_resized_url" type="string" />
         <attribute code="thumbnail_url" type="string" />
         <attribute code="media_gallery_sizes" type="Hatimeria\Reagento\Api\Data\GalleryMediaEntrySizeInterface[]" />
+        <!--<attribute code="stock_item" type="Magento\CatalogInventory\Api\Data\StockItemInterface">
+            <join reference_table="cataloginventory_stock_item" reference_field="product_id" join_on_field="entity_id">
+                <field>item_id</field>
+                <field>product_id</field>
+                <field>stock_id</field>
+                <field>qty</field>
+                <field>min_qty</field>
+                <field>use_config_min_qty</field>
+                <field>is_qty_decimal</field>
+                <field>backorders</field>
+                <field>use_config_backorders</field>
+                <field>min_sale_qty</field>
+                <field>use_config_min_sale_qty</field>
+                <field>max_sale_qty</field>
+                <field>use_config_max_sale_qty</field>
+                <field>is_in_stock</field>
+                <field>low_stock_date</field>
+                <field>notify_stock_qty</field>
+                <field>use_config_notify_stock_qty</field>
+                <field>manage_stock</field>
+                <field>use_config_manage_stock</field>
+                <field>stock_status_changed_auto</field>
+                <field>use_config_qty_increments</field>
+                <field>qty_increments</field>
+                <field>use_config_enable_qty_inc</field>
+                <field>enable_qty_increments</field>
+                <field>is_decimal_divided</field>
+                <field>website_id</field>
+            </join>
+        </attribute>-->
     </extension_attributes>
 </config>
