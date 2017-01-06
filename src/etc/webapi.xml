@@ -18,4 +18,16 @@
             <resource ref="Magento_Catalog::categories"/>
         </resources>
     </route>
+    <route url="/V1/categories/:categoryId/breadcrumbs" method="GET">
+        <service class="Hatimeria\Reagento\Api\CategoryBreadcrumbsInterface" method="getList"/>
+        <resources>
+            <resource ref="Magento_Catalog::categories" />
+        </resources>
+    </route>
+    <route url="/V1/guest-carts/:cartId/paypal-fetch-token" method="GET">
+        <service class="Hatimeria\Reagento\Api\Payment\PaypalInterface" method="getToken"/>
+        <resources>
+            <resource ref="anonymous" />
+        </resources>
+    </route>
 </routes>
