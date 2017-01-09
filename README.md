@@ -5,6 +5,7 @@ Custom API endpoints provided by this module:
 - `/rest/V1/url/:url` - get info about cms page by the given URL
 - `/rest/V1/info` - get basic settings for current shop
 - `/rest/V1/categories/homepage` - get categories marked as "Show on homepage" (max - 6)
+- `/rest/V1/contact` with `POST` - send a contact email
 
 ## Important settings (if your Magento instance is on a separate domain)
 

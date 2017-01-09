@@ -9,7 +9,8 @@
     <preference for="Hatimeria\Reagento\Api\Data\UrlDataInterface" type="Hatimeria\Reagento\Model\UrlData" />
     <preference for="Hatimeria\Reagento\Api\CategoryBreadcrumbsInterface" type="Hatimeria\Reagento\Model\CategoryBreadcrumbs" />
     <preference for="Hatimeria\Reagento\Api\Payment\PaypalInterface" type="Hatimeria\Reagento\Model\Payment\Paypal" />
-    <preference for="Hatimeria\Reagento\Api\Payment\Data\PaymentDataInterface" type="Hatimeria\Reagento\Model\Payment\PaypalData" />
+    <preference for="Hatimeria\Reagento\Api\Payment\Data\PaypalDataInterface" type="Hatimeria\Reagento\Model\Payment\PaypalData" />
+    <preference for="Hatimeria\Reagento\Api\ContactFormInterface" type="Hatimeria\Reagento\Model\ContactForm" />
     <type name="Magento\Catalog\Model\ProductRepository">
         <arguments>
             <argument name="collectionFactory" xsi:type="object">ProductRepositoryCollectionFactory</argument>
