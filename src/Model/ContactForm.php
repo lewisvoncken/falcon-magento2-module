@@ -6,6 +6,7 @@ use Hatimeria\Reagento\Api\ContactFormInterface;
 use Magento\Backend\App\Area\FrontNameResolver;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\App\Request\Http;
 use Magento\Framework\DataObject;
 use Magento\Framework\Mail\Template\TransportBuilder;
 use Magento\Store\Model\StoreManagerInterface;
@@ -18,7 +19,7 @@ class ContactForm implements ContactFormInterface
     /** @var StoreManagerInterface */
     private $_storeManager;
 
-    /** @var RequestInterface */
+    /** @var RequestInterface|Http */
     private $_request;
 
     /** @var ScopeConfigInterface */
@@ -50,13 +51,21 @@ class ContactForm implements ContactFormInterface
     {
         $req = $this->_request;
 
-        $message = $req->getParam('message');
-        $firstName = $req->getParam('firstName');
-        $lastName = $req->getParam('lastName');
+        $inputValue = file_get_contents('php://input');
+        if($inputValue) {
+            $inputRequest = json_decode($inputValue, true);
+            foreach ($inputRequest as $key => $value) {
+                $req->setPostValue($key, $value);
+            }
+        }
+
+        $message = $req->getPostValue('message');
+        $firstName = $req->getPostValue('firstName');
+        $lastName = $req->getPostValue('lastName');
         $name = "$firstName $lastName";
-        $email = $req->getParam('email');
-        $telephone = $req->getParam('telephone');
-        $sendTo = $req->getParam('sendTo');
+        $email = $req->getPostValue('email');
+        $telephone = $req->getPostValue('telephone');
+        $sendTo = $req->getPostValue('sendTo');
 
         $dataObject = new DataObject();
         $dataObject->setData([
