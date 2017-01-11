@@ -30,4 +30,10 @@
             <resource ref="anonymous" />
         </resources>
     </route>
+    <route url="/V1/contact" method="POST">
+        <service class="Hatimeria\Reagento\Api\ContactFormInterface" method="send"/>
+        <resources>
+            <resource ref="Magento_Contact::contact" />
+        </resources>
+    </route>
 </routes>
