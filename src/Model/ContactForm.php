@@ -35,6 +35,9 @@ class ContactForm implements ContactFormInterface
         $this->_request = $request;
     }
 
+    /**
+     * @return void
+     */
     public function send()
     {
         $req = $this->_request;
@@ -42,6 +45,7 @@ class ContactForm implements ContactFormInterface
         $message = $req->getParam('message');
         $firstName = $req->getParam('firstName');
         $lastName = $req->getParam('lastName');
+        $name = "$firstName $lastName";
         $email = $req->getParam('email');
         $telephone = $req->getParam('telephone');
         $sendTo = $req->getParam('sendTo');
@@ -53,11 +57,11 @@ class ContactForm implements ContactFormInterface
             ])
             ->setTemplateVars(['data' => [
                 'comment' => $message,
-                'name' => "$firstName $lastName",
+                'name' => $name,
                 'email' => $email,
                 'telephone' => $telephone,
             ]])
-            ->setFrom($email)
+            ->setFrom(['name' => $name, 'email' => $email])
             ->addTo($sendTo)
             ->setReplyTo($email)
             ->getTransport();
