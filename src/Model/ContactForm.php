@@ -66,15 +66,20 @@ class ContactForm implements ContactFormInterface
             'telephone' => $telephone,
         ]);
 
+        $storeName = $this->_scopeConfig->getValue(
+            'general/store_information/name',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
+
         $transport = $this->_transportBuilder
-            ->setTemplateIdentifier($this->_scopeConfig->getValue('contact/email/email_template', 'store'))
+            ->setTemplateIdentifier($this->_scopeConfig->getValue('contact/email/email_template', \Magento\Store\Model\ScopeInterface::SCOPE_STORE))
             ->setTemplateOptions([
                 'area' => FrontNameResolver::AREA_CODE,
                 'store' => $this->_storeManager->getStore()->getId(),
             ])
             ->setTemplateVars(['data' => $dataObject])
             ->setFrom(['name' => $name, 'email' => $email])
-            ->addTo($sendTo)
+            ->addTo([$storeName => $sendTo])
             ->setReplyTo($email)
             ->getTransport();
 
