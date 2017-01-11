@@ -3,39 +3,47 @@
 namespace Hatimeria\Reagento\Model;
 
 use Hatimeria\Reagento\Api\ContactFormInterface;
-use Magento\Framework\App\Area;
+use Magento\Backend\App\Area\FrontNameResolver;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\DataObject;
 use Magento\Framework\Mail\Template\TransportBuilder;
 use Magento\Store\Model\StoreManagerInterface;
 
 class ContactForm implements ContactFormInterface
 {
-    /**
-     * @var TransportBuilder
-     */
+    /** @var TransportBuilder */
     private $_transportBuilder;
 
     /** @var StoreManagerInterface */
     private $_storeManager;
 
+    /** @var RequestInterface */
     private $_request;
+
+    /** @var ScopeConfigInterface */
+    private $_scopeConfig;
 
     /**
      * @param TransportBuilder $transportBuilder
      * @param StoreManagerInterface $storeManager
      * @param RequestInterface $request
+     * @param ScopeConfigInterface $scopeConfig
      */
     public function __construct(
         TransportBuilder $transportBuilder,
         StoreManagerInterface $storeManager,
-        RequestInterface $request
+        RequestInterface $request,
+        ScopeConfigInterface $scopeConfig
     ) {
         $this->_transportBuilder = $transportBuilder;
         $this->_storeManager = $storeManager;
         $this->_request = $request;
+        $this->_scopeConfig = $scopeConfig;
     }
 
     /**
+     * @throws \Exception
      * @return void
      */
     public function send()
@@ -50,17 +58,21 @@ class ContactForm implements ContactFormInterface
         $telephone = $req->getParam('telephone');
         $sendTo = $req->getParam('sendTo');
 
-        $transport = $this->_transportBuilder->setTemplateIdentifier('contact_email_email_template')
+        $dataObject = new DataObject();
+        $dataObject->setData([
+            'comment' => $message,
+            'name' => $name,
+            'email' => $email,
+            'telephone' => $telephone,
+        ]);
+
+        $transport = $this->_transportBuilder
+            ->setTemplateIdentifier($this->_scopeConfig->getValue('contact/email/email_template', 'store'))
             ->setTemplateOptions([
-                'area' => Area::AREA_FRONTEND,
+                'area' => FrontNameResolver::AREA_CODE,
                 'store' => $this->_storeManager->getStore()->getId(),
             ])
-            ->setTemplateVars(['data' => [
-                'comment' => $message,
-                'name' => $name,
-                'email' => $email,
-                'telephone' => $telephone,
-            ]])
+            ->setTemplateVars(['data' => $dataObject])
             ->setFrom(['name' => $name, 'email' => $email])
             ->addTo($sendTo)
             ->setReplyTo($email)
