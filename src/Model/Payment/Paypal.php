@@ -2,7 +2,6 @@
 namespace Hatimeria\Reagento\Model\Payment;
 
 use Hatimeria\Reagento\Api\Payment\PaypalInterface;
-use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Framework\UrlInterface;
 use Hatimeria\Reagento\Model\Payment\PaypalDataFactory;
 use Magento\Framework\ObjectManagerInterface;
@@ -95,10 +94,6 @@ class Paypal implements PaypalInterface
      */
     protected $_checkoutTypes = [];
 
-    /**
-     * @var CustomerSession
-     */
-    protected $customerSession;
 
     /**
      * @var Checkout\Factory
@@ -121,7 +116,6 @@ class Paypal implements PaypalInterface
         ObjectManagerInterface $objectManager,
         QuoteIdMaskFactory $quoteMaskFactory,
         CartRepositoryInterface $cartRepository,
-        CustomerSession $customerSession,
         PaypalCheckoutFactory $checkoutFactory
     ) {
         $this->urlBuilder = $urlBuilder;
@@ -129,7 +123,6 @@ class Paypal implements PaypalInterface
         $this->objectManager = $objectManager;
         $this->quoteMaskFactory = $quoteMaskFactory;
         $this->cartRepository = $cartRepository;
-        $this->customerSession = $customerSession;
         $this->checkoutFactory = $checkoutFactory;
         $parameters = ['params' => [$this->_configMethod]];
         $this->_config = $this->objectManager->create($this->_configType, $parameters);
@@ -194,20 +187,13 @@ class Paypal implements PaypalInterface
         /** @var Data $checkoutHelper */
         $checkoutHelper = $this->objectManager->get(Data::class);
         $quoteCheckoutMethod = $quote->getCheckoutMethod();
-        $customerData = $this->customerSession->getCustomerDataObject();
 
         if ($quote->getIsMultiShipping()) {
             $quote->setIsMultiShipping(false);
             $quote->removeAllAddresses();
         }
 
-        if ($customerData->getId()) {
-            $this->_checkout->setCustomerWithAddressChange(
-                $customerData,
-                $quote->getBillingAddress(),
-                $quote->getShippingAddress()
-            );
-        } else if (
+        if (
             (!$quoteCheckoutMethod || $quoteCheckoutMethod !== Onepage::METHOD_REGISTER)
             && !$checkoutHelper->isAllowedGuestCheckout($quote, $quote->getStoreId())
         ) {
@@ -229,7 +215,7 @@ class Paypal implements PaypalInterface
 
         return $this->_checkout->start(
             $this->urlBuilder->getUrl('checkoutExt/payment_paypal_express/return', ['cart_id' => $cartId]),
-            $this->urlBuilder->getUrl('checkoutExt/payment_paypal_express', ['cart_id' => $cartId]),
+            $this->urlBuilder->getUrl('checkoutExt/payment_paypal_express/cancel', ['cart_id' => $cartId]),
             $hasButton
         );
     }
