@@ -74,6 +74,6 @@ class Url implements UrlInterface
             return $urlData;
         }
 
-        throw new NoSuchEntityException(__('Requested page doesn\'t exist'));
+        throw new NoSuchEntityException(__('Requested entity doesn\'t exist'));
     }
 }
