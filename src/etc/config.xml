@@ -7,9 +7,9 @@
                 <app_home_url>/</app_home_url>
             </reagento>
             <payment>
-                <paypal_redirect_success>checkout/success</paypal_redirect_success>
-                <paypal_redirect_failure>checkout/failure</paypal_redirect_failure>
-                <paypal_redirect_cancel>checkout/cancel</paypal_redirect_cancel>
+                <paypal_redirect_success>checkout/result/success</paypal_redirect_success>
+                <paypal_redirect_failure>checkout/result/failure</paypal_redirect_failure>
+                <paypal_redirect_cancel>checkout/result/cancel</paypal_redirect_cancel>
             </payment>
         </hatimeria>
     </default>
