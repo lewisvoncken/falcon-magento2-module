@@ -2,6 +2,7 @@
 
 namespace Hatimeria\Reagento\Helper;
 
+use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Model\Category as MagentoCategory;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\Helper\AbstractHelper;
@@ -21,24 +22,30 @@ class Category extends AbstractHelper
     /** @var \Magento\Framework\Image\AdapterFactory */
     private $imageFactory;
 
+    /** @var CategoryRepositoryInterface */
+    protected $categoryRepository;
+
     /**
      * @param AppContext $context
      * @param \Magento\Framework\Image\AdapterFactory $imageFactory
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\View\ConfigInterface $viewConfig
+     * @param CategoryRepositoryInterface $categoryRepository
      */
     public function __construct(AppContext $context,
                                 \Magento\Framework\Image\AdapterFactory $imageFactory,
                                 \Magento\Framework\Filesystem $filesystem,
                                 \Magento\Store\Model\StoreManagerInterface $storeManager,
-                                \Magento\Framework\View\ConfigInterface $viewConfig)
-    {
+                                \Magento\Framework\View\ConfigInterface $viewConfig,
+                                CategoryRepositoryInterface $categoryRepository
+    ) {
         parent::__construct($context);
         $this->viewConfig = $viewConfig;
         $this->storeManager = $storeManager;
         $this->filesystem = $filesystem;
         $this->imageFactory = $imageFactory;
+        $this->categoryRepository = $categoryRepository;
     }
 
     /**
@@ -77,5 +84,20 @@ class Category extends AbstractHelper
             . $categorySubPath . $resizedImagePath;
 
         $category->setData('image', $url);
+    }
+
+    /**
+     * @param MagentoCategory $category
+     */
+    public function ensureUrlPath($category)
+    {
+        if($category->getData('is_anchor') != 1) {
+            // Skip non-anchored categories
+            return;
+        }
+
+        /** @var MagentoCategory $fullEntity */
+        $fullEntity = $this->categoryRepository->get($category->getId());
+        $category->setData('url_path', $fullEntity->getData('url_path'));
     }
 }
