@@ -18,6 +18,7 @@ use Magento\Framework\Controller\ResultFactory;
 use Magento\Quote\Model\QuoteIdMaskFactory;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\ActionInterface;
 
 /**
  * Class ReturnAction
@@ -131,6 +132,10 @@ class ReturnAction extends \Magento\Paypal\Controller\Express\ReturnAction
         return $this->_getQuote();
     }
 
+    /**
+     * Execute Action
+     * @return \Magento\Framework\Controller\Result\Redirect
+     */
     public function execute()
     {
         /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
@@ -144,6 +149,7 @@ class ReturnAction extends \Magento\Paypal\Controller\Express\ReturnAction
             ScopeConfigInterface::SCOPE_TYPE_DEFAULT
         );
         $redirectUrl = false;
+        $message = __('');
 
         try {
             $this->initQuote($cartId);
@@ -162,23 +168,34 @@ class ReturnAction extends \Magento\Paypal\Controller\Express\ReturnAction
                         'hatimeria/payment/paypal_redirect_success',
                         ScopeConfigInterface::SCOPE_TYPE_DEFAULT
                     );
+                    $message = __('Your Order got a number: #%1', $this->_checkout->getOrder()->getIncrementId());
                 }
             } else {
-                throw new LocalizedException('Review page is not supported!');
+                throw new LocalizedException(__('Review page is not supported!'));
             }
 
         } catch (LocalizedException $e) {
             $this->logger->critical('PayPal Return Action: ' . $e->getMessage());
             $redirectUrl = $redirectUrlFailure;
+            $message = __('Reason: %1', $e->getMessage());
         } catch (Exception $e) {
             $this->logger->critical('PayPal Return Action: ' . $e->getMessage());
+            $message = __('Reason: %1', $e->getMessage());
             $redirectUrl = $redirectUrlFailure;
         }
 
         if (strpos($redirectUrl, 'http') !== false) {
-            return $resultRedirect->setUrl($redirectUrl);
+            $sep = (strpos($redirectUrl, '?') === false) ? '?' : '&';
+            return $resultRedirect->setUrl(sprintf('%s%s%s=%s',
+                $redirectUrl,
+                $sep,
+                ActionInterface::PARAM_NAME_URL_ENCODED,
+                base64_encode((string)$message)
+            ));
         } else {
-            return $resultRedirect->setPath($redirectUrl);
+            return $resultRedirect->setPath($redirectUrl, [
+                ActionInterface::PARAM_NAME_URL_ENCODED => base64_encode((string)$message)
+            ]);
         }
     }
 
