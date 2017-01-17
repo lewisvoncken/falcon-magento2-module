@@ -91,11 +91,6 @@ class Category extends AbstractHelper
      */
     public function ensureUrlPath($category)
     {
-        if($category->getData('is_anchor') != 1) {
-            // Skip non-anchored categories
-            return;
-        }
-
         /** @var MagentoCategory $fullEntity */
         $fullEntity = $this->categoryRepository->get($category->getId());
         $category->setData('url_path', $fullEntity->getData('url_path'));
