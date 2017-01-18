@@ -158,7 +158,7 @@ class Product extends AbstractHelper
                     $configurableProductOptions[$attributeItem->getAttributeId()]['values'][] = [
                         'value_index' => $attributeOption['value_index'],
                         'label' => $attributeOption['label'],
-                        'stock_status' => $stockProducts,
+                        'in_stock' => $stockProducts,
                     ];
                 }
             }
