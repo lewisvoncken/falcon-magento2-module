@@ -19,6 +19,7 @@ use Magento\Quote\Model\QuoteIdMaskFactory;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ActionInterface;
+use Magento\Framework\Url as UrlBuilder;
 
 /**
  * Class ReturnAction
@@ -53,6 +54,11 @@ class ReturnAction extends \Magento\Paypal\Controller\Express\ReturnAction
     protected $logger;
 
     /**
+     * @var \Magento\Framework\Url
+     */
+    protected $urlBuilder;
+
+    /**
      * ReturnAction constructor.
      * @param Context $context
      * @param CustomerSession $customerSession
@@ -66,6 +72,7 @@ class ReturnAction extends \Magento\Paypal\Controller\Express\ReturnAction
      * @param CartRepositoryInterface $cartRepository
      * @param ScopeConfigInterface $scopeConfig
      * @param LoggerInterface $logger
+     * @param \Magento\Framework\Url $urlBuilder
      */
     public function __construct(
         Context $context,
@@ -79,7 +86,8 @@ class ReturnAction extends \Magento\Paypal\Controller\Express\ReturnAction
         QuoteIdMaskFactory $quoteMaskFactory,
         CartRepositoryInterface $cartRepository,
         ScopeConfigInterface $scopeConfig,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        UrlBuilder $urlBuilder
     ) {
         parent::__construct(
             $context,
@@ -95,6 +103,7 @@ class ReturnAction extends \Magento\Paypal\Controller\Express\ReturnAction
         $this->cartRepository = $cartRepository;
         $this->scopeConfig = $scopeConfig;
         $this->logger = $logger;
+        $this->urlBuilder = $urlBuilder;
     }
 
     /**
@@ -193,9 +202,12 @@ class ReturnAction extends \Magento\Paypal\Controller\Express\ReturnAction
                 base64_encode((string)$message)
             ));
         } else {
-            return $resultRedirect->setPath($redirectUrl, [
-                ActionInterface::PARAM_NAME_URL_ENCODED => base64_encode((string)$message)
-            ]);
+            return $resultRedirect->setUrl($this->urlBuilder->getBaseUrl()
+                . sprintf('%s?%s=%s',
+                    trim($redirectUrl, ' /'),
+                    ActionInterface::PARAM_NAME_URL_ENCODED,
+                    base64_encode((string)$message)
+                ));
         }
     }
 
