@@ -110,8 +110,8 @@ class Product extends AbstractHelper
      */
     public function ensureOptionsForConfigurableProduct($product)
     {
-        /** @var \Magento\CatalogInventory\Api\StockStateInterface $StockState */
-        $stockState = $this->objectManager->get('\Magento\CatalogInventory\Api\StockStateInterface');
+        /** @var \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry */
+        $stockRegistry = $this->objectManager->get('\Magento\CatalogInventory\Api\StockRegistryInterface');
 
         if($product->getTypeId() === 'configurable') {
             /** @var \Magento\ConfigurableProduct\Model\Product\Type\Configurable $productInstance */
@@ -129,7 +129,7 @@ class Product extends AbstractHelper
 
             foreach ($productInstance->getUsedProducts($product) as $usedProduct) {
                 /** @var \Magento\Catalog\Model\Product $usedProduct */
-                $stockInfo[$usedProduct->getSku()] = $stockState->getStockQty($usedProduct->getId());
+                $stockInfo[$usedProduct->getSku()] = $stockRegistry->getProductStockStatus($usedProduct->getId());
             }
 
             foreach ($attributes as $attributeItem) {
