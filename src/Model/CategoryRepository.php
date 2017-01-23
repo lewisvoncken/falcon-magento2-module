@@ -37,6 +37,7 @@ class CategoryRepository extends \Magento\Catalog\Model\CategoryRepository imple
         $collection = $this->categoryCollection->create();
 
         $collection->addAttributeToFilter('is_on_homepage', '1')
+            ->addAttributeToFilter('is_active', 1)
             ->addFieldToSelect('name')
             ->addFieldToSelect('image')
             ->addFieldToSelect('url_key')
