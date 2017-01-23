@@ -8,4 +8,7 @@
     <type name="Magento\Catalog\Model\Category">
         <plugin name="hatimeriaReagentoAfterCategoryLoad" type="\Hatimeria\Reagento\Model\Plugin\AfterCategoryLoad" />
     </type>
+    <type name="Magento\Quote\Model\Cart\Totals\ItemConverter">
+        <plugin name="hatimeriaReagentoItemConverter" type="Hatimeria\Reagento\Model\Plugin\ItemConverter" />
+    </type>
 </config>
