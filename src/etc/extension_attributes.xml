@@ -38,5 +38,6 @@
     <extension_attributes for="Magento\Quote\Api\Data\TotalsItemInterface">
         <attribute code="thumbnail_url" type="string" />
         <attribute code="url_key" type="string" />
+        <attribute code="available_qty" type="string" />
     </extension_attributes>
 </config>
