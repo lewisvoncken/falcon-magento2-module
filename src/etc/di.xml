@@ -23,4 +23,11 @@
             <argument name="instanceName" xsi:type="string">Hatimeria\Reagento\Model\ResourceModel\Product\Collection</argument>
         </arguments>
     </virtualType>
+    <type name="Hatimeria\Reagento\Model\Cart\Item\AttributeList">
+        <arguments>
+            <argument name="attributes" xsi:type="array">
+                <item name="url_key" xsi:type="string">url_key</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
