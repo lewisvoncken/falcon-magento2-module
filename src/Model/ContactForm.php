@@ -67,6 +67,9 @@ class ContactForm implements ContactFormInterface
         $telephone = $req->getPostValue('telephone');
         $sendTo = $req->getPostValue('sendTo');
 
+        $senderEmail = $this->_scopeConfig->getValue('trans_email/ident_support/email', \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+        $senderName  = $this->_scopeConfig->getValue('trans_email/ident_support/name', \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+
         $dataObject = new DataObject();
         $dataObject->setData([
             'comment' => $message,
@@ -87,7 +90,7 @@ class ContactForm implements ContactFormInterface
                 'store' => $this->_storeManager->getStore()->getId(),
             ])
             ->setTemplateVars(['data' => $dataObject])
-            ->setFrom(['name' => $name, 'email' => $email])
+            ->setFrom(['name' => $senderName, 'email' => $senderEmail])
             ->addTo([$storeName => $sendTo])
             ->setReplyTo($email)
             ->getTransport();
