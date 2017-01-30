@@ -148,7 +148,7 @@ class Product extends AbstractHelper
                     $stockProducts = [];
                     foreach ($attributeConfigurableOptions as $attributeConfigurableOption) {
                         if($attributeConfigurableOption['value_index'] === $attributeOption['value_index']) {
-                            if($stockInfo[$attributeConfigurableOption['sku']] > 0) {
+                            if(isset($stockInfo[$attributeConfigurableOption['sku']]) && $stockInfo[$attributeConfigurableOption['sku']] > 0) {
                                 $stockProducts[] = $attributeConfigurableOption['sku'];
                             }
                         }

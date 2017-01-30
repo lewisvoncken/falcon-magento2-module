@@ -2,6 +2,8 @@
 
 namespace Hatimeria\Reagento\Model\Plugin;
 
+use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
+
 class ItemConverter
 {
     /** @var \Magento\Quote\Api\Data\TotalsItemExtensionFactory */
@@ -46,6 +48,12 @@ class ItemConverter
             $thumbnailUrl = $productExtensionAttributes->getThumbnailUrl();
         }
 
+        $urlKey = $product->getUrlKey();
+
+        if ($product->getTypeId() == Configurable::TYPE_CODE) {
+            $product = $item->getChildren()[0]->getProduct();
+        }
+
         $stockItem = $this->stockRegistry->getStockItem($product->getId());
 
         $attributes = [];
@@ -57,7 +65,8 @@ class ItemConverter
             [
                 'data' => [
                     'thumbnail_url' => $thumbnailUrl,
-                    'available_qty' => $stockItem->getQty(),
+                    'url_key'       => $urlKey,
+                    'available_qty' => $stockItem->getQty()
                 ] + $attributes
             ]
         );

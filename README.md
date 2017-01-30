@@ -24,3 +24,17 @@ There's an injected code, that allows to get a base price for Configurable produ
 ```
 $product->setPriceCalculation(false);
 ```
+
+## Custom product attributes in totals API endpoint
+
+To add product attributes per cart item use di.xml to inject your list e.g.
+
+```
+<type name="Hatimeria\Reagento\Model\Cart\Item\AttributeList">
+    <arguments>
+        <argument name="attributes" xsi:type="array">
+            <item name="brand" xsi:type="string">brand</item>
+        </argument>
+    </arguments>
+</type>
+```

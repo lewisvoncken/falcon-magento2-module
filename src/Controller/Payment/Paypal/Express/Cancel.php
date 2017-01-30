@@ -1,5 +1,6 @@
 <?php
-namespace Hatimeria\Reagento\Controller;
+namespace Hatimeria\Reagento\Controller\Payment\Paypal\Express;
+
 use Psr\Log\LoggerInterface;
 use Magento\Paypal\Controller\Express\Cancel as CancelAction;
 use Magento\Quote\Model\QuoteIdMaskFactory;
