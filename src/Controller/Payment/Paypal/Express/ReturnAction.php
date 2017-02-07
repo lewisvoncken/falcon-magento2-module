@@ -2,9 +2,13 @@
 
 namespace Hatimeria\Reagento\Controller\Payment\Paypal\Express;
 
+use Exception;
+use Psr\Log\LoggerInterface;
+use Magento\Catalog\Model\Config\Source\Price\Scope;
 use Magento\Framework\App\Action\Context;
 use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Checkout\Model\Session as CheckoutSession;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Sales\Model\OrderFactory;
 use Magento\Paypal\Model\Express\Checkout\Factory;
 use Magento\Framework\Session\Generic;
@@ -13,6 +17,9 @@ use Magento\Customer\Model\Url;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Quote\Model\QuoteIdMaskFactory;
 use Magento\Quote\Api\CartRepositoryInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\ActionInterface;
+use Magento\Framework\Url as UrlBuilder;
 
 /**
  * Class ReturnAction
@@ -36,6 +43,37 @@ class ReturnAction extends \Magento\Paypal\Controller\Express\ReturnAction
      */
     protected $cartRepository;
 
+    /**
+     * @var ScopeConfigInterface
+     */
+    protected $scopeConfig;
+
+    /**
+     * @var LoggerInterface
+     */
+    protected $logger;
+
+    /**
+     * @var \Magento\Framework\Url
+     */
+    protected $urlBuilder;
+
+    /**
+     * ReturnAction constructor.
+     * @param Context $context
+     * @param CustomerSession $customerSession
+     * @param CheckoutSession $checkoutSession
+     * @param OrderFactory $orderFactory
+     * @param Factory $checkoutFactory
+     * @param Generic $paypalSession
+     * @param HelperData $urlHelper
+     * @param Url $customerUrl
+     * @param QuoteIdMaskFactory $quoteMaskFactory
+     * @param CartRepositoryInterface $cartRepository
+     * @param ScopeConfigInterface $scopeConfig
+     * @param LoggerInterface $logger
+     * @param \Magento\Framework\Url $urlBuilder
+     */
     public function __construct(
         Context $context,
         CustomerSession $customerSession,
@@ -46,7 +84,10 @@ class ReturnAction extends \Magento\Paypal\Controller\Express\ReturnAction
         HelperData $urlHelper,
         Url $customerUrl,
         QuoteIdMaskFactory $quoteMaskFactory,
-        CartRepositoryInterface $cartRepository
+        CartRepositoryInterface $cartRepository,
+        ScopeConfigInterface $scopeConfig,
+        LoggerInterface $logger,
+        UrlBuilder $urlBuilder
     ) {
         parent::__construct(
             $context,
@@ -60,6 +101,9 @@ class ReturnAction extends \Magento\Paypal\Controller\Express\ReturnAction
         );
         $this->quoteMaskFactory = $quoteMaskFactory;
         $this->cartRepository = $cartRepository;
+        $this->scopeConfig = $scopeConfig;
+        $this->logger = $logger;
+        $this->urlBuilder = $urlBuilder;
     }
 
     /**
@@ -97,6 +141,10 @@ class ReturnAction extends \Magento\Paypal\Controller\Express\ReturnAction
         return $this->_getQuote();
     }
 
+    /**
+     * Execute Action
+     * @return \Magento\Framework\Controller\Result\Redirect
+     */
     public function execute()
     {
         /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
@@ -105,9 +153,14 @@ class ReturnAction extends \Magento\Paypal\Controller\Express\ReturnAction
         $cartId = $request->getParam('cart_id');
         $token = $request->getParam('token');
         $payerId = $request->getParam('PayerID');
+        $redirectUrlFailure = $this->scopeConfig->getValue(
+            'hatimeria/payment/paypal_redirect_failure',
+            ScopeConfigInterface::SCOPE_TYPE_DEFAULT
+        );
+        $redirectUrl = false;
+        $message = __('');
 
         try {
-
             $this->initQuote($cartId);
             $this->_initCheckout();
             $this->_checkout->returnFromPaypal($token);
@@ -115,24 +168,47 @@ class ReturnAction extends \Magento\Paypal\Controller\Express\ReturnAction
             if ($this->_checkout->canSkipOrderReviewStep()) {
                 $this->placeOrder($token, $payerId);
 
-                die('Order is placed. Checkout can now redirect to React.');
+                // redirect if PayPal specified some URL (for example, to Giropay bank)
+                $url = $this->_checkout->getRedirectUrl();
+                if ($url) {
+                    $redirectUrl = $url;
+                } else {
+                    $redirectUrl = $this->scopeConfig->getValue(
+                        'hatimeria/payment/paypal_redirect_success',
+                        ScopeConfigInterface::SCOPE_TYPE_DEFAULT
+                    );
+                    $message = __('Your Order got a number: #%1', $this->_checkout->getOrder()->getIncrementId());
+                }
             } else {
-                $this->_redirect('*/*/review'); // @todo check it!
+                throw new LocalizedException(__('Review page is not supported!'));
             }
 
-        } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            $this->messageManager->addExceptionMessage(
-                $e,
-                $e->getMessage()
-            );
-        } catch (\Exception $e) {
-            $this->messageManager->addExceptionMessage(
-                $e,
-                __('We can\'t process Express Checkout approval.')
-            );
+        } catch (LocalizedException $e) {
+            $this->logger->critical('PayPal Return Action: ' . $e->getMessage());
+            $redirectUrl = $redirectUrlFailure;
+            $message = __('Reason: %1', $e->getMessage());
+        } catch (Exception $e) {
+            $this->logger->critical('PayPal Return Action: ' . $e->getMessage());
+            $message = __('Reason: %1', $e->getMessage());
+            $redirectUrl = $redirectUrlFailure;
         }
 
-        return $resultRedirect->setPath('checkout/cart');
+        if (strpos($redirectUrl, 'http') !== false) {
+            $sep = (strpos($redirectUrl, '?') === false) ? '?' : '&';
+            return $resultRedirect->setUrl(sprintf('%s%s%s=%s',
+                $redirectUrl,
+                $sep,
+                ActionInterface::PARAM_NAME_URL_ENCODED,
+                base64_encode((string)$message)
+            ));
+        } else {
+            return $resultRedirect->setUrl($this->urlBuilder->getBaseUrl()
+                . sprintf('%s?%s=%s',
+                    trim($redirectUrl, ' /'),
+                    ActionInterface::PARAM_NAME_URL_ENCODED,
+                    base64_encode((string)$message)
+                ));
+        }
     }
 
     /**
@@ -165,13 +241,5 @@ class ReturnAction extends \Magento\Paypal\Controller\Express\ReturnAction
                 'quote' => $this->_getQuote()
             ]
         );
-
-        // redirect if PayPal specified some URL (for example, to Giropay bank)
-        $url = $this->_checkout->getRedirectUrl();
-        if ($url) {
-            $this->getResponse()->setRedirect($url);
-            return;
-        }
-        $this->_redirect('checkout/onepage/success');
     }
 }

@@ -2,7 +2,7 @@
 
 Custom API endpoints provided by this module:
 
-- `/rest/V1/url/:url` - get info about cms page by the given URL
+- `/rest/V1/url/?requestPath=:url` - get info about cms page by the given URL
 - `/rest/V1/info` - get basic settings for current shop
 - `/rest/V1/categories/homepage` - get categories marked as "Show on homepage" (max - 6)
 - `/rest/V1/contact` with `POST` - send a contact email
@@ -23,4 +23,18 @@ There's an injected code, that allows to get a base price for Configurable produ
 
 ```
 $product->setPriceCalculation(false);
+```
+
+## Custom product attributes in totals API endpoint
+
+To add product attributes per cart item use di.xml to inject your list e.g.
+
+```
+<type name="Hatimeria\Reagento\Model\Cart\Item\AttributeList">
+    <arguments>
+        <argument name="attributes" xsi:type="array">
+            <item name="brand" xsi:type="string">brand</item>
+        </argument>
+    </arguments>
+</type>
 ```

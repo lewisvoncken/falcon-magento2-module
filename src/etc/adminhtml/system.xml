@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <tab id="hatimeria" translate="label" sortOrder="500">
+            <label>Hatimeria</label>
+        </tab>
+        <section id="hatimeria" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="0" showInStore="0">
+            <class>separator-top</class>
+            <label>Payment</label>
+            <tab>hatimeria</tab>
+            <resource>Magento_Catalog::config_catalog</resource>
+            <group id="payment" translate="label" type="text" sortOrder="90" showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>Payment</label>
+                <field id="paypal_redirect_success" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                    <label>Paypal Redirect Success</label>
+                    <comment>Redirect to address or path</comment>
+                </field>
+                <field id="paypal_redirect_failure" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                    <label>Paypal Redirect Failure</label>
+                    <comment>Redirect to address or path</comment>
+                </field>
+                <field id="paypal_redirect_cancel" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                    <label>Paypal Redirect Cancel</label>
+                    <comment>Redirect to address or path</comment>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

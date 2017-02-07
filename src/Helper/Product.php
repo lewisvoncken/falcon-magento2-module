@@ -110,25 +110,55 @@ class Product extends AbstractHelper
      */
     public function ensureOptionsForConfigurableProduct($product)
     {
-        if($product->getTypeId() === 'configurable') {
-            $productExtension = $this->getProductExtensionAttributes($product);
-            $configurableProductOptions = [];
-            $options = $product->getTypeInstance()->getConfigurableAttributesAsArray($product);
+        /** @var \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry */
+        $stockRegistry = $this->objectManager->get('\Magento\CatalogInventory\Api\StockRegistryInterface');
 
-            foreach ($options as $optionItem) {
-                $configurableProductOptions[$optionItem['attribute_id']] = [
-                    'id' => $optionItem['id'],
-                    'attribute_id' => $optionItem['attribute_id'],
-                    'label' => $optionItem['label'],
-                    'position' => $optionItem['position'],
+        if($product->getTypeId() === 'configurable') {
+            /** @var \Magento\ConfigurableProduct\Model\Product\Type\Configurable $productInstance */
+            $productInstance = $product->getTypeInstance();
+
+            $productExtension = $this->getProductExtensionAttributes($product);
+            $stockInfo = [];
+            $configurableProductOptions = [];
+
+            /** @var \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute[] $attributes */
+            $attributes = $productInstance->getConfigurableAttributes($product);
+
+            /** @var array $configurableOptions */
+            $configurableOptions = $productInstance->getConfigurableOptions($product);
+
+            foreach ($productInstance->getUsedProducts($product) as $usedProduct) {
+                /** @var \Magento\Catalog\Model\Product $usedProduct */
+                $stockInfo[$usedProduct->getSku()] = $stockRegistry->getProductStockStatus($usedProduct->getId());
+            }
+
+            foreach ($attributes as $attributeItem) {
+                $attributeConfigurableOptions = $configurableOptions[$attributeItem->getAttributeId()];
+
+                $configurableProductOptions[$attributeItem->getAttributeId()] = [
+                    'id' => $attributeItem->getId(),
+                    'attribute_id' => $attributeItem->getAttributeId(),
+                    'label' => $attributeItem->getLabel(),
+                    'position' => $attributeItem->getPosition(),
                     'product_id' => $product->getId(),
                     'values' => [],
                 ];
 
-                foreach ($optionItem['values'] as $optionItemValue) {
-                    $configurableProductOptions[$optionItem['attribute_id']]['values'][] = [
-                        'value_index' => $optionItemValue['value_index'],
-                        'label' => $optionItemValue['label']
+                foreach ($attributeItem->getOptions() as $attributeOption) {
+                    $stockProducts = [];
+                    foreach ($attributeConfigurableOptions as $attributeConfigurableOption) {
+                        if($attributeConfigurableOption['value_index'] === $attributeOption['value_index']) {
+                            if(isset($stockInfo[$attributeConfigurableOption['sku']]) && $stockInfo[$attributeConfigurableOption['sku']] > 0) {
+                                $stockProducts[] = $attributeConfigurableOption['sku'];
+                            }
+                        }
+                    }
+
+                    /** @var \Magento\ConfigurableProduct\Api\Data\OptionValueInterface $attributeOption */
+                    $configurableProductOptions[$attributeItem->getAttributeId()]['values'][] = [
+                        'value_index' => $attributeOption['value_index'],
+                        'label' => $attributeOption['label'],
+                        'in_stock' => $stockProducts,
                     ];
                 }
             }

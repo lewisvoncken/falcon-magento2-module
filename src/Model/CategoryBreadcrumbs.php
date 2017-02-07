@@ -31,21 +31,16 @@ class CategoryBreadcrumbs implements CategoryBreadcrumbsInterface
         $pathInStore = $category->getPathInStore();
         $pathIds = array_reverse(explode(',', $pathInStore));
 
-        /** @var \Magento\Catalog\Model\Category[] */
-        $categories = $category->getParentCategories();
-
         $result = [];
 
         foreach ($pathIds as $categoryId) {
-            if (!isset($categories[$categoryId])) {
-                continue;
-            }
-            $category = $categories[$categoryId];
+            $parentCategory = $this->categoryRepository->get($categoryId);
 
             $result[] = [
-                'id' => $category->getId(),
-                'name' => $category->getName(),
-                'url_key' => $category->getUrlKey()
+                'id' => $parentCategory->getId(),
+                'name' => $parentCategory->getName(),
+                'url_path' => $parentCategory->getUrlPath(),
+                'url_key' => $parentCategory->getUrlKey()
             ];
         }
 

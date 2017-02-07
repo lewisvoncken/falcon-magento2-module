@@ -15,8 +15,8 @@
                 <height>1000</height>
             </image>
             <image id="product_media_gallery_item_thumbnail" type="thumbnail">
-                <width>80</width>
-                <height>50</height>
+                <width>160</width>
+                <height>100</height>
             </image>
             <image id="seller_list_image" type="thumbnail">
                 <width>300</width>

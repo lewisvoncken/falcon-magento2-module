@@ -34,6 +34,7 @@ class AfterLoadObserver implements ObserverInterface
         foreach ($collection as $item) {
             /** @var Category $item */
             $this->categoryHelper->addImageAttribute($item);
+            $this->categoryHelper->ensureUrlPath($item);
         }
     }
 }
