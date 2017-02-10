@@ -3,6 +3,7 @@
 namespace Hatimeria\Reagento\Controller\Payment\Paypal\Express;
 
 use Exception;
+use Magento\Quote\Model\Quote;
 use Psr\Log\LoggerInterface;
 use Magento\Catalog\Model\Config\Source\Price\Scope;
 use Magento\Framework\App\Action\Context;
@@ -31,12 +32,6 @@ class ReturnAction extends \Magento\Paypal\Controller\Express\ReturnAction
      * @var QuoteIdMaskFactory
      */
     protected $quoteMaskFactory;
-
-    /**
-     * Quote
-     * @var \Magento\Quote\Model\Quote
-     */
-    protected $quote;
 
     /**
      * @var CartRepositoryInterface
@@ -108,20 +103,20 @@ class ReturnAction extends \Magento\Paypal\Controller\Express\ReturnAction
 
     /**
      * Quote
-     * @return \Magento\Quote\Model\Quote
+     * @return Quote
      */
     protected function _getQuote()
     {
-        return $this->quote;
+        return $this->_quote;
     }
 
     /**
-     * @param \Magento\Quote\Model\Quote $quote
+     * @param Quote $quote
      * @return GetToken
      */
-    public function setQuote(\Magento\Quote\Model\Quote $quote)
+    public function setQuote(Quote $quote)
     {
-        $this->quote = $quote;
+        $this->_quote = $quote;
 
         return $this;
     }
@@ -130,15 +125,16 @@ class ReturnAction extends \Magento\Paypal\Controller\Express\ReturnAction
     /**
      * Initialize Quote based on masked Id
      * @param $cartId
-     * @return \Magento\Quote\Model\Quote
+     * @return Quote
      */
     protected function initQuote($cartId)
     {
         // Unmask quote:
         $quoteMask = $this->quoteMaskFactory->create()->load($cartId, 'masked_id');
-        $this->setQuote($this->cartRepository->getActive($quoteMask->getQuoteId()));
+        $quote = $this->cartRepository->getActive($quoteMask->getQuoteId());
+        $this->setQuote($quote);
 
-        return $this->_getQuote();
+        return $this->_quote;
     }
 
     /**
@@ -166,7 +162,7 @@ class ReturnAction extends \Magento\Paypal\Controller\Express\ReturnAction
             $this->_checkout->returnFromPaypal($token);
 
             if ($this->_checkout->canSkipOrderReviewStep()) {
-                $this->placeOrder($token, $payerId);
+                $this->placeOrder($token, $cartId, $payerId);
 
                 // redirect if PayPal specified some URL (for example, to Giropay bank)
                 $url = $this->_checkout->getRedirectUrl();
@@ -214,10 +210,16 @@ class ReturnAction extends \Magento\Paypal\Controller\Express\ReturnAction
     /**
      * Place Order
      * @param $token
+     * @param $cartId
      * @param $payerId
      */
-    protected function placeOrder($token, $payerId)
+    protected function placeOrder($token, $cartId, $payerId)
     {
+        // Fix: reinitialize quote and checkout.
+        $this->resetCheckoutTypes();
+        $this->initQuote($cartId);
+        $this->_initCheckout();
+
         $this->_checkout->place($token);
 
         // prepare session to success or cancellation page
@@ -241,5 +243,14 @@ class ReturnAction extends \Magento\Paypal\Controller\Express\ReturnAction
                 'quote' => $this->_getQuote()
             ]
         );
+    }
+
+    /**
+     * Reset checkout types
+     */
+    protected function resetCheckoutTypes()
+    {
+        unset($this->_checkoutTypes);
+        $this->_checkoutTypes = [];
     }
 }
