@@ -30,6 +30,12 @@
             <resource ref="Magento_Catalog::categories" />
         </resources>
     </route>
+    <route url="/V1/products" method="GET">
+        <service class="Hatimeria\Reagento\Api\ProductRepositoryInterface" method="getList"/>
+        <resources>
+            <resource ref="Magento_Catalog::products" />
+        </resources>
+    </route>
     <route url="/V1/guest-carts/:cartId/paypal-fetch-token" method="GET">
         <service class="Hatimeria\Reagento\Api\Payment\PaypalInterface" method="getToken"/>
         <resources>
