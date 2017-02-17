@@ -11,16 +11,23 @@
     <preference for="Hatimeria\Reagento\Api\Payment\PaypalInterface" type="Hatimeria\Reagento\Model\Payment\Paypal" />
     <preference for="Hatimeria\Reagento\Api\Payment\Data\PaypalDataInterface" type="Hatimeria\Reagento\Model\Payment\PaypalData" />
     <preference for="Hatimeria\Reagento\Api\ContactFormInterface" type="Hatimeria\Reagento\Model\ContactForm" />
-    <preference for="Hatimeria\Reagento\Api\Data\CategoryTreeInterface" type="\Hatimeria\Reagento\Model\Category" />
+    <preference for="Hatimeria\Reagento\Api\Data\CategoryTreeInterface" type="Hatimeria\Reagento\Model\Category" />
     <preference for="Hatimeria\Reagento\Api\CategoryManagementInterface" type="Hatimeria\Reagento\Model\CategoryManagement" />
+    <preference for="Hatimeria\Reagento\Api\ProductRepositoryInterface" type="Hatimeria\Reagento\Model\ProductRepository" />
     <type name="Magento\Catalog\Model\ProductRepository">
         <arguments>
             <argument name="collectionFactory" xsi:type="object">ProductRepositoryCollectionFactory</argument>
+            <argument name="searchResultsFactory" xsi:type="object">ProductRepositorySearchResultsFactory</argument>
         </arguments>
     </type>
     <virtualType name="ProductRepositoryCollectionFactory" type="Magento\Catalog\Model\ResourceModel\Product\CollectionFactory">
         <arguments>
             <argument name="instanceName" xsi:type="string">Hatimeria\Reagento\Model\ResourceModel\Product\Collection</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="ProductRepositorySearchResultsFactory" type="Magento\Catalog\Api\Data\ProductSearchResultsInterfaceFactory">
+        <arguments>
+            <argument name="instanceName" xsi:type="string">Hatimeria\Reagento\Api\SearchResults</argument>
         </arguments>
     </virtualType>
 </config>
