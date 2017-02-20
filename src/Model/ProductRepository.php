@@ -8,6 +8,7 @@ use Magento\Catalog\Model\ProductFactory;
 use Magento\Framework\Api\Data\ImageContentInterfaceFactory;
 use Magento\Framework\Api\ImageContentValidatorInterface;
 use Magento\Framework\Api\ImageProcessorInterface;
+use Magento\Framework\Api\SortOrder;
 
 class ProductRepository extends \Magento\Catalog\Model\ProductRepository implements ProductRepositoryInterface
 {
@@ -55,24 +56,64 @@ class ProductRepository extends \Magento\Catalog\Model\ProductRepository impleme
      */
     public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria, $withAttributeFilters = [])
     {
-        /** @var \Hatimeria\Reagento\Api\SearchResults $list */
-        $list = parent::getList($searchCriteria);
+        $categoryID = (int)$this->getCategoryIdFromSearchCriteria($searchCriteria);
+
+        /** @var \Magento\Catalog\Model\ResourceModel\Product\Collection $collection */
+        $collection = $this->collectionFactory->create();
+        $this->extensionAttributesJoinProcessor->process($collection);
+
+        foreach ($this->metadataService->getList($this->searchCriteriaBuilder->create())->getItems() as $metadata) {
+            $collection->addAttributeToSelect($metadata->getAttributeCode());
+        }
+        $collection->joinAttribute('status', 'catalog_product/status', 'entity_id', null, 'inner');
+        $collection->joinAttribute('visibility', 'catalog_product/visibility', 'entity_id', null, 'inner');
+
+        //Add filters from root filter group to the collection
+        foreach ($searchCriteria->getFilterGroups() as $group) {
+            $this->addFilterGroupToCollection($group, $collection);
+        }
+
+        $sortOrders = (array)$searchCriteria->getSortOrders();
+
+        /** @var SortOrder $sortOrder */
+        foreach ($sortOrders as $sortOrder) {
+            $field = $sortOrder->getField();
+            $collection->addOrder(
+                $field,
+                ($sortOrder->getDirection() == SortOrder::SORT_ASC) ? 'ASC' : 'DESC'
+            );
+        }
+
+        if($categoryID && empty($sortOrders)) {
+            $collection->joinField(
+                'position',
+                'catalog_category_product_index',
+                'position',
+                'product_id = entity_id',
+                'category_id = ' . $categoryID
+            );
+            $collection->setOrder('position', SortOrder::SORT_ASC);
+        }
+
+        $collection->setCurPage($searchCriteria->getCurrentPage());
+        $collection->setPageSize($searchCriteria->getPageSize());
+        $collection->load();
+
+        /** @var \Hatimeria\Reagento\Api\SearchResults $searchResult */
+        $searchResult = $this->searchResultsFactory->create();
+        $searchResult->setSearchCriteria($searchCriteria);
+        $searchResult->setItems($collection->getItems());
+        $searchResult->setTotalCount($collection->getSize());
 
         if ($withAttributeFilters && is_string($withAttributeFilters)) {
             $withAttributeFilters = [$withAttributeFilters];
         }
 
-        $categoryID = $this->getCategoryIdFromSearchCriteria($searchCriteria);
-
         if (!empty($withAttributeFilters) && $categoryID !== null) {
-            $list->setFilters($this->getAttributeFilters($withAttributeFilters, $categoryID));
+            $searchResult->setFilters($this->getAttributeFilters($withAttributeFilters, $categoryID));
         }
 
-        if ($categoryID) {
-            $this->applyCategorySorting($list, $categoryID);
-        }
-
-        return $list;
+        return $searchResult;
     }
 
     /**
@@ -126,30 +167,5 @@ class ProductRepository extends \Magento\Catalog\Model\ProductRepository impleme
         }
 
         return $result;
-    }
-
-    /**
-     * @param \Hatimeria\Reagento\Api\SearchResults $result
-     * @param int $categoryID
-     */
-    protected function applyCategorySorting($result, $categoryID)
-    {
-        /** @var \Magento\Catalog\Model\Category $category */
-        $category = $this->categoryFactory->create()->load($categoryID);
-        if(!$category) {
-            return;
-        }
-        $position = $category->getProductsPosition();
-
-        /** @var \Magento\Catalog\Model\Product[] $items */
-        $items = $result->getItems();
-
-        usort($items, function($a, $b) use ($position) {
-            /** @var \Magento\Catalog\Model\Product $a */
-            /** @var \Magento\Catalog\Model\Product $b */
-            return ($position[$a->getId()] < $position[$b->getId()]) ? -1 : 1;
-        });
-
-        $result->setItems($items);
     }
 }
