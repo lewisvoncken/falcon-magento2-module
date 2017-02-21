@@ -87,7 +87,7 @@ class ProductRepository extends \Magento\Catalog\Model\ProductRepository impleme
         if($categoryID && empty($sortOrders)) {
             $collection->joinField(
                 'position',
-                'catalog_category_product_index',
+                'catalog_category_product',
                 'position',
                 'product_id = entity_id',
                 'category_id = ' . $categoryID
