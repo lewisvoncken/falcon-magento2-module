@@ -276,7 +276,7 @@ class AdyenHPP implements AdyenLinkInterface
                 break;
         }
         $decrypted = $this->encryptor->decrypt($secretWord);
-        //if crypt key is empty string is saved in plain form and decryption returns empty string
+        //if crypt key is empty then hmac string is saved in plain form and decryption returns empty string
         return $decrypted ? $decrypted : $secretWord;
     }
 }
