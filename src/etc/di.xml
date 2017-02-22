@@ -10,6 +10,7 @@
     <preference for="Hatimeria\Reagento\Api\CategoryBreadcrumbsInterface" type="Hatimeria\Reagento\Model\CategoryBreadcrumbs" />
     <preference for="Hatimeria\Reagento\Api\Payment\PaypalInterface" type="Hatimeria\Reagento\Model\Payment\Paypal" />
     <preference for="Hatimeria\Reagento\Api\Payment\Data\PaypalDataInterface" type="Hatimeria\Reagento\Model\Payment\PaypalData" />
+    <preference for="Hatimeria\Reagento\Api\Payment\AdyenLinkInterface" type="Hatimeria\Reagento\Model\Payment\AdyenHPP" />
     <preference for="Hatimeria\Reagento\Api\ContactFormInterface" type="Hatimeria\Reagento\Model\ContactForm" />
     <preference for="Hatimeria\Reagento\Api\Data\CategoryTreeInterface" type="Hatimeria\Reagento\Model\Category" />
     <preference for="Hatimeria\Reagento\Api\CategoryManagementInterface" type="Hatimeria\Reagento\Model\CategoryManagement" />
