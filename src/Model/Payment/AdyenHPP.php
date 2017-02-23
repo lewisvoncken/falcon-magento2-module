@@ -275,6 +275,8 @@ class AdyenHPP implements AdyenLinkInterface
                 $secretWord = trim($this->adyenHelper->getAdyenHppConfigData('hmac_live', $storeId));
                 break;
         }
-        return $secretWord;
+        $decrypted = $this->encryptor->decrypt($secretWord);
+        //if crypt key is empty then hmac string is saved in plain form and decryption returns empty string
+        return $decrypted ? $decrypted : $secretWord;
     }
 }
