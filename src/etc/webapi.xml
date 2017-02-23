@@ -48,6 +48,12 @@
             <resource ref="Magento_Contact::contact" />
         </resources>
     </route>
+    <route url="/V1/order-info/:quoteId" method="GET">
+        <service class="Hatimeria\Reagento\Api\QuoteMaskInterface" method="getItem" />
+        <resources>
+            <resource ref="anonymous" />
+        </resources>
+    </route>
     <route url="/V1/guest-payment/:cartId/:orderId/adyen-link" method="GET">
         <service class="Hatimeria\Reagento\Api\Payment\AdyenLinkInterface" method="getGuestOrderPaymentLink"/>
         <resources>
