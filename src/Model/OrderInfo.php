@@ -11,6 +11,7 @@ class OrderInfo extends AbstractModel implements OrderInfoInterface
     const KEY_REVENUE = 'revenue';
     const KEY_SHIPPING = 'shipping';
     const KEY_TAX = 'tax';
+    const KEY_QUOTE_ID = 'quote_id';
 
     public function getOrderId()
     {
@@ -50,5 +51,15 @@ class OrderInfo extends AbstractModel implements OrderInfoInterface
     public function setTax($tax)
     {
         return $this->setData(self::KEY_TAX, $tax);
+    }
+
+    public function getQuoteId()
+    {
+        return $this->getData(self::KEY_QUOTE_ID);
+    }
+
+    public function setQuoteId($id)
+    {
+        return $this->setData(self::KEY_QUOTE_ID, $id);
     }
 }

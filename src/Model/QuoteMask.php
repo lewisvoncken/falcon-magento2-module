@@ -67,6 +67,7 @@ class QuoteMask implements QuoteMaskInterface
         $result->setRevenue($order->getGrandTotal());
         $result->setShipping($order->getShippingInclTax());
         $result->setTax($order->getTaxAmount());
+        $result->setQuoteId($quoteId);
 
         return $result;
     }
