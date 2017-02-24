@@ -145,20 +145,20 @@ class ProductRepository extends \Magento\Catalog\Model\ProductRepository impleme
     protected function getAttributeFilters($attributeFilters, $categoryID)
     {
         $connection = $this->resource->getConnection();
-        $categoryProductTableName = $this->resource->getTableName('catalog_category_product');
-        $productEntityTableName = $this->resource->getTableName('catalog_product_entity_int');
+        $select = $connection->select()
+            ->distinct()
+            ->from('catalog_product_entity_int', ['value'])
+            ->joinLeft('catalog_category_product', 'catalog_product_entity_int.entity_id = product_id', null)
+            ->where('attribute_id = :attribute_id and category_id = :category_id');
 
         $result = [];
         foreach ($attributeFilters as $attributeFilter) {
             /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute */
             $attribute = $this->eavConfig->getAttribute('catalog_product', $attributeFilter);
-            $attributeEntityId = (int)$attribute->getId();
-
-            $sql = "SELECT DISTINCT cpei.value
-                    FROM `$productEntityTableName` cpei
-                    LEFT JOIN `$categoryProductTableName` ccp ON (cpei.entity_id = ccp.product_id)
-                    WHERE cpei.attribute_id = $attributeEntityId AND ccp.category_id = $categoryID";
-            $availableOptions = $connection->fetchCol($sql);
+            $availableOptions = $connection->fetchCol($select, [
+                'attribute_id' => (int)$attribute->getId(),
+                'category_id' => $categoryID
+            ]);
 
             // When there's no available options for this attribute in provided category
             if(empty($availableOptions)) {
