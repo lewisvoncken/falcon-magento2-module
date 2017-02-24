@@ -12,14 +12,14 @@ use Magento\Framework\Api\SortOrder;
 
 class ProductRepository extends \Magento\Catalog\Model\ProductRepository implements ProductRepositoryInterface
 {
-    /**
-     * @var \Magento\Eav\Model\Config
-     */
+    /** @var \Magento\Eav\Model\Config */
     protected $eavConfig;
-    /**
-     * @var \Magento\Catalog\Model\CategoryFactory
-     */
-    private $categoryFactory;
+
+    /** @var \Magento\Catalog\Model\CategoryFactory */
+    protected $categoryFactory;
+
+    /** @var \Magento\Framework\App\ResourceConnection */
+    protected $resource;
 
     public function __construct(
         ProductFactory $productFactory,
@@ -43,12 +43,14 @@ class ProductRepository extends \Magento\Catalog\Model\ProductRepository impleme
         ImageProcessorInterface $imageProcessor,
         \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $extensionAttributesJoinProcessor,
         \Magento\Eav\Model\Config $eavConfig,
-        \Magento\Catalog\Model\CategoryFactory $categoryFactory
+        \Magento\Catalog\Model\CategoryFactory $categoryFactory,
+        \Magento\Framework\App\ResourceConnection $resource
     )
     {
         parent::__construct($productFactory, $initializationHelper, $searchResultsFactory, $collectionFactory, $searchCriteriaBuilder, $attributeRepository, $resourceModel, $linkInitializer, $linkTypeProvider, $storeManager, $filterBuilder, $metadataServiceInterface, $extensibleDataObjectConverter, $optionConverter, $fileSystem, $contentValidator, $contentFactory, $mimeTypeExtensionMap, $imageProcessor, $extensionAttributesJoinProcessor);
         $this->eavConfig = $eavConfig;
         $this->categoryFactory = $categoryFactory;
+        $this->resource = $resource;
     }
 
     /**
@@ -142,21 +144,38 @@ class ProductRepository extends \Magento\Catalog\Model\ProductRepository impleme
      */
     protected function getAttributeFilters($attributeFilters, $categoryID)
     {
-        // TODO - check available options for products in provided $categoryID
+        $connection = $this->resource->getConnection();
+        $categoryProductTableName = $this->resource->getTableName('catalog_category_product');
+        $productEntityTableName = $this->resource->getTableName('catalog_product_entity_int');
+
         $result = [];
         foreach ($attributeFilters as $attributeFilter) {
             /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute */
             $attribute = $this->eavConfig->getAttribute('catalog_product', $attributeFilter);
+            $attributeEntityId = (int)$attribute->getId();
+
+            $sql = "SELECT cpei.value
+                    FROM `$productEntityTableName` cpei
+                    LEFT JOIN `$categoryProductTableName` ccp ON (cpei.entity_id = ccp.product_id)
+                    WHERE cpei.attribute_id = $attributeEntityId AND ccp.category_id = $categoryID";
+            $availableOptions = $connection->fetchCol($sql);
+
+            // When there's no available options for this attribute in provided category
+            if(empty($availableOptions)) {
+                continue;
+            }
+
             $attributeResult = [
                 'label' => $attribute->getStoreLabel(),
                 'code' => $attribute->getAttributeCode(),
                 'options' => [],
             ];
 
-            foreach ($attribute->getOptions() as $option) {
-                if (!$option->getValue()) {
+            foreach ($attribute-> getOptions() as $option) {
+                if (!$option->getValue() || !in_array($option->getValue(), $availableOptions) ) {
                     continue;
                 }
+
                 $attributeResult['options'][] = [
                     'label' => $option->getLabel(),
                     'value' => $option->getValue()
