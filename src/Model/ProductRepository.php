@@ -154,7 +154,7 @@ class ProductRepository extends \Magento\Catalog\Model\ProductRepository impleme
             $attribute = $this->eavConfig->getAttribute('catalog_product', $attributeFilter);
             $attributeEntityId = (int)$attribute->getId();
 
-            $sql = "SELECT cpei.value
+            $sql = "SELECT DISTINCT cpei.value
                     FROM `$productEntityTableName` cpei
                     LEFT JOIN `$categoryProductTableName` ccp ON (cpei.entity_id = ccp.product_id)
                     WHERE cpei.attribute_id = $attributeEntityId AND ccp.category_id = $categoryID";
