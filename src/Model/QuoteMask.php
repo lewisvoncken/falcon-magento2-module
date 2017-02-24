@@ -63,10 +63,11 @@ class QuoteMask implements QuoteMaskInterface
 
         /** @var OrderInfo $result */
         $result = $this->objectManager->create('\Hatimeria\Reagento\Api\Data\OrderInfoInterface');
-        $result->setOrderId($order->getId());
+        $result->setOrderId($order->getRealOrderId());
         $result->setRevenue($order->getGrandTotal());
         $result->setShipping($order->getShippingInclTax());
         $result->setTax($order->getTaxAmount());
+        $result->setQuoteId($quoteId);
 
         return $result;
     }
