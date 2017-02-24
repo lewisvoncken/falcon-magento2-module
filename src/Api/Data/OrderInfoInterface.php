@@ -47,4 +47,15 @@ interface OrderInfoInterface
      * @return mixed
      */
     public function setTax($tax);
+
+    /**
+     * @return mixed
+     */
+    public function getQuoteId();
+
+    /**
+     * @param mixed $id
+     * @return mixed
+     */
+    public function setQuoteId($id);
 }
