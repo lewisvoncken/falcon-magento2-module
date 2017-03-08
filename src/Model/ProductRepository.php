@@ -3,7 +3,9 @@
 namespace Hatimeria\Reagento\Model;
 
 use Hatimeria\Reagento\Api\ProductRepositoryInterface;
+use Magento\Catalog\Model\Product\Attribute\Source\Status as ProductStatus;
 use Magento\Catalog\Model\Product\Gallery\MimeTypeExtensionMap;
+use Magento\Catalog\Model\Product\Visibility as ProductVisibility;
 use Magento\Catalog\Model\ProductFactory;
 use Magento\Framework\Api\Data\ImageContentInterfaceFactory;
 use Magento\Framework\Api\ImageContentValidatorInterface;
@@ -149,7 +151,28 @@ class ProductRepository extends \Magento\Catalog\Model\ProductRepository impleme
             ->distinct()
             ->from('catalog_product_entity_int', ['value'])
             ->joinLeft('catalog_category_product', 'catalog_product_entity_int.entity_id = product_id', null)
-            ->where('attribute_id = :attribute_id and category_id = :category_id');
+            ->where('catalog_product_entity_int.attribute_id = :attribute_id')
+            ->where('category_id = :category_id');
+
+        $extraAttributes = [
+            'visibility' => [
+                ProductVisibility::VISIBILITY_IN_CATALOG,
+                ProductVisibility::VISIBILITY_BOTH
+            ],
+            'status' => [
+                ProductStatus::STATUS_ENABLED
+            ]
+        ];
+
+        foreach ($extraAttributes as $attributeCode => $attributeValues) {
+            $attributeSelect = $connection->select()
+                ->from('catalog_product_entity_int', 'entity_id')
+                ->joinLeft('eav_attribute', 'catalog_product_entity_int.attribute_id = eav_attribute.attribute_id', null)
+                ->where('value in (?)', $attributeValues)
+                ->where('attribute_code = ?', $attributeCode);
+
+            $select->where('catalog_product_entity_int.entity_id in ?', $attributeSelect);
+        }
 
         $result = [];
         foreach ($attributeFilters as $attributeFilter) {
