@@ -49,7 +49,7 @@ class Url implements UrlInterface
     /**
      * @inheritdoc
      */
-    public function getUrl($requestPath)
+    public function getUrl($requestPath, $secondCheck = false)
     {
         $urlModel = $this->urlFinder->findOneByData(array('request_path' => $requestPath));
 
@@ -68,6 +68,13 @@ class Url implements UrlInterface
 
                 case 'cms-page':
                     $urlData->setCmsPage($this->pageRepository->getById($urlModel->getEntityId()));
+                    break;
+
+                case 'custom':
+                    // Preventing multiple checks
+                    if(!$secondCheck) {
+                        return $this->getUrl($urlModel->getTargetPath(), true);
+                    }
                     break;
             }
 
