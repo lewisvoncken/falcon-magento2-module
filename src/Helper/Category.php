@@ -25,6 +25,9 @@ class Category extends AbstractHelper
     /** @var CategoryRepositoryInterface */
     protected $categoryRepository;
 
+    /** @var \Magento\Catalog\Api\Data\CategoryExtensionFactory */
+    protected $extensionFactory;
+
     /**
      * @param AppContext $context
      * @param \Magento\Framework\Image\AdapterFactory $imageFactory
@@ -35,6 +38,7 @@ class Category extends AbstractHelper
      */
     public function __construct(AppContext $context,
                                 \Magento\Framework\Image\AdapterFactory $imageFactory,
+                                \Magento\Catalog\Api\Data\CategoryExtensionFactory $extensionFactory,
                                 \Magento\Framework\Filesystem $filesystem,
                                 \Magento\Store\Model\StoreManagerInterface $storeManager,
                                 \Magento\Framework\View\ConfigInterface $viewConfig,
@@ -46,6 +50,7 @@ class Category extends AbstractHelper
         $this->filesystem = $filesystem;
         $this->imageFactory = $imageFactory;
         $this->categoryRepository = $categoryRepository;
+        $this->extensionFactory = $extensionFactory;
     }
 
     /**
@@ -94,5 +99,46 @@ class Category extends AbstractHelper
         /** @var MagentoCategory $fullEntity */
         $fullEntity = $this->categoryRepository->get($category->getId());
         $category->setData('url_path', $fullEntity->getData('url_path'));
+    }
+
+    /**
+     * @param MagentoCategory $category
+     */
+    public function addBreadcrumbsData($category)
+    {
+        $pathInStore = $category->getPathInStore();
+        $pathIds = array_reverse(explode(',', $pathInStore));
+
+        $result = [];
+
+        // If there's only 1 category in the path and it equals to the current one - do nothing.
+        if(count($pathIds) == 1 && $pathIds[0] == $category->getId()) {
+            return;
+        }
+
+        foreach ($pathIds as $categoryId) {
+            // Skip category information about current category
+            if($categoryId === $category->getId()) {
+                continue;
+            }
+
+            /** @var MagentoCategory $parentCategory */
+            $parentCategory = $this->categoryRepository->get($categoryId);
+
+            $result[] = [
+                'id' => $parentCategory->getId(),
+                'name' => $parentCategory->getName(),
+                'url_path' => $parentCategory->getUrlPath(),
+                'url_key' => $parentCategory->getUrlKey()
+            ];
+        }
+
+        $extensionAttributes = $category->getExtensionAttributes();
+        if($extensionAttributes === null) {
+            $extensionAttributes = $this->extensionFactory->create();
+        }
+
+        $extensionAttributes->setData('breadcrumbs', $result);
+        $category->setExtensionAttributes($extensionAttributes);
     }
 }
