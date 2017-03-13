@@ -25,7 +25,7 @@ class AfterCategoryLoad
     public function afterLoad(Category $category)
     {
         $this->categoryHelper->addImageAttribute($category);
-        $this->categoryHelper->addBreadcrumbs($category);
+        $this->categoryHelper->addBreadcrumbsData($category);
 
         return $category;
     }

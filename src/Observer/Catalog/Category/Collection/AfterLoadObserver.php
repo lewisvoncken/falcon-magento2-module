@@ -35,7 +35,7 @@ class AfterLoadObserver implements ObserverInterface
             /** @var Category $item */
             $this->categoryHelper->addImageAttribute($item);
             $this->categoryHelper->ensureUrlPath($item);
-            $this->categoryHelper->addBreadcrumbs($item);
+            $this->categoryHelper->addBreadcrumbsData($item);
         }
     }
 }
