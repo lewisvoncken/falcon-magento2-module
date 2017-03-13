@@ -40,4 +40,7 @@
         <attribute code="url_key" type="string" />
         <attribute code="available_qty" type="string" />
     </extension_attributes>
+    <extension_attributes for="Magento\Catalog\Api\Data\CategoryInterface">
+        <attribute code="breadcrumbs" type="mixed"/>
+    </extension_attributes>
 </config>
