@@ -115,11 +115,6 @@ class Category extends AbstractHelper
 
         $result = [];
 
-        // If there's only 1 category in the path and it equals to the current one - do nothing.
-        if(count($pathIds) == 1 && $pathIds[0] == $category->getId()) {
-            return;
-        }
-
         foreach ($pathIds as $categoryId) {
             // Skip category information about current category
             if($categoryId === $category->getId()) {
@@ -136,6 +131,13 @@ class Category extends AbstractHelper
                 'url_key' => $parentCategory->getUrlKey()
             ];
         }
+
+        $result[] = [
+            'id' => $category->getId(),
+            'name' => $category->getName(),
+            'url_path' => $category->getUrlPath(),
+            'url_key' => $category->getUrlKey()
+        ];
 
         $extensionAttributes = $category->getExtensionAttributes();
         if($extensionAttributes === null) {
