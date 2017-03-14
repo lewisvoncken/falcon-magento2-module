@@ -107,6 +107,10 @@ class Category extends AbstractHelper
     public function addBreadcrumbsData($category)
     {
         $pathInStore = $category->getPathInStore();
+        if(empty($pathInStore)) {
+            return;
+        }
+
         $pathIds = array_reverse(explode(',', $pathInStore));
 
         $result = [];
