@@ -23,6 +23,9 @@ class ProductRepository extends \Magento\Catalog\Model\ProductRepository impleme
     /** @var \Magento\Framework\App\ResourceConnection */
     protected $resource;
 
+    /** @var \Magento\Catalog\Model\CategoryRepository */
+    protected $categoryRepository;
+
     public function __construct(
         ProductFactory $productFactory,
         \Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper $initializationHelper,
@@ -30,6 +33,7 @@ class ProductRepository extends \Magento\Catalog\Model\ProductRepository impleme
         \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $collectionFactory,
         \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder,
         \Magento\Catalog\Api\ProductAttributeRepositoryInterface $attributeRepository,
+        \Magento\Catalog\Model\CategoryRepository $categoryRepository,
         \Magento\Catalog\Model\ResourceModel\Product $resourceModel,
         \Magento\Catalog\Model\Product\Initialization\Helper\ProductLinks $linkInitializer,
         \Magento\Catalog\Model\Product\LinkTypeProvider $linkTypeProvider,
@@ -53,14 +57,15 @@ class ProductRepository extends \Magento\Catalog\Model\ProductRepository impleme
         $this->eavConfig = $eavConfig;
         $this->categoryFactory = $categoryFactory;
         $this->resource = $resource;
+        $this->categoryRepository = $categoryRepository;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria, $withAttributeFilters = [])
+    public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria, $includeSubcategories = false, $withAttributeFilters = [])
     {
-        $categoryID = (int)$this->getCategoryIdFromSearchCriteria($searchCriteria);
+        $categoryIDs = $this->getCategoryIdFromSearchCriteria($searchCriteria, $includeSubcategories);
 
         /** @var \Magento\Catalog\Model\ResourceModel\Product\Collection $collection */
         $collection = $this->collectionFactory->create();
@@ -74,6 +79,17 @@ class ProductRepository extends \Magento\Catalog\Model\ProductRepository impleme
 
         //Add filters from root filter group to the collection
         foreach ($searchCriteria->getFilterGroups() as $group) {
+            if($includeSubcategories) {
+                // if including products for subcategories - modify category filter group
+                foreach ($group->getFilters() as $filter) {
+                    /** @var \Magento\Framework\Api\Filter $filter */
+                    if ($filter->getField() === 'category_id') {
+                        $filter->setConditionType('in');
+                        $filter->setValue($categoryIDs);
+                    }
+                }
+            }
+
             $this->addFilterGroupToCollection($group, $collection);
         }
 
@@ -88,13 +104,13 @@ class ProductRepository extends \Magento\Catalog\Model\ProductRepository impleme
             );
         }
 
-        if($categoryID && empty($sortOrders)) {
+        if(!empty($categoryIDs) && empty($sortOrders)) {
             $collection->joinField(
                 'position',
                 'catalog_category_product',
                 'position',
                 'product_id = entity_id',
-                'category_id = ' . $categoryID
+                ['category_id' => $categoryIDs]
             );
             $collection->setOrder('position', SortOrder::SORT_ASC);
         }
@@ -113,8 +129,8 @@ class ProductRepository extends \Magento\Catalog\Model\ProductRepository impleme
             $withAttributeFilters = [$withAttributeFilters];
         }
 
-        if (!empty($withAttributeFilters) && $categoryID !== null) {
-            $searchResult->setFilters($this->getAttributeFilters($withAttributeFilters, $categoryID));
+        if (!empty($withAttributeFilters) && !empty($categoryIDs)) {
+            $searchResult->setFilters($this->getAttributeFilters($withAttributeFilters, $categoryIDs));
         }
 
         return $searchResult;
@@ -122,26 +138,37 @@ class ProductRepository extends \Magento\Catalog\Model\ProductRepository impleme
 
     /**
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
-     * @return null|int
+     * @param bool $includeSubcategories
+     * @return null|array
      */
-    protected function getCategoryIdFromSearchCriteria(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria)
+    protected function getCategoryIdFromSearchCriteria(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria, $includeSubcategories = false)
     {
+        $categoryIDs = [];
+
         foreach ($searchCriteria->getFilterGroups() as $filterGroup) {
             /** @var \Magento\Framework\Api\Search\FilterGroup $filterGroup */
             foreach ($filterGroup->getFilters() as $filter) {
                 /** @var \Magento\Framework\Api\Filter $filter */
                 if ($filter->getField() === 'category_id' && $filter->getConditionType() === 'eq') {
-                    return (int)$filter->getValue();
+                    $categoryIDs[] = $filter->getValue();
                 }
             }
         }
 
-        return null;
+        if(!empty($categoryIDs) && $includeSubcategories) {
+            /** @var \Magento\Catalog\Model\Category $categoryEntity */
+            $categoryEntity = $this->categoryRepository->get($categoryIDs[0]);
+            if($categoryEntity) {
+                return $categoryEntity->getAllChildren(true);
+            }
+        }
+
+        return $categoryIDs;
     }
 
     /**
      * @param array $attributeFilters
-     * @param int $categoryID
+     * @param int|int[] $categoryID
      * @return array
      */
     protected function getAttributeFilters($attributeFilters, $categoryID)
@@ -152,7 +179,7 @@ class ProductRepository extends \Magento\Catalog\Model\ProductRepository impleme
             ->from('catalog_product_entity_int', ['value'])
             ->joinLeft('catalog_category_product', 'catalog_product_entity_int.entity_id = product_id', null)
             ->where('catalog_product_entity_int.attribute_id = :attribute_id')
-            ->where('category_id = :category_id');
+            ->where('category_id in (?)', $categoryID);
 
         $extraAttributes = [
             'visibility' => [
@@ -179,8 +206,7 @@ class ProductRepository extends \Magento\Catalog\Model\ProductRepository impleme
             /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute */
             $attribute = $this->eavConfig->getAttribute('catalog_product', $attributeFilter);
             $availableOptions = $connection->fetchCol($select, [
-                'attribute_id' => (int)$attribute->getId(),
-                'category_id' => $categoryID
+                'attribute_id' => (int)$attribute->getId()
             ]);
 
             // When there's no available options for this attribute in provided category

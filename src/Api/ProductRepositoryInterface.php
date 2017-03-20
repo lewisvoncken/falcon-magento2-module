@@ -6,10 +6,10 @@ interface ProductRepositoryInterface extends \Magento\Catalog\Api\ProductReposit
 {
     /**
      * Get product list
-     *
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
+     * @param bool $includeSubcategories
      * @param mixed $withAttributeFilters
      * @return \Hatimeria\Reagento\Api\Data\ProductSearchResultsInterface
      */
-    public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria, $withAttributeFilters = []);
+    public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria, $includeSubcategories = false, $withAttributeFilters = []);
 }
