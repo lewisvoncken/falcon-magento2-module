@@ -105,14 +105,23 @@ class ProductRepository extends \Magento\Catalog\Model\ProductRepository impleme
         }
 
         if(!empty($categoryIDs) && empty($sortOrders)) {
-            $collection->joinField(
-                'position',
-                'catalog_category_product',
-                'position',
-                'product_id = entity_id',
-                ['category_id' => $categoryIDs]
-            );
-            $collection->setOrder('position', SortOrder::SORT_ASC);
+            // info: 3 statements below is an attempt to get products for provided categories taking into account
+            // category level and product position for specific category
+            $categoryLevelSelect = $this->resource->getConnection()
+                ->select()
+                ->from('catalog_category_entity', ['entity_id', 'level'])
+                ->where('entity_id in (?)', $categoryIDs)
+                ->order('level ASC');
+
+            $categoryPositionSelect = $this->resource->getConnection()
+                ->select()
+                ->from('catalog_category_product', ['category_id', 'product_id', 'position'])
+                ->join($categoryLevelSelect, 'category_id = t.entity_id')
+                ->group('product_id');
+
+            $collection->getSelect()
+                ->join($categoryPositionSelect, 'product_id = e.entity_id', 'position')
+                ->order('position ' . SortOrder::SORT_ASC);
         }
 
         $collection->setCurPage($searchCriteria->getCurrentPage());
