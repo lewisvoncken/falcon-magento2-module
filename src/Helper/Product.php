@@ -29,24 +29,30 @@ class Product extends AbstractHelper
     /** @var GalleryReadHandler */
     protected $galleryReadHandler;
 
+    /** @var \Magento\Eav\Model\Config */
+    protected $eavConfig;
+
     /**
      * @param AppContext $context
      * @param ProductExtensionFactory $productExtensionFactory
      * @param ImageHelper $imageHelper
      * @param ObjectManagerInterface $objectManager
+     * @param \Magento\Eav\Model\Config $eavConfig
      */
     public function __construct(
         AppContext $context,
         ProductExtensionFactory $productExtensionFactory,
         ImageHelper $imageHelper,
         GalleryReadHandler $galleryReadHandler,
-        ObjectManagerInterface $objectManager
+        ObjectManagerInterface $objectManager,
+        \Magento\Eav\Model\Config $eavConfig
     ) {
         parent::__construct($context);
         $this->productExtensionFactory = $productExtensionFactory;
         $this->objectManager = $objectManager;
         $this->imageHelper = $imageHelper;
         $this->galleryReadHandler = $galleryReadHandler;
+        $this->eavConfig = $eavConfig;
     }
 
     /**
@@ -134,6 +140,15 @@ class Product extends AbstractHelper
 
             foreach ($attributes as $attributeItem) {
                 $attributeConfigurableOptions = $configurableOptions[$attributeItem->getAttributeId()];
+                $attributeOptionValues = [];
+
+                // Getting sort-order data for attribute options
+                $attributeOptionsOrder = $productInstance->getAttributeById($attributeItem->getAttributeId(), $product)->getSource()->getAllOptions();
+                $optionsOrder = [];
+
+                foreach ($attributeOptionsOrder as $item) {
+                    $optionsOrder[] = $item['value'];
+                }
 
                 $configurableProductOptions[$attributeItem->getAttributeId()] = [
                     'id' => $attributeItem->getId(),
@@ -155,12 +170,14 @@ class Product extends AbstractHelper
                     }
 
                     /** @var \Magento\ConfigurableProduct\Api\Data\OptionValueInterface $attributeOption */
-                    $configurableProductOptions[$attributeItem->getAttributeId()]['values'][] = [
+                    $attributeOptionValues[ array_search($attributeOption['value_index'], $optionsOrder) ] = [
                         'value_index' => $attributeOption['value_index'],
                         'label' => $attributeOption['label'],
                         'in_stock' => $stockProducts,
                     ];
                 }
+                ksort($attributeOptionValues);
+                $configurableProductOptions[$attributeItem->getAttributeId()]['values'] = array_values($attributeOptionValues);
             }
 
             $productExtension->setConfigurableProductOptions($configurableProductOptions);
