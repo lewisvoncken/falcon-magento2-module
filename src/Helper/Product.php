@@ -125,6 +125,7 @@ class Product extends AbstractHelper
 
             $productExtension = $this->getProductExtensionAttributes($product);
             $stockInfo = [];
+            $disabledProducts = [];
             $configurableProductOptions = [];
 
             /** @var \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute[] $attributes */
@@ -136,6 +137,9 @@ class Product extends AbstractHelper
             foreach ($productInstance->getUsedProducts($product) as $usedProduct) {
                 /** @var \Magento\Catalog\Model\Product $usedProduct */
                 $stockInfo[$usedProduct->getSku()] = $stockRegistry->getProductStockStatus($usedProduct->getId());
+                if($usedProduct->getStatus() != 1) {
+                    $disabledProducts[] = $usedProduct->getSku();
+                }
             }
 
             foreach ($attributes as $attributeItem) {
@@ -160,13 +164,23 @@ class Product extends AbstractHelper
                 ];
 
                 foreach ($attributeItem->getOptions() as $attributeOption) {
+                    $optionEnabled = true;
                     $stockProducts = [];
                     foreach ($attributeConfigurableOptions as $attributeConfigurableOption) {
                         if($attributeConfigurableOption['value_index'] === $attributeOption['value_index']) {
+                            if(in_array($attributeConfigurableOption['sku'], $disabledProducts)) {
+                                $optionEnabled = false;
+                                break;
+                            }
+
                             if(isset($stockInfo[$attributeConfigurableOption['sku']]) && $stockInfo[$attributeConfigurableOption['sku']] > 0) {
                                 $stockProducts[] = $attributeConfigurableOption['sku'];
                             }
                         }
+                    }
+
+                    if(!$optionEnabled) {
+                        continue;
                     }
 
                     /** @var \Magento\ConfigurableProduct\Api\Data\OptionValueInterface $attributeOption */
