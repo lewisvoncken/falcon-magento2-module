@@ -7,6 +7,10 @@ Custom API endpoints provided by this module:
 - `/rest/V1/categories/homepage` - get categories marked as "Show on homepage" (max - 6)
 - `/rest/V1/contact` with `POST` - send a contact email
 
+## Noticeable changes
+
+- `Minicart` block is shown again (Emperia/Marketplace module use `window.checkout` data in its forms) (since v1.1.11)
+
 ## Important settings (if your Magento instance is on a separate domain)
 
 - Put Magento2 application to a subdomain of the main domain (for example `api.example.com`)
