@@ -73,10 +73,15 @@ class Category extends AbstractHelper
         $absolutePath = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA)->getAbsolutePath($categorySubPath);
         $resizedImagePath = "cache/{$width}x{$height}/{$imageName}";
         $resizedImage = $absolutePath . $resizedImagePath;
+        $originalImagePath = $absolutePath . $imageName;
+
+        if(!file_exists($originalImagePath)) {
+            return;
+        }
 
         if(!file_exists($resizedImage)) {
             $imageResize = $this->imageFactory->create();
-            $imageResize->open($absolutePath . $imageName);
+            $imageResize->open($originalImagePath);
             $imageResize->constrainOnly(TRUE);
             $imageResize->keepTransparency(TRUE);
             $imageResize->keepFrame(FALSE);
