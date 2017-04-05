@@ -7,9 +7,30 @@ Custom API endpoints provided by this module:
 - `/rest/V1/categories/homepage` - get categories marked as "Show on homepage" (max - 6)
 - `/rest/V1/contact` with `POST` - send a contact email
 
-## Noticeable changes
+## Creating package releases
 
-- `Minicart` block is shown again (Emperia/Marketplace module use `window.checkout` data in its forms) (since v1.1.11)
+In order to create package release, create GIT tag and push it all together to the repository - you have
+to run the following command:
+
+```
+composer run-script release
+```
+
+It will raise the package version in `composer.json` and `etc/module.xml` files, create a GIT tag and push these changes
+to the repository.
+
+By default - `patch` version will be raised. If you want to raise major or minor - set it with the following syntax:
+
+```
+composer run-script release -- minor
+```
+
+## Using latest release of this package
+
+In order to use the latest package version - you have to set package version with the following rules:
+
+- `0.*` - use the latest possible release up to `1.0.0` version
+- `0.2.*` - use the latest possible release up to `0.3.0` version
 
 ## Important settings (if your Magento instance is on a separate domain)
 
