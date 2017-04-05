@@ -11,5 +11,8 @@
         "psr-4": {
             "Hatimeria\\Reagento\\": "src"
         }
+    },
+    "require": {
+        "adyen/module-payment": "^2.0"
     }
 }
