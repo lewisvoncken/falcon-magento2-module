@@ -3,7 +3,7 @@
 namespace Hatimeria\Reagento\Helper;
 
 use Hatimeria\Reagento\Api\Data\GalleryMediaEntrySizeInterface;
-use Hatimeria\Reagento\Helper\Image as ImageHelper;
+use Hatimeria\Reagento\Helper\Media as MediaHelper;
 use Magento\Catalog\Api\Data\ProductExtension;
 use Magento\Catalog\Api\Data\ProductExtensionFactory;
 use Magento\Catalog\Model\Product as MagentoProduct;
@@ -17,8 +17,8 @@ use Magento\Framework\ObjectManagerInterface;
  */
 class Product extends AbstractHelper
 {
-    /** @var ImageHelper */
-    private $imageHelper;
+    /** @var MediaHelper */
+    private $mediaHelper;
 
     /** @var ProductExtensionFactory */
     private $productExtensionFactory;
@@ -35,14 +35,14 @@ class Product extends AbstractHelper
     /**
      * @param AppContext $context
      * @param ProductExtensionFactory $productExtensionFactory
-     * @param ImageHelper $imageHelper
+     * @param MediaHelper $mediaHelper
      * @param ObjectManagerInterface $objectManager
      * @param \Magento\Eav\Model\Config $eavConfig
      */
     public function __construct(
         AppContext $context,
         ProductExtensionFactory $productExtensionFactory,
-        ImageHelper $imageHelper,
+        MediaHelper $mediaHelper,
         GalleryReadHandler $galleryReadHandler,
         ObjectManagerInterface $objectManager,
         \Magento\Eav\Model\Config $eavConfig
@@ -50,7 +50,7 @@ class Product extends AbstractHelper
         parent::__construct($context);
         $this->productExtensionFactory = $productExtensionFactory;
         $this->objectManager = $objectManager;
-        $this->imageHelper = $imageHelper;
+        $this->mediaHelper = $mediaHelper;
         $this->galleryReadHandler = $galleryReadHandler;
         $this->eavConfig = $eavConfig;
     }
@@ -63,7 +63,7 @@ class Product extends AbstractHelper
     public function addProductImageAttribute($product, $size = 'product_list_thumbnail', $attributeName = 'thumbnail_resized_url')
     {
         $productExtension = $this->getProductExtensionAttributes($product);
-        $productExtension->setData($attributeName, $this->imageHelper->getMainProductImageUrl($product, $size));
+        $productExtension->setData($attributeName, $this->mediaHelper->getMainProductImageUrl($product, $size));
         $product->setExtensionAttributes($productExtension);
     }
 
@@ -83,17 +83,24 @@ class Product extends AbstractHelper
         $extAttrs = $this->getProductExtensionAttributes($product);
 
         foreach ($mediaGalleryEntries as $mediaGalleryEntry) {
-            if($mediaGalleryEntry->getMediaType() !== 'image' || $mediaGalleryEntry->isDisabled()) {
+            if ($mediaGalleryEntry->isDisabled()) {
                 continue;
             }
 
-            /** @var GalleryMediaEntrySizeInterface $sizesEntry */
-            $sizesEntry = $this->objectManager->create('Hatimeria\Reagento\Api\Data\GalleryMediaEntrySizeInterface');
 
-            $file = $mediaGalleryEntry->getFile();
-            $sizesEntry->setFull($this->imageHelper->getProductImageUrl($product, $file, 'product_media_gallery_item'));
-            $sizesEntry->setThumbnail($this->imageHelper->getProductImageUrl($product, $file, 'product_media_gallery_item_thumbnail'));
+                /** @var GalleryMediaEntrySizeInterface $sizesEntry */
+                $sizesEntry = $this->objectManager->create('Hatimeria\Reagento\Api\Data\GalleryMediaEntrySizeInterface');
+
+                $file = $mediaGalleryEntry->getFile();
+            if ($mediaGalleryEntry->getMediaType() === 'image') {
+                $sizesEntry->setFull($this->mediaHelper->getProductImageUrl($product, $file, 'product_media_gallery_item'));
+                $sizesEntry->setThumbnail($this->mediaHelper->getProductImageUrl($product, $file, 'product_media_gallery_item_thumbnail'));
+            } elseif ($mediaGalleryEntry->getMediaType() === 'video') {
+                $sizesEntry->setEmbedUrl($this->mediaHelper->getProductVideoUrl());
+            }
+            $sizesEntry->setType($mediaGalleryEntry->getMediaType());
             $sizes[] = $sizesEntry;
+
         }
 
         $extAttrs->setMediaGallerySizes($sizes);
