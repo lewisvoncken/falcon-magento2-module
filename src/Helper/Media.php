@@ -54,9 +54,17 @@ class Media extends AbstractHelper
      * @param MagentoProduct $product
      * @return string
      */
-    public function getProductVideoUrl(MagentoProduct $product)
+    public function getProductVideoUrl(MagentoProduct $product, $mediaId)
     {
-        return $product->getVideoUrl();
+        $mediaGallery = $product->getMediaGallery();
+        if (
+            isset ($mediaGallery['images']) &&
+            isset ($mediaGallery['images'][$mediaId]) &&
+            isset ($mediaGallery['images'][$mediaId]['video_url'])
+        ) {
+            return $mediaGallery['images'][$mediaId]['video_url'];
+        }
 
+        return null;
     }
 }
