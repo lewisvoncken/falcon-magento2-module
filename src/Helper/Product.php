@@ -91,9 +91,9 @@ class Product extends AbstractHelper
             $sizesEntry = $this->objectManager->create('Hatimeria\Reagento\Api\Data\GalleryMediaEntrySizeInterface');
 
             $file = $mediaGalleryEntry->getFile();
+            $sizesEntry->setThumbnail($this->mediaHelper->getProductImageUrl($product, $file, 'product_media_gallery_item_thumbnail'));
             if ($mediaGalleryEntry->getMediaType() === 'image') {
                 $sizesEntry->setFull($this->mediaHelper->getProductImageUrl($product, $file, 'product_media_gallery_item'));
-                $sizesEntry->setThumbnail($this->mediaHelper->getProductImageUrl($product, $file, 'product_media_gallery_item_thumbnail'));
             } elseif ($mediaGalleryEntry->getMediaType() === 'external-video') {
                 $sizesEntry->setEmbedUrl($this->mediaHelper->getProductVideoUrl($product, $mediaGalleryEntry->getId()));
             }
