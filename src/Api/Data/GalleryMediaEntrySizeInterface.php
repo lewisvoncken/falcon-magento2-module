@@ -31,6 +31,7 @@ interface GalleryMediaEntrySizeInterface
      * @return string
      */
     public function getThumbnail();
+
     /**
      * @param string $url
      * @return self
