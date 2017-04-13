@@ -92,9 +92,8 @@ class Product extends AbstractHelper
 
             $file = $mediaGalleryEntry->getFile();
             $sizesEntry->setThumbnail($this->mediaHelper->getProductImageUrl($product, $file, 'product_media_gallery_item_thumbnail'));
-            if ($mediaGalleryEntry->getMediaType() === 'image') {
-                $sizesEntry->setFull($this->mediaHelper->getProductImageUrl($product, $file, 'product_media_gallery_item'));
-            } elseif ($mediaGalleryEntry->getMediaType() === 'external-video') {
+            $sizesEntry->setFull($this->mediaHelper->getProductImageUrl($product, $file, 'product_media_gallery_item'));
+            if ($mediaGalleryEntry->getMediaType() === 'external-video') {
                 $sizesEntry->setEmbedUrl($this->mediaHelper->getProductVideoUrl($product, $mediaGalleryEntry->getId()));
             }
             $sizesEntry->setType($mediaGalleryEntry->getMediaType());
