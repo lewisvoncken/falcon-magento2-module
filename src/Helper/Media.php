@@ -52,6 +52,7 @@ class Media extends AbstractHelper
 
     /**
      * @param MagentoProduct $product
+     * @param int $mediaId
      * @return string
      */
     public function getProductVideoUrl(MagentoProduct $product, $mediaId)

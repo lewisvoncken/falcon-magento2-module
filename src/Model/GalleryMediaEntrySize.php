@@ -10,7 +10,7 @@ class GalleryMediaEntrySize extends AbstractModel implements GalleryMediaEntrySi
     const TYPE = 'type';
     const FULL = 'full';
     const THUMBNAIL = 'thumbnail';
-    const EMBED_URL = 'EMBED_URL';
+    const EMBED_URL = 'embed_url';
 
     /**
      * @return string
