@@ -11,4 +11,7 @@
     <type name="Magento\Quote\Model\Cart\Totals\ItemConverter">
         <plugin name="hatimeriaReagentoItemConverter" type="Hatimeria\Reagento\Model\Plugin\ItemConverter" />
     </type>
+    <type name="Magento\Quote\Model\QuoteManagement">
+        <plugin name="hatimeriaReagentoAfterPlaceOrder" type="Hatimeria\Reagento\Model\Plugin\AfterPlaceOrder" />
+    </type>
 </config>
