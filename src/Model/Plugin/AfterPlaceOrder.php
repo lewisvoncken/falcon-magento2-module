@@ -26,7 +26,7 @@ class AfterPlaceOrder
     /**
      * @param $subject
      * @param $orderId
-     * @return int|\StdObject
+     * @return mixed
      */
     public function afterPlaceOrder($subject, $orderId)
     {
@@ -36,12 +36,15 @@ class AfterPlaceOrder
         if ($payment->getAdditionalInformation()) {
             $paymentAdditionalInfo = $payment->getAdditionalInformation();
             if ( isset($paymentAdditionalInfo['3dActive']) && true === $paymentAdditionalInfo['3dActive'] ) {
-                $result = [
-                    'issuerUrl' => $paymentAdditionalInfo['issuerUrl'],
+                $result = new \StdClass();
+                $result->issuerUrl = $paymentAdditionalInfo['issuerUrl'];
+                $result->md        = $paymentAdditionalInfo['md'];
+                $result->paRequest = $paymentAdditionalInfo['paRequest'];
+//                    'issuerUrl' => $paymentAdditionalInfo['issuerUrl'],
 //                    'termUrl'  => $this->adyenValidate3dBlock->getTermUrl(),
-                    'md' => $paymentAdditionalInfo['md'],
-                    'paRequest' => $paymentAdditionalInfo['paRequest']
-                ];
+//                    'md' => $paymentAdditionalInfo['md'],
+//                    'paRequest' => $paymentAdditionalInfo['paRequest']
+//                ];
 
                 return $result;
             }
