@@ -99,16 +99,6 @@ class Category extends AbstractHelper
     /**
      * @param MagentoCategory $category
      */
-    public function ensureUrlPath($category)
-    {
-        /** @var MagentoCategory $fullEntity */
-        $fullEntity = $this->categoryRepository->get($category->getId());
-        $category->setData('url_path', $fullEntity->getData('url_path'));
-    }
-
-    /**
-     * @param MagentoCategory $category
-     */
     public function addBreadcrumbsData($category)
     {
         $pathInStore = $category->getPathInStore();
@@ -116,19 +106,11 @@ class Category extends AbstractHelper
             return;
         }
 
-        $pathIds = array_reverse(explode(',', $pathInStore));
-
         $result = [];
 
-        foreach ($pathIds as $categoryId) {
-            // Skip category information about current category
-            if($categoryId === $category->getId()) {
-                continue;
-            }
+        $parentCategories = $category->getParentCategories();
 
-            /** @var MagentoCategory $parentCategory */
-            $parentCategory = $this->categoryRepository->get($categoryId);
-
+        foreach ($parentCategories as $parentCategory) {
             $result[] = [
                 'id' => $parentCategory->getId(),
                 'name' => $parentCategory->getName(),
