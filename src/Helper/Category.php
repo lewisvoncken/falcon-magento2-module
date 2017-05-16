@@ -4,6 +4,7 @@ namespace Hatimeria\Reagento\Helper;
 
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Model\Category as MagentoCategory;
+use Magento\Catalog\Model\Category\Collection as MagentoCategoryCollection;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\App\Helper\Context as AppContext;
@@ -98,8 +99,9 @@ class Category extends AbstractHelper
 
     /**
      * @param MagentoCategory $category
+     * @param MagentoCategoryCollection $collection
      */
-    public function addBreadcrumbsData($category)
+    public function addBreadcrumbsData($category, $collection)
     {
         $pathInStore = $category->getPathInStore();
         if(empty($pathInStore)) {
@@ -108,9 +110,11 @@ class Category extends AbstractHelper
 
         $result = [];
 
-        $parentCategories = $category->getParentCategories();
+        $pathIds = array_reverse(explode(',', $pathInStore));
+        array_shift($pathIds); // remove the current category from parent path ids
 
-        foreach ($parentCategories as $parentCategory) {
+        foreach ($pathIds as $id) {
+            $parentCategory = $collection->getItemById($id);
             $result[] = [
                 'id' => $parentCategory->getId(),
                 'name' => $parentCategory->getName(),

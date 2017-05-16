@@ -13,11 +13,6 @@ class Collection extends MagentoCategoryCollection
      */
     protected $hatimeriaCategoryHelper;
 
-    /**
-     * @var AbstractCollection
-     */
-    protected $abstractCollection;
-
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
         \Psr\Log\LoggerInterface $logger,
@@ -30,11 +25,9 @@ class Collection extends MagentoCategoryCollection
         \Magento\Framework\Validator\UniversalFactory $universalFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Hatimeria\Reagento\Helper\Category $hatimeriaCategoryHelper,
-        \Magento\Catalog\Model\ResourceModel\Collection\AbstractCollection $abstractCollection,
         \Magento\Framework\DB\Adapter\AdapterInterface $connection = null
     ) {
         $this->hatimeriaCategoryHelper = $hatimeriaCategoryHelper;
-        $this->abstractCollection = $abstractCollection;
         return parent::__construct(
             $entityFactory,
             $logger,
@@ -61,23 +54,46 @@ class Collection extends MagentoCategoryCollection
         if ($this->isLoaded()) {
             return $this;
         }
-
         $this->addAttributeToSelect('url_path');
+        $this->addAttributeToSelect('url_key');
+        $this->addAttributeToSelect('image');
 
-        if ($this->_loadWithProductCount) {
-            $this->addAttributeToSelect('all_children');
-            $this->addAttributeToSelect('is_anchor');
-        }
+        parent::load($printQuery, $logQuery);
 
-        $this->abstractCollection->load($printQuery, $logQuery);
-
-        if ($this->_loadWithProductCount) {
-            $this->_loadProductCount();
-        }
-        foreach ($this as $category) {
+        foreach ($this->_items as $category) {
             $this->hatimeriaCategoryHelper->addImageAttribute($category);
-            $this->hatimeriaCategoryHelper->addBreadcrumbsData($category);
+            $this->hatimeriaCategoryHelper->addBreadcrumbsData($category, $this);
         }
+
         return $this;
     }
+
+    public function getItems()
+    {
+        if (! $this->isLoaded()) {
+            $this->load();
+        }
+
+        return $this->_items;
+    }
+
+
+    /**
+     * Retrieve item by id
+     *
+     * @param   mixed $idValue
+     * @return  \Magento\Framework\DataObject
+     */
+    public function getItemById($idValue)
+    {
+        if (! $this->isLoaded()) {
+            $this->load();
+        }
+
+        if (isset($this->_items[$idValue])) {
+            return $this->_items[$idValue];
+        }
+        return null;
+    }
+
 }
