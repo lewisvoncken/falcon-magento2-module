@@ -4,6 +4,7 @@ namespace Hatimeria\Reagento\Helper;
 
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Model\Category as MagentoCategory;
+use Magento\Catalog\Model\Category\Collection as MagentoCategoryCollection;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\App\Helper\Context as AppContext;
@@ -98,37 +99,22 @@ class Category extends AbstractHelper
 
     /**
      * @param MagentoCategory $category
+     * @param MagentoCategoryCollection $collection
      */
-    public function ensureUrlPath($category)
-    {
-        /** @var MagentoCategory $fullEntity */
-        $fullEntity = $this->categoryRepository->get($category->getId());
-        $category->setData('url_path', $fullEntity->getData('url_path'));
-    }
-
-    /**
-     * @param MagentoCategory $category
-     */
-    public function addBreadcrumbsData($category)
+    public function addBreadcrumbsData($category, $collection)
     {
         $pathInStore = $category->getPathInStore();
         if(empty($pathInStore)) {
             return;
         }
 
-        $pathIds = array_reverse(explode(',', $pathInStore));
-
         $result = [];
 
-        foreach ($pathIds as $categoryId) {
-            // Skip category information about current category
-            if($categoryId === $category->getId()) {
-                continue;
-            }
+        $pathIds = array_reverse(explode(',', $pathInStore));
+        array_shift($pathIds); // remove the current category from parent path ids
 
-            /** @var MagentoCategory $parentCategory */
-            $parentCategory = $this->categoryRepository->get($categoryId);
-
+        foreach ($pathIds as $id) {
+            $parentCategory = $collection->getItemById($id);
             $result[] = [
                 'id' => $parentCategory->getId(),
                 'name' => $parentCategory->getName(),
