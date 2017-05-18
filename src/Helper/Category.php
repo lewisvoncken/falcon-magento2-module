@@ -29,6 +29,8 @@ class Category extends AbstractHelper
     /** @var \Magento\Catalog\Api\Data\CategoryExtensionFactory */
     protected $extensionFactory;
 
+    protected $loadedCategories = [];
+
     /**
      * @param AppContext $context
      * @param \Magento\Framework\Image\AdapterFactory $imageFactory
@@ -101,7 +103,7 @@ class Category extends AbstractHelper
      * @param MagentoCategory $category
      * @param MagentoCategoryCollection $collection
      */
-    public function addBreadcrumbsData($category, $collection)
+    public function addBreadcrumbsData($category, $collection = null)
     {
         $pathInStore = $category->getPathInStore();
         if(empty($pathInStore)) {
@@ -111,10 +113,18 @@ class Category extends AbstractHelper
         $result = [];
 
         $pathIds = array_reverse(explode(',', $pathInStore));
-        array_shift($pathIds); // remove the current category from parent path ids
+        array_pop($pathIds); // remove the current category from parent path ids
 
         foreach ($pathIds as $id) {
-            $parentCategory = $collection->getItemById($id);
+            if($collection) {
+                $parentCategory = $collection->getItemById($id);
+            } else if(array_key_exists($id, $this->loadedCategories)) {
+                $parentCategory = $this->loadedCategories[$id];
+            } else {
+                $parentCategory = $this->categoryRepository->get($id);
+                $this->loadedCategories[$id] = $parentCategory;
+            }
+
             $result[] = [
                 'id' => $parentCategory->getId(),
                 'name' => $parentCategory->getName(),
