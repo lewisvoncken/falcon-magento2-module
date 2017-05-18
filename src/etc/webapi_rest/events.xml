@@ -15,7 +15,4 @@
     <event name="cms_block_collection_load_after">
         <observer name="hatimeria_reagento_cms_block_collection_load_after_observer" instance="Hatimeria\Reagento\Observer\Cms\AfterCollectionLoadObserver" />
     </event>
-    <event name="catalog_category_collection_load_after">
-        <observer name="hatimeria_reagento_catalog_category_collection_load_after_observer" instance="Hatimeria\Reagento\Observer\Catalog\Category\Collection\AfterLoadObserver" />
-    </event>
 </config>
