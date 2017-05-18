@@ -125,6 +125,11 @@ class Category extends AbstractHelper
                 $this->loadedCategories[$id] = $parentCategory;
             }
 
+            // todo: category may not be found - investigate why!
+            if(!$parentCategory) {
+                continue;
+            }
+
             $result[] = [
                 'id' => $parentCategory->getId(),
                 'name' => $parentCategory->getName(),
