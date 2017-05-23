@@ -29,7 +29,7 @@ class AfterPlaceOrder
         OrderRepositoryInterface $orderRepository,
         \Magento\Framework\UrlInterface $urlBuilder
     ) {
-        $this->orderRepository      = $orderRepository;
+        $this->orderRepository = $orderRepository;
         $this->urlBuilder = $urlBuilder;
     }
 
@@ -44,8 +44,8 @@ class AfterPlaceOrder
         $order = $this->orderRepository->get($orderId);
         $payment = $order->getPayment();
         $obj = new OrderResponse();
-        if ($payment->getAdditionalInformation()) {
-            $paymentAdditionalInfo = $payment->getAdditionalInformation();
+        $paymentAdditionalInfo = $payment->getAdditionalInformation();
+        if ($paymentAdditionalInfo) {
             if ($payment->getMethod() == 'adyen_cc' && isset($paymentAdditionalInfo['3dActive']) && true === $paymentAdditionalInfo['3dActive'] ) {
                 $adyen = new AdyenRedirect();
                 $adyen->setIssuerUrl($paymentAdditionalInfo['issuerUrl']);
