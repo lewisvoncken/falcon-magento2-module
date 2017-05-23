@@ -67,7 +67,7 @@
         </resources>
     </route>
 
-    <route url="/V1/guest-carts/:cartId/order/hatimeria" method="PUT">
+    <route url="/V1/guest-carts/:cartId/reagento-order" method="PUT">
         <service class="\Hatimeria\Reagento\Api\HatimeriaCartManagementInterface" method="placeOrder"/>
         <resources>
             <resource ref="anonymous" />
