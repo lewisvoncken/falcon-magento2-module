@@ -183,11 +183,20 @@ class ProductRepository extends \Magento\Catalog\Model\ProductRepository impleme
     protected function getAttributeFilters($attributeFilters, $categoryID)
     {
         $connection = $this->resource->getConnection();
-        $select = $connection->select()
+        // dropdown attributes
+        $selectInt = $connection->select()
             ->distinct()
             ->from('catalog_product_entity_int', ['value'])
             ->joinLeft('catalog_category_product', 'catalog_product_entity_int.entity_id = product_id', null)
             ->where('catalog_product_entity_int.attribute_id = :attribute_id')
+            ->where('category_id in (?)', $categoryID);
+
+        // multiselect attibutes
+        $selectVarchar = $connection->select()
+            ->distinct()
+            ->from('catalog_product_entity_varchar', ['value'])
+            ->joinLeft('catalog_category_product', 'catalog_product_entity_varchar.entity_id = product_id', null)
+            ->where('catalog_product_entity_varchar.attribute_id = :attribute_id')
             ->where('category_id in (?)', $categoryID);
 
         $extraAttributes = [
@@ -201,22 +210,36 @@ class ProductRepository extends \Magento\Catalog\Model\ProductRepository impleme
         ];
 
         foreach ($extraAttributes as $attributeCode => $attributeValues) {
-            $attributeSelect = $connection->select()
+            $attributeSelectInt = $connection->select()
                 ->from('catalog_product_entity_int', 'entity_id')
                 ->joinLeft('eav_attribute', 'catalog_product_entity_int.attribute_id = eav_attribute.attribute_id', null)
                 ->where('value in (?)', $attributeValues)
                 ->where('attribute_code = ?', $attributeCode);
 
-            $select->where('catalog_product_entity_int.entity_id in ?', $attributeSelect);
+            $attributeSelectVarchar = $connection->select()
+                ->from('catalog_product_entity_int', 'entity_id')
+                ->joinLeft('eav_attribute', 'catalog_product_entity_int.attribute_id = eav_attribute.attribute_id', null)
+                ->where('value in (?)', $attributeValues)
+                ->where('attribute_code = ?', $attributeCode);
+
+            $selectInt->where('catalog_product_entity_int.entity_id in ?', $attributeSelectInt);
+            $selectVarchar->where('catalog_product_entity_varchar.entity_id in ?', $attributeSelectVarchar);
         }
 
         $result = [];
         foreach ($attributeFilters as $attributeFilter) {
             /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute */
             $attribute = $this->eavConfig->getAttribute('catalog_product', $attributeFilter);
-            $availableOptions = $connection->fetchCol($select, [
-                'attribute_id' => (int)$attribute->getId()
-            ]);
+
+            if ('multiselect' == $attribute->getFrontendInput()) {
+                $availableOptions = $connection->fetchCol($selectVarchar, [
+                    'attribute_id' => (int)$attribute->getId()
+                ]);
+            } else {
+                $availableOptions = $connection->fetchCol($selectInt, [
+                    'attribute_id' => (int)$attribute->getId()
+                ]);
+            }
 
             // When there's no available options for this attribute in provided category
             if(empty($availableOptions)) {
