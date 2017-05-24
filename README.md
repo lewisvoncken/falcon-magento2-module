@@ -3,6 +3,7 @@
 Custom API endpoints provided by this module:
 
 - `[POST] /rest/V1/contact` - send a contact email
+- `[POST] /V1/guest-carts/:cartId/payment-information` (**overridden**) - modifies the docblock of function return type (may be int or OrderResponse object)
 - `[GET] /rest/V1/url/?requestPath=:url` - get info about cms page by the given URL
 - `[GET] /rest/V1/info` - get basic settings for current shop
 - `[GET] /rest/V1/categories/homepage` - get categories marked as "Show on homepage" (max - 6)
