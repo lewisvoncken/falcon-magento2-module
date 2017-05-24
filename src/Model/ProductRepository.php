@@ -192,7 +192,7 @@ class ProductRepository extends \Magento\Catalog\Model\ProductRepository impleme
             ->where('category_id in (?)', $categoryID);
 
         // multiselect attibutes
-        $selectText = $connection->select()
+        $selectVarchar = $connection->select()
             ->distinct()
             ->from('catalog_product_entity_varchar', ['value'])
             ->joinLeft('catalog_category_product', 'catalog_product_entity_varchar.entity_id = product_id', null)
@@ -223,7 +223,7 @@ class ProductRepository extends \Magento\Catalog\Model\ProductRepository impleme
                 ->where('attribute_code = ?', $attributeCode);
 
             $selectInt->where('catalog_product_entity_int.entity_id in ?', $attributeSelectInt);
-            $selectText->where('catalog_product_entity_varchar.entity_id in ?', $attributeSelectText);
+            $selectVarchar->where('catalog_product_entity_varchar.entity_id in ?', $attributeSelectText);
         }
 
         $result = [];
@@ -232,7 +232,7 @@ class ProductRepository extends \Magento\Catalog\Model\ProductRepository impleme
             $attribute = $this->eavConfig->getAttribute('catalog_product', $attributeFilter);
 
             if ('multiselect' == $attribute->getFrontendInput()) {
-                $availableOptions = $connection->fetchCol($selectText, [
+                $availableOptions = $connection->fetchCol($selectVarchar, [
                     'attribute_id' => (int)$attribute->getId()
                 ]);
             } else {
