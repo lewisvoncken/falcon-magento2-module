@@ -216,14 +216,14 @@ class ProductRepository extends \Magento\Catalog\Model\ProductRepository impleme
                 ->where('value in (?)', $attributeValues)
                 ->where('attribute_code = ?', $attributeCode);
 
-            $attributeSelectText = $connection->select()
+            $attributeSelectVarchar = $connection->select()
                 ->from('catalog_product_entity_int', 'entity_id')
                 ->joinLeft('eav_attribute', 'catalog_product_entity_int.attribute_id = eav_attribute.attribute_id', null)
                 ->where('value in (?)', $attributeValues)
                 ->where('attribute_code = ?', $attributeCode);
 
             $selectInt->where('catalog_product_entity_int.entity_id in ?', $attributeSelectInt);
-            $selectVarchar->where('catalog_product_entity_varchar.entity_id in ?', $attributeSelectText);
+            $selectVarchar->where('catalog_product_entity_varchar.entity_id in ?', $attributeSelectVarchar);
         }
 
         $result = [];
