@@ -67,4 +67,16 @@
         </resources>
     </route>
 
+    <route url="/V1/guest-carts/:cartId/reagento-order" method="PUT">
+        <service class="\Hatimeria\Reagento\Api\HatimeriaCartManagementInterface" method="placeOrder"/>
+        <resources>
+            <resource ref="anonymous" />
+        </resources>
+    </route>
+    <route url="/V1/guest-carts/:cartId/payment-information" method="POST">
+        <service class="\Hatimeria\Reagento\Api\HatimeriaGuestPaymentInformationManagementInterface" method="savePaymentInformationAndPlaceOrder"/>
+        <resources>
+            <resource ref="anonymous" />
+        </resources>
+    </route>
 </routes>

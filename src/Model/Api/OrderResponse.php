@@ -1,0 +1,43 @@
+<?php
+namespace Hatimeria\Reagento\Model\Api;
+
+use Magento\Framework\DataObject;
+
+class OrderResponse extends DataObject
+{
+    /**
+     * @var \Hatimeria\Reagento\Model\Api\AdyenRedirect
+     */
+    protected $adyen;
+
+    /**
+     * @var string
+     */
+    protected $orderId;
+
+    /**
+     * @return \Hatimeria\Reagento\Model\Api\AdyenRedirect
+     */
+    public function getAdyen()
+    {
+        return $this->_data['adyen'];
+    }
+
+    /**
+     * @return string
+     */
+    public function getOrderId()
+    {
+        return $this->_data['order_id'];
+    }
+
+    /**
+     * @param string $key
+     * @param null $index
+     * @return array
+     */
+    public function getData($key = '', $index = null)
+    {
+        return [];
+    }
+}
