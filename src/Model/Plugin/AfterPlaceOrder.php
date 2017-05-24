@@ -43,10 +43,12 @@ class AfterPlaceOrder
         /** @var Order $order */
         $order = $this->orderRepository->get($orderId);
         $payment = $order->getPayment();
+        // TODO replace the object creation with dependency injection of interface, and make object implement it
         $obj = new OrderResponse();
         $paymentAdditionalInfo = $payment->getAdditionalInformation();
         if ($paymentAdditionalInfo) {
             if ($payment->getMethod() == 'adyen_cc' && isset($paymentAdditionalInfo['3dActive']) && true === $paymentAdditionalInfo['3dActive'] ) {
+                // TODO replace the object creation with dependency injection of interface, and make object implement it
                 $adyen = new AdyenRedirect();
                 $adyen->setIssuerUrl($paymentAdditionalInfo['issuerUrl']);
                 $adyen->setMd($paymentAdditionalInfo['md']);
@@ -54,11 +56,11 @@ class AfterPlaceOrder
                 $adyen->setTermUrl($this->_getTermUrl());
 
                 $obj->setAdyen($adyen);
+                $obj->setOrderId($order->getData('increment_id'));
+                return $obj;
             }
         }
-        $obj->setOrderId($order->getData('increment_id'));
-
-        return $obj;
+        return $order->getData('increment_id');
     }
 
     /**

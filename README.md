@@ -13,6 +13,7 @@ Custom API endpoints provided by this module:
 - `[GET] /rest/V1/order-info/:quoteId` - get order information from quote ID (orderId, revenue, shipping, tax etc)
 - `[GET] /rest/V1/guest-payment/:cartId/:orderId/adyen-link` - get Adyen payment link for redirection
 - `[GET] /rest/V1/customer-payment/:customerId/:orderId/adyen-link` - get Adyen payment link for redirection (for registered customer)
+- `[PUT] /rest/V1/guest-carts/:cartId/reagento-order` - place order with Adyen credit card - getting an object as a response
 
 Extension attributes:
 
