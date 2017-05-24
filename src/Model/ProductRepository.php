@@ -194,9 +194,9 @@ class ProductRepository extends \Magento\Catalog\Model\ProductRepository impleme
         // multiselect attibutes
         $selectText = $connection->select()
             ->distinct()
-            ->from('catalog_product_entity_text', ['value'])
-            ->joinLeft('catalog_category_product', 'catalog_product_entity_text.entity_id = product_id', null)
-            ->where('catalog_product_entity_text.attribute_id = :attribute_id')
+            ->from('catalog_product_entity_varchar', ['value'])
+            ->joinLeft('catalog_category_product', 'catalog_product_entity_varchar.entity_id = product_id', null)
+            ->where('catalog_product_entity_varchar.attribute_id = :attribute_id')
             ->where('category_id in (?)', $categoryID);
 
         $extraAttributes = [
@@ -223,7 +223,7 @@ class ProductRepository extends \Magento\Catalog\Model\ProductRepository impleme
                 ->where('attribute_code = ?', $attributeCode);
 
             $selectInt->where('catalog_product_entity_int.entity_id in ?', $attributeSelectInt);
-            $selectText->where('catalog_product_entity_text.entity_id in ?', $attributeSelectText);
+            $selectText->where('catalog_product_entity_varchar.entity_id in ?', $attributeSelectText);
         }
 
         $result = [];
