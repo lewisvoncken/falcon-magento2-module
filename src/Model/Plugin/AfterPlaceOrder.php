@@ -56,11 +56,11 @@ class AfterPlaceOrder
                 $adyen->setTermUrl($this->_getTermUrl());
 
                 $obj->setAdyen($adyen);
-                $obj->setOrderId($order->getData('increment_id'));
-                return $obj;
             }
         }
-        return $order->getData('increment_id');
+        $obj->setOrderId($order->getData('increment_id'));
+
+        return $obj;
     }
 
     /**
