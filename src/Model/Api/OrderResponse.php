@@ -20,7 +20,11 @@ class OrderResponse extends DataObject
      */
     public function getAdyen()
     {
-        return $this->_data['adyen'];
+        if (isset($this->_data['adyen'])) {
+            return $this->_data['adyen'];
+        } else {
+            return null;
+        }
     }
 
     /**
