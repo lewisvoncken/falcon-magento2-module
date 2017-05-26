@@ -2,7 +2,9 @@
 
 namespace Hatimeria\Reagento\Controller\Adyen;
 
-class Validate3d extends \Adyen\Payment\Controller\Process\Validate3d
+use \Adyen\Payment\Controller\Process\Validate3d as AdyenValidate3d;
+
+class Validate3d extends AdyenValidate3d
 {
     /**
      * Get order object
