@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: wbrodsky
- * Date: 02/06/2017
- * Time: 09:59
- */
 
 namespace Hatimeria\Reagento\Model\Plugin;
 
@@ -27,6 +21,7 @@ class StoreSetter
     /**
      * @param $subject
      * @param \Magento\Framework\App\Action\AbstractAction $actionInstance
+     * @return \Magento\Framework\App\Action\AbstractAction
      */
     public function afterMatch($subject, $actionInstance)
     {
