@@ -33,4 +33,7 @@
             <argument name="instanceName" xsi:type="string">Hatimeria\Reagento\Api\SearchResults</argument>
         </arguments>
     </virtualType>
+    <type name="Magento\Framework\App\RouterInterface">
+        <plugin name="hatimeriaReagentoStoreSetter" type="Hatimeria\Reagento\Model\Plugin\StoreSetter"/>
+    </type>
 </config>
