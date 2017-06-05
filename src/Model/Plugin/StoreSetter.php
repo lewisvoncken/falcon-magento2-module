@@ -2,6 +2,7 @@
 
 namespace Hatimeria\Reagento\Model\Plugin;
 
+use Magento\Framework\App\Action\AbstractAction;
 use Magento\Store\Model\StoreManagerInterface;
 
 class StoreSetter
@@ -11,7 +12,10 @@ class StoreSetter
      */
     protected $storeManager;
 
-
+    /**
+     * StoreSetter constructor.
+     * @param StoreManagerInterface $storeManager
+     */
     public function __construct(
         StoreManagerInterface $storeManager
     ) {
@@ -25,18 +29,20 @@ class StoreSetter
      */
     public function afterMatch($subject, $actionInstance)
     {
-        $request = $actionInstance->getRequest();
-        // Currently apply only for paypal controller in Hatimeria extension, remove this condition when needed elsewhere
-        if (
-            'payment_paypal_express' == $request->getControllerName() &&
-            'checkoutExt' == $request->getModuleName()
-        ) {
-            $storeId = $request->getParam('store_id');
-            if ($storeId) {
-                $this->storeManager->setCurrentStore($storeId);
+        if ($actionInstance && $actionInstance instanceof AbstractAction) {
+            $request = $actionInstance->getRequest();
+            //Currently apply only for paypal controller in Hatimeria extension, remove this condition when needed elsewhere
+            if (
+                'payment_paypal_express' == $request->getControllerName() &&
+                'checkoutExt' == $request->getModuleName()
+            ) {
+                $storeId = $request->getParam('store_id');
+                if ($storeId) {
+                    $this->storeManager->setCurrentStore($storeId);
+                }
             }
-        }
 
+        }
         return $actionInstance;
     }
 }
