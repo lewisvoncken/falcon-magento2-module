@@ -177,10 +177,10 @@ class ProductRepository extends \Magento\Catalog\Model\ProductRepository impleme
 
     /**
      * @param array $attributeFilters
-     * @param int|int[] $categoryID
+     * @param int|int[] $categoryIDs
      * @return array
      */
-    protected function getAttributeFilters($attributeFilters, $categoryID = [])
+    protected function getAttributeFilters($attributeFilters, $categoryIDs = [])
     {
         $connection = $this->resource->getConnection();
         // dropdown attributes
@@ -190,14 +190,14 @@ class ProductRepository extends \Magento\Catalog\Model\ProductRepository impleme
             ->joinLeft('catalog_category_product', 'catalog_product_entity_int.entity_id = product_id', null)
             ->where('catalog_product_entity_int.attribute_id = :attribute_id');
 
-        // multiselect attibutes
+        // multiselect attributes
         $selectVarchar = $connection->select()
             ->distinct()
             ->from('catalog_product_entity_varchar', ['value'])
             ->joinLeft('catalog_category_product', 'catalog_product_entity_varchar.entity_id = product_id', null)
             ->where('catalog_product_entity_varchar.attribute_id = :attribute_id');
 
-        if (!empty($categoryIDs)) {
+        if ( !empty($categoryIDs) ) {
             $selectInt->where('category_id in (?)', $categoryIDs);
             $selectVarchar->where('category_id in (?)', $categoryIDs);
         }
