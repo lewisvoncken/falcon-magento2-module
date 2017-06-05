@@ -138,7 +138,7 @@ class ProductRepository extends \Magento\Catalog\Model\ProductRepository impleme
             $withAttributeFilters = [$withAttributeFilters];
         }
 
-        if (!empty($withAttributeFilters) && !empty($categoryIDs)) {
+        if (!empty($withAttributeFilters)) {
             $searchResult->setFilters($this->getAttributeFilters($withAttributeFilters, $categoryIDs));
         }
 
@@ -180,7 +180,7 @@ class ProductRepository extends \Magento\Catalog\Model\ProductRepository impleme
      * @param int|int[] $categoryID
      * @return array
      */
-    protected function getAttributeFilters($attributeFilters, $categoryID)
+    protected function getAttributeFilters($attributeFilters, $categoryID = [])
     {
         $connection = $this->resource->getConnection();
         // dropdown attributes
@@ -188,16 +188,19 @@ class ProductRepository extends \Magento\Catalog\Model\ProductRepository impleme
             ->distinct()
             ->from('catalog_product_entity_int', ['value'])
             ->joinLeft('catalog_category_product', 'catalog_product_entity_int.entity_id = product_id', null)
-            ->where('catalog_product_entity_int.attribute_id = :attribute_id')
-            ->where('category_id in (?)', $categoryID);
+            ->where('catalog_product_entity_int.attribute_id = :attribute_id');
 
         // multiselect attibutes
         $selectVarchar = $connection->select()
             ->distinct()
             ->from('catalog_product_entity_varchar', ['value'])
             ->joinLeft('catalog_category_product', 'catalog_product_entity_varchar.entity_id = product_id', null)
-            ->where('catalog_product_entity_varchar.attribute_id = :attribute_id')
-            ->where('category_id in (?)', $categoryID);
+            ->where('catalog_product_entity_varchar.attribute_id = :attribute_id');
+
+        if (!empty($categoryIDs)) {
+            $selectInt->where('category_id in (?)', $categoryIDs);
+            $selectVarchar->where('category_id in (?)', $categoryIDs);
+        }
 
         $extraAttributes = [
             'visibility' => [
