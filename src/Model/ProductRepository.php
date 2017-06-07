@@ -77,22 +77,6 @@ class ProductRepository extends \Magento\Catalog\Model\ProductRepository impleme
         $collection->joinAttribute('status', 'catalog_product/status', 'entity_id', null, 'inner');
         $collection->joinAttribute('visibility', 'catalog_product/visibility', 'entity_id', null, 'inner');
 
-        //Add filters from root filter group to the collection
-        foreach ($searchCriteria->getFilterGroups() as $group) {
-            if($includeSubcategories) {
-                // if including products for subcategories - modify category filter group
-                foreach ($group->getFilters() as $filter) {
-                    /** @var \Magento\Framework\Api\Filter $filter */
-                    if ($filter->getField() === 'category_id') {
-                        $filter->setConditionType('in');
-                        $filter->setValue($categoryIDs);
-                    }
-                }
-            }
-
-            $this->addFilterGroupToCollection($group, $collection);
-        }
-
         $sortOrders = (array)$searchCriteria->getSortOrders();
 
         /** @var SortOrder $sortOrder */
@@ -124,6 +108,30 @@ class ProductRepository extends \Magento\Catalog\Model\ProductRepository impleme
                 ->order('position ' . SortOrder::SORT_ASC);
         }
 
+        list($attributeFilters, $attributes) = $this->getAttributeFilters($withAttributeFilters, $categoryIDs);
+
+        //Add filters from root filter group to the collection
+        foreach ($searchCriteria->getFilterGroups() as $group) {
+            if($includeSubcategories) {
+                // if including products for subcategories - modify category filter group
+                foreach ($group->getFilters() as $filter) {
+                    /** @var \Magento\Framework\Api\Filter $filter */
+                    if ($filter->getField() === 'category_id') {
+                        $filter->setConditionType('in');
+                        $filter->setValue($categoryIDs);
+                    } elseif (in_array($filter->getField(), array_keys($attributes))) {
+                        /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute */
+                        $attribute = $attributes[$filter->getField()];
+                        if ('multiselect' == $attribute->getFrontendInput()) {
+                            $filter->setConditionType('finset');
+                        }
+                    }
+                }
+            }
+
+            $this->addFilterGroupToCollection($group, $collection);
+        }
+
         $collection->setCurPage($searchCriteria->getCurrentPage());
         $collection->setPageSize($searchCriteria->getPageSize());
         $collection->load();
@@ -138,8 +146,8 @@ class ProductRepository extends \Magento\Catalog\Model\ProductRepository impleme
             $withAttributeFilters = [$withAttributeFilters];
         }
 
-        if (!empty($withAttributeFilters) && !empty($categoryIDs)) {
-            $searchResult->setFilters($this->getAttributeFilters($withAttributeFilters, $categoryIDs));
+        if (!empty($withAttributeFilters)) {
+            $searchResult->setFilters($attributeFilters);
         }
 
         return $searchResult;
@@ -177,10 +185,10 @@ class ProductRepository extends \Magento\Catalog\Model\ProductRepository impleme
 
     /**
      * @param array $attributeFilters
-     * @param int|int[] $categoryID
-     * @return array
+     * @param int|int[] $categoryIDs
+     * @return [ array, \Magento\Catalog\Model\ResourceModel\Eav\Attribute[] ]
      */
-    protected function getAttributeFilters($attributeFilters, $categoryID)
+    protected function getAttributeFilters($attributeFilters, $categoryIDs = [])
     {
         $connection = $this->resource->getConnection();
         // dropdown attributes
@@ -188,16 +196,19 @@ class ProductRepository extends \Magento\Catalog\Model\ProductRepository impleme
             ->distinct()
             ->from('catalog_product_entity_int', ['value'])
             ->joinLeft('catalog_category_product', 'catalog_product_entity_int.entity_id = product_id', null)
-            ->where('catalog_product_entity_int.attribute_id = :attribute_id')
-            ->where('category_id in (?)', $categoryID);
+            ->where('catalog_product_entity_int.attribute_id = :attribute_id');
 
-        // multiselect attibutes
+        // multiselect attributes
         $selectVarchar = $connection->select()
             ->distinct()
             ->from('catalog_product_entity_varchar', ['value'])
             ->joinLeft('catalog_category_product', 'catalog_product_entity_varchar.entity_id = product_id', null)
-            ->where('catalog_product_entity_varchar.attribute_id = :attribute_id')
-            ->where('category_id in (?)', $categoryID);
+            ->where('catalog_product_entity_varchar.attribute_id = :attribute_id');
+
+        if ( !empty($categoryIDs) ) {
+            $selectInt->where('category_id in (?)', $categoryIDs);
+            $selectVarchar->where('category_id in (?)', $categoryIDs);
+        }
 
         $extraAttributes = [
             'visibility' => [
@@ -227,6 +238,7 @@ class ProductRepository extends \Magento\Catalog\Model\ProductRepository impleme
         }
 
         $result = [];
+        $resultAttributes = [];
         foreach ($attributeFilters as $attributeFilter) {
             /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute */
             $attribute = $this->eavConfig->getAttribute('catalog_product', $attributeFilter);
@@ -253,7 +265,10 @@ class ProductRepository extends \Magento\Catalog\Model\ProductRepository impleme
             ];
 
             foreach ($attribute-> getOptions() as $option) {
-                if (!$option->getValue() || !in_array($option->getValue(), $availableOptions) ) {
+                if (
+                    !$option->getValue() ||
+                    ('multiselect' != $attribute->getFrontendInput() && !in_array($option->getValue(), $availableOptions))
+                ) {
                     continue;
                 }
 
@@ -264,8 +279,9 @@ class ProductRepository extends \Magento\Catalog\Model\ProductRepository impleme
             }
 
             $result[] = $attributeResult;
+            $resultAttributes[$attribute->getAttributeCode()] = $attribute;
         }
 
-        return $result;
+        return [$result, $resultAttributes];
     }
 }
