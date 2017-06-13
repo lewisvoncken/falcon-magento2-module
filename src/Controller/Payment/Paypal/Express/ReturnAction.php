@@ -4,6 +4,7 @@ namespace Hatimeria\Reagento\Controller\Payment\Paypal\Express;
 
 use Exception;
 use Magento\Quote\Model\Quote;
+use Magento\Store\Model\StoreManager;
 use Psr\Log\LoggerInterface;
 use Magento\Catalog\Model\Config\Source\Price\Scope;
 use Magento\Framework\App\Action\Context;
@@ -54,6 +55,11 @@ class ReturnAction extends \Magento\Paypal\Controller\Express\ReturnAction
     protected $urlBuilder;
 
     /**
+     * @var StoreManager
+     */
+    protected $storeManager;
+
+    /**
      * ReturnAction constructor.
      * @param Context $context
      * @param CustomerSession $customerSession
@@ -82,7 +88,8 @@ class ReturnAction extends \Magento\Paypal\Controller\Express\ReturnAction
         CartRepositoryInterface $cartRepository,
         ScopeConfigInterface $scopeConfig,
         LoggerInterface $logger,
-        UrlBuilder $urlBuilder
+        UrlBuilder $urlBuilder,
+        StoreManager $storeManager
     ) {
         parent::__construct(
             $context,
@@ -99,6 +106,7 @@ class ReturnAction extends \Magento\Paypal\Controller\Express\ReturnAction
         $this->scopeConfig = $scopeConfig;
         $this->logger = $logger;
         $this->urlBuilder = $urlBuilder;
+        $this->storeManager = $storeManager;
     }
 
     /**
@@ -131,7 +139,8 @@ class ReturnAction extends \Magento\Paypal\Controller\Express\ReturnAction
     {
         // Unmask quote:
         $quoteMask = $this->quoteMaskFactory->create()->load($cartId, 'masked_id');
-        $quote = $this->cartRepository->getActive($quoteMask->getQuoteId());
+        $stores = $this->storeManager->getStores();
+        $quote = $this->cartRepository->getActive($quoteMask->getQuoteId(), array_keys($stores));
         $this->setQuote($quote);
 
         return $this->_quote;
