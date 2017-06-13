@@ -43,8 +43,11 @@ class Checkout extends MagentoCheckout
         $solutionType = $this->_config->getMerchantCountry() == 'DE'
             ? PaypalConfig::EC_SOLUTION_TYPE_MARK
             : $this->_config->getValue('solutionType');
-        $this->_api->setAmount($this->_quote->getGrandTotal())
+        $this->_api
+            //START OF OVERWRITTEN CODE
+            ->setAmount($this->_quote->getGrandTotal())
             ->setCurrencyCode($this->_quote->getQuoteCurrencyCode())
+            //END OF OVERWRITTEN CODE
             ->setInvNum($this->_quote->getReservedOrderId())
             ->setReturnUrl($returnUrl)
             ->setCancelUrl($cancelUrl)
