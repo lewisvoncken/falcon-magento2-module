@@ -1,4 +1,7 @@
 <?php
+
+namespace Hatimeria\Reagento\Model\Payment\Paypal;
+
 use Magento\Paypal\Model\Express as PaypalExpress;
 use Magento\Paypal\Model\Express\Checkout as ExpressCheckout;
 
@@ -35,7 +38,7 @@ class Express extends PaypalExpress
     // START OF OVERWRITTEN CODE
         )->setCurrencyCode(
             $order->getOrderCurrencyCode()
-    // END OF OVERWRITTEN CODE    
+    // END OF OVERWRITTEN CODE
         )->setPaypalCart(
             $cart
         )->setIsLineItemsEnabled(
