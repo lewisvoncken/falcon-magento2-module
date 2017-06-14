@@ -3,6 +3,7 @@
 Custom API endpoints provided by this module:
 
 - `[POST] /rest/V1/contact` - send a contact email
+- `[POST] /V1/guest-carts/:cartId/payment-information` (**overridden**) - modifies the docblock of function return type (may be int or OrderResponse object)
 - `[GET] /rest/V1/url/?requestPath=:url` - get info about cms page by the given URL
 - `[GET] /rest/V1/info` - get basic settings for current shop
 - `[GET] /rest/V1/categories/homepage` - get categories marked as "Show on homepage" (max - 6)
@@ -13,6 +14,7 @@ Custom API endpoints provided by this module:
 - `[GET] /rest/V1/order-info/:quoteId` - get order information from quote ID (orderId, revenue, shipping, tax etc)
 - `[GET] /rest/V1/guest-payment/:cartId/:orderId/adyen-link` - get Adyen payment link for redirection
 - `[GET] /rest/V1/customer-payment/:customerId/:orderId/adyen-link` - get Adyen payment link for redirection (for registered customer)
+- `[PUT] /rest/V1/guest-carts/:cartId/reagento-order` - place order with Adyen credit card - getting an object as a response
 
 Extension attributes:
 

@@ -17,6 +17,8 @@
     <preference for="Hatimeria\Reagento\Api\ProductRepositoryInterface" type="Hatimeria\Reagento\Model\ProductRepository" />
     <preference for="Hatimeria\Reagento\Api\QuoteMaskInterface" type="Hatimeria\Reagento\Model\QuoteMask" />
     <preference for="Hatimeria\Reagento\Api\Data\OrderInfoInterface" type="Hatimeria\Reagento\Model\OrderInfo" />
+    <preference for="Magento\Paypal\Model\Express\Checkout" type="Hatimeria\Reagento\Model\Payment\Paypal\Express\Checkout" />
+    <preference for="Magento\Paypal\Model\Express" type="Hatimeria\Reagento\Model\Payment\Paypal\Express" />
     <type name="Magento\Catalog\Model\ProductRepository">
         <arguments>
             <argument name="collectionFactory" xsi:type="object">ProductRepositoryCollectionFactory</argument>
@@ -33,4 +35,7 @@
             <argument name="instanceName" xsi:type="string">Hatimeria\Reagento\Api\SearchResults</argument>
         </arguments>
     </virtualType>
+    <type name="Magento\Framework\App\RouterInterface">
+        <plugin name="hatimeriaReagentoStoreSetter" type="Hatimeria\Reagento\Model\Plugin\StoreSetter"/>
+    </type>
 </config>
