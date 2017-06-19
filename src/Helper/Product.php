@@ -251,9 +251,10 @@ class Product extends AbstractHelper
 
             $priceIncludingTax = $priceExcludingTax + ($priceExcludingTax * ($rate / 100));
 
+            // 2 - display prices including tax
             $catalogPriceInclTax = (int) $this->scopeConfig->getValue(
                     'tax/display/type',
-                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE) === 1;
+                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE) === 2;
 
             $productExtension = $this->getProductExtensionAttributes($product);
 
