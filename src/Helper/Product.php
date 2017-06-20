@@ -249,7 +249,7 @@ class Product extends AbstractHelper
                 $priceExcludingTax = $product->getPrice();
             }
 
-            $priceIncludingTax = $priceExcludingTax + ($priceExcludingTax * ($rate / 100));
+            $priceIncludingTax = round($priceExcludingTax + ($priceExcludingTax * ($rate / 100)), 2);
 
             // 2 - display prices including tax
             $catalogPriceInclTax = (int) $this->scopeConfig->getValue(
