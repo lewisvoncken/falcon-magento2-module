@@ -11,6 +11,8 @@ use Magento\Catalog\Model\Product\Gallery\ReadHandler as GalleryReadHandler;
 use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\App\Helper\Context as AppContext;
 use Magento\Framework\ObjectManagerInterface;
+use Magento\Tax\Api\TaxCalculationInterface;
+
 
 /**
  * @package Hatimeria\Reagento\Helper
@@ -29,6 +31,11 @@ class Product extends AbstractHelper
     /** @var GalleryReadHandler */
     protected $galleryReadHandler;
 
+    /**
+     * @var TaxCalculationInterface
+     */
+    protected $taxCalculation;
+
     /** @var \Magento\Eav\Model\Config */
     protected $eavConfig;
 
@@ -45,6 +52,7 @@ class Product extends AbstractHelper
         MediaHelper $mediaHelper,
         GalleryReadHandler $galleryReadHandler,
         ObjectManagerInterface $objectManager,
+        TaxCalculationInterface $taxCalculation,
         \Magento\Eav\Model\Config $eavConfig
     ) {
         parent::__construct($context);
@@ -53,6 +61,7 @@ class Product extends AbstractHelper
         $this->mediaHelper = $mediaHelper;
         $this->galleryReadHandler = $galleryReadHandler;
         $this->eavConfig = $eavConfig;
+        $this->taxCalculation = $taxCalculation;
     }
 
     /**
@@ -216,5 +225,47 @@ class Product extends AbstractHelper
         }
 
         return $productExtension;
+    }
+
+    /**
+     * @param MagentoProduct $product
+     */
+    public function calculateCatalogDisplayPrice($product)
+    {
+        $taxAttribute = $product->getCustomAttribute('tax_class_id');
+        if ($taxAttribute) {
+            // First get base price (=price excluding tax)
+            $productRateId = $taxAttribute->getValue();
+            $rate = $this->taxCalculation->getCalculatedRate($productRateId);
+
+            // Product price in catalog is including tax.
+            $basePriceInclTax = (int) $this->scopeConfig->getValue(
+                    'tax/calculation/price_includes_tax',
+                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE) === 1;
+
+            if ($basePriceInclTax) {
+                $priceExcludingTax = $product->getPrice() / (1 + ($rate / 100));
+            } else {
+                // Product price in catalog is excluding tax.
+                $priceExcludingTax = $product->getPrice();
+            }
+
+            $priceIncludingTax = round($priceExcludingTax + ($priceExcludingTax * ($rate / 100)), 2);
+
+            // 2 - display prices including tax
+            $catalogPriceInclTax = (int) $this->scopeConfig->getValue(
+                    'tax/display/type',
+                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE) === 2;
+
+            $productExtension = $this->getProductExtensionAttributes($product);
+
+            if ($catalogPriceInclTax) {
+                $productExtension->setCatalogDisplayPrice($priceIncludingTax);
+            } else {
+                $productExtension->setCatalogDisplayPrice($priceExcludingTax);
+            }
+
+            $product->setExtensionAttributes($productExtension);
+        }
     }
 }
