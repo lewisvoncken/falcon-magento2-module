@@ -36,7 +36,7 @@ class AfterProductLoad
         $this->productHelper->addProductImageAttribute($product, 'product_list_image', 'thumbnail_url');
         $this->productHelper->addMediaGallerySizes($product);
 
-        $this->productHelper->ensurePriceIncludesTaxes($product);
+        $this->productHelper->calculateCatalogDisplayPrice($product);
 
         return $product;
     }

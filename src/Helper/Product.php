@@ -230,9 +230,10 @@ class Product extends AbstractHelper
     /**
      * @param MagentoProduct $product
      */
-    public function ensurePriceIncludesTaxes($product)
+    public function calculateCatalogDisplayPrice($product)
     {
-        if ($taxAttribute = $product->getCustomAttribute('tax_class_id')) {
+        $taxAttribute = $product->getCustomAttribute('tax_class_id');
+        if ($taxAttribute) {
             // First get base price (=price excluding tax)
             $productRateId = $taxAttribute->getValue();
             $rate = $this->taxCalculation->getCalculatedRate($productRateId);
