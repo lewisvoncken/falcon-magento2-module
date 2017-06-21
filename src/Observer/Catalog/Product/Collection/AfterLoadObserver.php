@@ -41,6 +41,8 @@ class AfterLoadObserver implements ObserverInterface
             $this->productHelper->addProductImageAttribute($item);
             $this->productHelper->addProductImageAttribute($item, 'product_list_image', 'thumbnail_url');
             $this->productHelper->addMediaGallerySizes($item);
+
+            $this->productHelper->calculateCatalogDisplayPrice($item);
         }
     }
 }
