@@ -243,7 +243,7 @@ class ProductRepository extends \Magento\Catalog\Model\ProductRepository impleme
             /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute */
             $attribute = $this->eavConfig->getAttribute('catalog_product', $attributeFilter);
 
-            if ('multiselect' == $attribute->getFrontendInput()) {
+            if ('multiselect' == $attribute->getFrontendInput() || 'text' == $attribute->getFrontendInput()) {
                 $availableOptions = $connection->fetchCol($selectVarchar, [
                     'attribute_id' => (int)$attribute->getId()
                 ]);
@@ -264,18 +264,27 @@ class ProductRepository extends \Magento\Catalog\Model\ProductRepository impleme
                 'options' => [],
             ];
 
-            foreach ($attribute-> getOptions() as $option) {
-                if (
-                    !$option->getValue() ||
-                    ('multiselect' != $attribute->getFrontendInput() && !in_array($option->getValue(), $availableOptions))
-                ) {
-                    continue;
+            if ('text' == $attribute->getFrontendInput()) {
+                foreach ($availableOptions as $availableOption) {
+                    $attributeResult['options'][] = [
+                        'label' => $availableOption,
+                        'value' => $availableOption
+                    ];
                 }
+            } else {
+                foreach ($attribute->getOptions() as $option) {
+                    if (
+                        !$option->getValue() ||
+                        ('multiselect' != $attribute->getFrontendInput() && !in_array($option->getValue(), $availableOptions))
+                    ) {
+                        continue;
+                    }
 
-                $attributeResult['options'][] = [
-                    'label' => $option->getLabel(),
-                    'value' => $option->getValue()
-                ];
+                    $attributeResult['options'][] = [
+                        'label' => $option->getLabel(),
+                        'value' => $option->getValue()
+                    ];
+                }
             }
 
             $result[] = $attributeResult;
