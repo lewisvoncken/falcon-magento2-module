@@ -243,7 +243,7 @@ class ProductRepository extends \Magento\Catalog\Model\ProductRepository impleme
             /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute */
             $attribute = $this->eavConfig->getAttribute('catalog_product', $attributeFilter);
 
-            if ('multiselect' == $attribute->getFrontendInput() || 'text' == $attribute->getFrontendInput()) {
+            if ( in_array($attribute->getFrontendInput(), ['multiselect', 'text']) ) {
                 $availableOptions = $connection->fetchCol($selectVarchar, [
                     'attribute_id' => (int)$attribute->getId()
                 ]);
