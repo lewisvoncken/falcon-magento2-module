@@ -24,6 +24,7 @@ class NodeServer
 
     /**
      * @param \Magento\Framework\HTTP\Adapter\CurlFactory $curlFactory
+     * @param ReagentoHelper $reagentoHelper
      */
     public function __construct(
         \Magento\Framework\HTTP\Adapter\CurlFactory $curlFactory,

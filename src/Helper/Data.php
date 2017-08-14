@@ -29,7 +29,9 @@ class Data extends AbstractHelper
      */
     protected $tagResolver;
     /**
+     * @param Context $context
      * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\App\Cache\Tag\Resolver\Proxy $registry
      */
     public function __construct(
