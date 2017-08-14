@@ -2,17 +2,28 @@
 
 namespace Hatimeria\Reagento\Helper;
 
+use Magento\Framework\App\Helper\Context;
 use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Store\Model\ScopeInterface;
 
 class Data extends AbstractHelper
 {
     const RESPONSE_TAGS_REGISTRY = 'response_tags';
+    /**
+     * Default response tag sent in X-Cache-Tags header in REST
+     */
+    const defaultResponseTag = 'ApiMagento';
 
     /**
      * @var \Magento\Framework\Registry
      */
     protected $registry;
+    /**
+     * Store manager
+     *
+     * @var \Magento\Store\Model\StoreManagerInterface 
+     */
+    protected $storeManager;
     /**
      * @var \Magento\Framework\App\Cache\Tag\Resolver\Proxy
      */
@@ -22,11 +33,16 @@ class Data extends AbstractHelper
      * @param \Magento\Framework\App\Cache\Tag\Resolver\Proxy $registry
      */
     public function __construct(
+        Context $context,
         \Magento\Framework\Registry $registry,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\App\Cache\Tag\Resolver\Proxy $tagResolver
     ) {
-        $this->registry    = $registry;
-        $this->tagResolver = $tagResolver;
+        $this->registry     = $registry;
+        $this->storeManager = $storeManager;
+        $this->tagResolver  = $tagResolver;
+
+        parent::__construct($context);
     }
 
     public function getAppLogoImg()
@@ -37,6 +53,32 @@ class Data extends AbstractHelper
     public function getAppHomeUrl()
     {
         return $this->getConfigValue('app_home_url');
+    }
+
+    /**
+     * Retrieve node server url from magento config or default base url
+     *
+     * @return string
+     */
+    public function getNodeServerUrl()
+    {
+        $url = $this->scopeConfig->getValue("reagento/general/node_server", ScopeInterface::SCOPE_STORE);
+
+        if (empty($url)) {
+            $url = $this->storeManager->getStore(0)->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_LINK);
+        }
+
+        return $url; 
+    }
+
+    /**
+     * Check configuration if node cache clear is enabled
+     *
+     * @return bool
+     */
+    public function isClearCacheEnabled()
+    {
+        return $this->scopeConfig->isSetFlag("reagento/general/clear_cache", ScopeInterface::SCOPE_STORE);
     }
 
     private function getConfigValue($key, $scope = ScopeInterface::SCOPE_STORE)

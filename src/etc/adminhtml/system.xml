@@ -10,6 +10,22 @@
         <tab id="hatimeria" translate="label" sortOrder="500">
             <label>Hatimeria</label>
         </tab>
+        <section id="reagento" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0">
+            <label>Reagento</label>
+            <tab>hatimeria</tab>
+            <resource>Magento_Catalog::config_catalog</resource>
+            <group id="general" translate="label" type="text" sortOrder="90" showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>General</label>
+                <field id="clear_cache" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Enable node cache clear</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="node_server" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                    <label>Node server url</label>
+                    <comment>Leaving fill empty will use default BASE_URL</comment>
+                </field>
+            </group>
+        </section>
         <section id="hatimeria" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="0" showInStore="0">
             <class>separator-top</class>
             <label>Payment</label>

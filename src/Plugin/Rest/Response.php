@@ -7,10 +7,6 @@ use Hatimeria\Reagento\Helper\Data as ReagentoHelper;
 class Response
 {
     /**
-     * Default response tag sent in X-Cache-Tags header in REST
-     */
-    const defaultResponseTag = 'ApiMagento';
-    /**
      * @var ReagentoHelper
      */
     protected $reagentoHelper;
@@ -33,7 +29,7 @@ class Response
      */
     public function afterPrepareResponse(\Magento\Framework\Webapi\Rest\Response $subject, $result)
     {
-        $tags = [self::defaultResponseTag];
+        $tags = [ReagentoHelper::defaultResponseTag];
         $registeredTags = $this->reagentoHelper->getResponseTags();
         if (!empty($registeredTags)) {
             $tags = array_merge($tags, $registeredTags);
