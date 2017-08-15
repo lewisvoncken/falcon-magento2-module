@@ -12,17 +12,24 @@ class CategoryRepository extends \Magento\Catalog\Model\CategoryRepository imple
 
     /** @var \Hatimeria\Reagento\Api\Data\CategorySearchResultsInterfaceFactory */
     private $searchResultsInterfaceFactory;
+    /**
+     * @var \Magento\Framework\Event\ManagerInterface
+     */
+    protected $_eventDispatcher;
 
     public function __construct(
         \Magento\Catalog\Model\CategoryFactory $categoryFactory,
         \Magento\Catalog\Model\ResourceModel\Category $categoryResource,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory $categoryCollection,
+        \Magento\Framework\Event\ManagerInterface $eventDispatcher,
         \Hatimeria\Reagento\Api\Data\CategorySearchResultsInterfaceFactory $searchResultsInterfaceFactory
     ){
         parent::__construct($categoryFactory, $categoryResource, $storeManager);
-        $this->categoryCollection = $categoryCollection;
+
+        $this->categoryCollection            = $categoryCollection;
         $this->searchResultsInterfaceFactory = $searchResultsInterfaceFactory;
+        $this->_eventDispatcher              = $eventDispatcher;
     }
 
     /**
@@ -45,6 +52,9 @@ class CategoryRepository extends \Magento\Catalog\Model\CategoryRepository imple
             ->addFieldToSelect('include_in_menu')
             ->setOrder('entity_id', 'desc')
             ->setPageSize(6);
+
+        $this->_eventDispatcher->dispatch('reagento_category_homepage_list_prepare_collection', 
+            ['collection' => $collection]);
 
         $searchResults->setItems($collection->getItems());
         $searchResults->setTotalCount($collection->getSize());

@@ -62,8 +62,21 @@ class Category extends AbstractHelper
      */
     public function addImageAttribute($category, $size = 'category_page_grid')
     {
+        $this->convertImageAttributeToUrl($category, 'image', $size);
+    }
+
+    /**
+     * Convert category object image attribute to resized full url value
+     *
+     * @param MagentoCategory $category
+     * @param string $attribute Attribute name for convertion
+     * @param string $size
+     * @param string $imagePath
+     */
+    public function convertImageAttributeToUrl($category, $attribute = 'image',  $size = 'category_page_grid', $imagePath = 'catalog/category/')
+    {
         $sizeValues = $this->viewConfig->getViewConfig()->getMediaAttributes('Magento_Catalog', 'images', $size);
-        $imageName = $category->getData('image');
+        $imageName = $category->getData($attribute);
         if(!$imageName || !$sizeValues) {
             return;
         }
@@ -71,7 +84,7 @@ class Category extends AbstractHelper
         $height = $sizeValues['height'];
         $width = $sizeValues['width'];
         // TODO try do not use hardcoded paths
-        $categorySubPath = 'catalog/category/';
+        $categorySubPath = $imagePath;
 
         $absolutePath = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA)->getAbsolutePath($categorySubPath);
         $resizedImagePath = "cache/{$width}x{$height}/{$imageName}";
@@ -96,7 +109,7 @@ class Category extends AbstractHelper
         $url = $this->storeManager->getStore()->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA)
             . $categorySubPath . $resizedImagePath;
 
-        $category->setData('image', $url);
+        $category->setData($attribute, $url);
     }
 
     /**
