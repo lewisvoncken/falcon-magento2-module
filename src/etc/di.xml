@@ -39,4 +39,7 @@
     <type name="Magento\Framework\App\RouterInterface">
         <plugin name="hatimeriaReagentoStoreSetter" type="Hatimeria\Reagento\Model\Plugin\StoreSetter"/>
     </type>
+    <type name="Magento\Framework\Webapi\Rest\Response">
+        <plugin name="hatimeriaReagentoRestResponse" type="Hatimeria\Reagento\Plugin\Rest\Response" />
+    </type>
 </config>

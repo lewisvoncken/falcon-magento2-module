@@ -4,6 +4,7 @@ namespace Hatimeria\Reagento\Model;
 
 use Hatimeria\Reagento\Api\UrlInterface;
 use Hatimeria\Reagento\Api\Data\UrlDataInterface;
+use Hatimeria\Reagento\Helper\Data as ReagentoHelper;
 use Hatimeria\Reagento\Model\UrlDataFactory;
 use Magento\Cms\Api\PageRepositoryInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
@@ -29,6 +30,10 @@ class Url implements UrlInterface
 
     /** @var \Hatimeria\Reagento\Model\UrlDataFactory */
     protected $urlDataFactory;
+    /**
+     * @var ReagentoHelper
+     */
+    protected $reagentoHelper;
 
     public function __construct(
         DataObjectHelper $dataFactory,
@@ -36,7 +41,8 @@ class Url implements UrlInterface
         PageRepositoryInterface $pageRepository,
         ProductRepositoryInterface $productRepository,
         CategoryRepositoryInterface $categoryRepository,
-        UrlDataFactory $urlDataFactory
+        UrlDataFactory $urlDataFactory,
+        ReagentoHelper $reagentoHelper
     ) {
         $this->dataFactory = $dataFactory;
         $this->pageRepository = $pageRepository;
@@ -44,6 +50,7 @@ class Url implements UrlInterface
         $this->productRepository = $productRepository;
         $this->categoryRepository = $categoryRepository;
         $this->urlDataFactory = $urlDataFactory;
+        $this->reagentoHelper = $reagentoHelper;
     }
 
     /**
@@ -59,15 +66,21 @@ class Url implements UrlInterface
 
             switch ($urlModel->getEntityType()) {
                 case 'product':
-                    $urlData->setProduct($this->productRepository->getById($urlModel->getEntityId()));
+                    $entity = $this->productRepository->getById($urlModel->getEntityId());
+                    $this->reagentoHelper->addResponseTagsByObject($entity);
+                    $urlData->setProduct($entity);
                     break;
 
                 case 'category':
-                    $urlData->setCategory($this->categoryRepository->get($urlModel->getEntityId()));
+                    $entity = $this->categoryRepository->get($urlModel->getEntityId());
+                    $this->reagentoHelper->addResponseTagsByObject($entity);
+                    $urlData->setCategory($entity);
                     break;
 
                 case 'cms-page':
-                    $urlData->setCmsPage($this->pageRepository->getById($urlModel->getEntityId()));
+                    $entity = $this->pageRepository->getById($urlModel->getEntityId());
+                    $this->reagentoHelper->addResponseTagsByObject($entity);
+                    $urlData->setCmsPage($entity);
                     break;
 
                 case 'custom':
