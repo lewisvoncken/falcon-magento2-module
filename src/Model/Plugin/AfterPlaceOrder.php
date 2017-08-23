@@ -58,7 +58,7 @@ class AfterPlaceOrder
                 $obj->setAdyen($adyen);
             }
         }
-        $obj->setOrderId($order->getData('increment_id'));
+        $obj->setOrderId($orderId);
 
         return $obj;
     }
