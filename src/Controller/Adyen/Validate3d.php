@@ -75,15 +75,6 @@ class Validate3d extends AdyenValidate3d
                     $order->getPayment()->setAdditionalInformation('paResponse', $requestPaRes);
 
                     try {
-                        /**
-                         * Magento should allow this.
-                         * https://github.com/magento/magento2/issues/5819
-                         */
-//                        $result = $order->getPayment()->getMethodInstance()->executeCommand(
-//                            'authorise_3d',
-//                            ['payment' => $order->getPayment(), 'amount' => $order->getGrandTotal()]
-//                        );
-                        // old fashion way:
                         $result = $this->_authorise3d($order->getPayment());
                     } catch (\Exception $e) {
                         $this->_adyenLogger->addAdyenResult("Process 3D secure payment was refused");
