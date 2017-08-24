@@ -3,9 +3,156 @@
 namespace Hatimeria\Reagento\Controller\Adyen;
 
 use \Adyen\Payment\Controller\Process\Validate3d as AdyenValidate3d;
+use Magento\Quote\Model\QuoteIdMaskFactory;
 
 class Validate3d extends AdyenValidate3d
 {
+    /**
+     * @param \Magento\Framework\Json\Helper\Data
+     */
+    protected $jsonHelper;
+    /**
+     * @param QuoteIdMaskFactory
+     */
+    protected $quoteIdMaskFactory;
+
+    public function __construct(
+        \Magento\Framework\App\Action\Context $context,
+        \Adyen\Payment\Logger\AdyenLogger $adyenLogger,
+        \Adyen\Payment\Helper\Data $adyenHelper,
+        \Adyen\Payment\Model\Api\PaymentRequest $paymentRequest,
+        \Magento\Sales\Api\OrderRepositoryInterface $orderRepository,
+        \Magento\Framework\Json\Helper\Data $jsonHelper,
+        QuoteIdMaskFactory $quoteIdMaskFactory
+    ) {
+        parent::__construct(
+            $context,
+            $adyenLogger,
+            $adyenHelper,
+            $paymentRequest,
+            $orderRepository
+        );
+        $this->jsonHelper         = $jsonHelper;
+        $this->quoteIdMaskFactory = $quoteIdMaskFactory;
+    }
+    
+    /**
+     * Method overite to handle json response for reagento requests
+     */
+    public function execute()
+    {
+        $userAgent = $this->getRequest()->getServer('HTTP_USER_AGENT');
+        // proceed to standard behaviour if request is not from Reagento
+        if ('Reagento' != $userAgent) {
+
+            return parent::execute();
+        }
+
+        $active = null;
+
+        // check if 3d is active
+        $order = $this->_getOrder();
+
+        if ($order->getPayment()) {
+            $active = $order->getPayment()->getAdditionalInformation('3dActive');
+        }
+
+        // check if 3D secure is active. If not just go to success page
+        if ($active) {
+
+            $this->_adyenLogger->addAdyenResult("3D secure is active");
+
+            // check if it is already processed
+            if ($this->getRequest()->isPost()) {
+
+                $this->_adyenLogger->addAdyenResult("Process 3D secure payment");
+                $requestMD = $this->getRequest()->getPost('MD');
+                $requestPaRes = $this->getRequest()->getPost('PaRes');
+                $md = $order->getPayment()->getAdditionalInformation('md');
+
+                if ($requestMD == $md) {
+
+                    $order->getPayment()->setAdditionalInformation('paResponse', $requestPaRes);
+
+                    try {
+                        /**
+                         * Magento should allow this.
+                         * https://github.com/magento/magento2/issues/5819
+                         */
+//                        $result = $order->getPayment()->getMethodInstance()->executeCommand(
+//                            'authorise_3d',
+//                            ['payment' => $order->getPayment(), 'amount' => $order->getGrandTotal()]
+//                        );
+                        // old fashion way:
+                        $result = $this->_authorise3d($order->getPayment());
+                    } catch (\Exception $e) {
+                        $this->_adyenLogger->addAdyenResult("Process 3D secure payment was refused");
+                        $result = 'Refused';
+                    }
+
+                    $this->_adyenLogger->addAdyenResult("Process 3D secure payment result is: " . $result);
+
+                    // check if authorise3d was successful
+                    if ($result == 'Authorised') {
+                        $order->addStatusHistoryComment(__('3D-secure validation was successful'))->save();
+                        // set back to false so when pressed back button on the success page it will reactivate 3D secure
+                        $order->getPayment()->setAdditionalInformation('3dActive', '');
+                        $this->_orderRepository->save($order);
+
+                        // switched original redirect to json response
+                        $this->getResponse()->representJson(
+                            $this->jsonHelper->jsonEncode([
+                                'success' => true
+                            ])
+                        );
+                    } else {
+                        $order->addStatusHistoryComment(__('3D-secure validation was unsuccessful.'))->save();
+
+                        // Move the order from PAYMENT_REVIEW to NEW, so that can be cancelled
+                        $order->setState(\Magento\Sales\Model\Order::STATE_NEW);
+                        $this->_adyenHelper->cancelOrder($order);
+                        $this->messageManager->addErrorMessage("3D-secure validation was unsuccessful");
+                        
+                        // reactivate the quote
+                        $session = $this->_getCheckout();
+
+                        // restore the quote
+                        $session->restoreQuote();
+
+                        // generate masked quote id for failed validation to reload quote in reagento
+                        $quoteId = $session->getQuoteId();
+                        $quoteIdMask = $this->quoteIdMaskFactory->create()->load($quoteId, 'quote_id');
+                        if ($quoteIdMask->getMaskedId() === null) {
+                            $quoteIdMask->setQuoteId($quoteId)->save();
+                        }
+                        // switched original redirect to json response
+                        $this->getResponse()->representJson(
+                            $this->jsonHelper->jsonEncode([
+                                'success' => false,
+                                'quoteId' => $quoteIdMask->getMaskedId()
+                            ])
+                        );
+                    }
+                }
+            } else {
+                $this->_adyenLogger->addAdyenResult("Customer was redirected to bank for 3D-secure validation.");
+                $order->addStatusHistoryComment(
+                    __('Customer was redirected to bank for 3D-secure validation.')
+                )->save();
+
+                $this->_view->loadLayout();
+                $this->_view->getLayout()->initMessages();
+                $this->_view->renderLayout();
+            }
+        } else {
+            // switched original redirect to json response
+            $this->getResponse()->representJson(
+                $this->jsonHelper->jsonEncode([
+                    'success' => true
+                ])
+            );
+        }
+    }
     /**
      * Get order object
      *
