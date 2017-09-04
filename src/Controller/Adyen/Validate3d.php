@@ -43,7 +43,7 @@ class Validate3d extends AdyenValidate3d
     {
         $userAgent = $this->getRequest()->getServer('HTTP_USER_AGENT');
         // proceed to standard behaviour if request is not from Reagento
-        if (false !== strpos($userAgent, 'Reagento')) {
+        if (false === strpos($userAgent, 'Reagento')) {
 
             return parent::execute();
         }
