@@ -210,7 +210,7 @@ class ReturnAction extends \Magento\Paypal\Controller\Express\ReturnAction
             $sep = (strpos($redirectUrl, '?') === false) ? '?' : '&';
 
             return $resultRedirect->setUrl(
-                $redirectUrl . $sep . $urlParams;
+                $redirectUrl . $sep . $urlParams
             );
         } else {
             return $resultRedirect->setUrl($this->urlBuilder->getBaseUrl()
