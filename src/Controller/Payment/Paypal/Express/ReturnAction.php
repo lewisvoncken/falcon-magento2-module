@@ -164,6 +164,7 @@ class ReturnAction extends \Magento\Paypal\Controller\Express\ReturnAction
         );
         $redirectUrl = false;
         $message = __('');
+        $orderId = '';
 
         try {
             $this->initQuote($cartId);
@@ -183,6 +184,7 @@ class ReturnAction extends \Magento\Paypal\Controller\Express\ReturnAction
                         ScopeConfigInterface::SCOPE_TYPE_DEFAULT
                     );
                     $message = __('Your Order got a number: #%1', $this->_checkout->getOrder()->getIncrementId());
+                    $orderId = $this->_checkout->getOrder()->getId();
                 }
             } else {
                 throw new LocalizedException(__('Review page is not supported!'));
@@ -198,21 +200,22 @@ class ReturnAction extends \Magento\Paypal\Controller\Express\ReturnAction
             $redirectUrl = $redirectUrlFailure;
         }
 
+        $urlParams = [
+            ActionInterface::PARAM_NAME_URL_ENCODED => base64_encode((string)$message),
+            'oid' => base64_encode($orderId)
+        ];
+        $urlParams = http_build_query($urlParams);
+
         if (strpos($redirectUrl, 'http') !== false) {
             $sep = (strpos($redirectUrl, '?') === false) ? '?' : '&';
-            return $resultRedirect->setUrl(sprintf('%s%s%s=%s',
-                $redirectUrl,
-                $sep,
-                ActionInterface::PARAM_NAME_URL_ENCODED,
-                base64_encode((string)$message)
-            ));
+
+            return $resultRedirect->setUrl(
+                $redirectUrl . $sep . $urlParams;
+            );
         } else {
             return $resultRedirect->setUrl($this->urlBuilder->getBaseUrl()
-                . sprintf('%s?%s=%s',
-                    trim($redirectUrl, ' /'),
-                    ActionInterface::PARAM_NAME_URL_ENCODED,
-                    base64_encode((string)$message)
-                ));
+                . trim($redirectUrl, ' /') . '?' . $urlParams
+                );
         }
     }
 
