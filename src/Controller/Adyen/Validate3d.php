@@ -153,13 +153,13 @@ class Validate3d extends AdyenValidate3d
     protected function _getOrder()
     {
         if (!$this->_order) {
-            $incrementId = $this->getRequest()->getPost('order_id');
-            if (!$incrementId) {
+            $orderId = $this->getRequest()->getPost('order_id');
+            if (!$orderId) {
                 throw new \Exception('Order ID is empty');
             }
-            $this->_adyenLogger->addAdyenResult('order id is #' . $incrementId);
+            $this->_adyenLogger->addAdyenResult('order id is #' . $orderId);
             $this->_orderFactory = $this->_objectManager->get('Magento\Sales\Model\OrderFactory');
-            $this->_order = $this->_orderFactory->create()->loadByIncrementId($incrementId);
+            $this->_order = $this->_orderFactory->create()->laod($orderId);
         }
         return $this->_order;
     }
