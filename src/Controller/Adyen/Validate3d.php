@@ -16,9 +16,9 @@ class Validate3d extends AdyenValidate3d
      */
     protected $quoteIdMaskFactory;
     /**
-     * @var \Magento\Quote\Api\CartRepositoryInterface
+     * @var \Magento\Quote\Model\QuoteFactory
      */
-    protected $quoteRepository;
+    protected $quoteFactory;
     /**
      * @var \Magento\Framework\Event\ManagerInterface
      */
@@ -33,7 +33,7 @@ class Validate3d extends AdyenValidate3d
         \Magento\Framework\Json\Helper\Data $jsonHelper,
         QuoteIdMaskFactory $quoteIdMaskFactory,
         \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
+        \Magento\Quote\Model\QuoteFactory $quoteFactory
     ) {
         parent::__construct(
             $context,
@@ -45,7 +45,7 @@ class Validate3d extends AdyenValidate3d
         $this->jsonHelper         = $jsonHelper;
         $this->quoteIdMaskFactory = $quoteIdMaskFactory;
         $this->_eventManager      = $eventManager;
-        $this->quoteRepository    = $quoteRepository;
+        $this->quoteFactory       = $quoteFactory;
     }
     
     /**
@@ -177,12 +177,17 @@ class Validate3d extends AdyenValidate3d
     {
         if ($order->getId()) {
             try {
-                $quote = $this->quoteRepository->get($order->getQuoteId());
-                $quote->setIsActive(1)->setReservedOrderId(null);
-                $this->quoteRepository->save($quote);
-                $this->_eventManager->dispatch('restore_quote', ['order' => $order, 'quote' => $quote]);
+                $quote = $this->quoteFactory->create();
+                $quote->load($order->getQuoteId());
 
-                return true;
+                if ($quote->getId()) {
+                    $quote->setIsActive(1)->setReservedOrderId(null);
+                    $quote->save();
+                    $this->_eventManager->dispatch('restore_quote', ['order' => $order, 'quote' => $quote]);
+
+                    return true;
+                }
+
             } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
             }
         }
