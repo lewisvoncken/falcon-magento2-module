@@ -178,7 +178,7 @@ class Validate3d extends AdyenValidate3d
         if ($order->getId()) {
             try {
                 $quote = $this->quoteFactory->create();
-                $quote->load($order->getQuoteId());
+                $quote->setStoreId($order->getStoreId())->load($order->getQuoteId());
 
                 if ($quote->getId()) {
                     $quote->setIsActive(1)->setReservedOrderId(null);
