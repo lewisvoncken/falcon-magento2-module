@@ -116,7 +116,7 @@ class UpgradeData implements UpgradeDataInterface
                             ->where('eav.entity_type_id = ?', 3)
                             ->where('eav.attribute_code = ?', 'is_on_homepage')
                             ->where('category.value = ?', 1)
-                            ->order('main.entity_id ASC');
+                            ->order(['main.level ASC', 'main.position ASC']);
 
         $data = [];
         $position = 100;
