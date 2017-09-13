@@ -149,7 +149,7 @@ class ProductRepository extends \Magento\Catalog\Model\ProductRepository impleme
         $collection->joinAttribute('visibility', 'catalog_product/visibility', 'entity_id', null, 'inner');
         $this->setListPosition($collection, $searchCriteria, $categoryIDs);
 
-        list($attributeFilters, $attributes) = $this->getAttributeFilters($withAttributeFilters, $categoryIDs);
+        list($attributeFilters, $attributes) = $this->getAttributeFilters($withAttributeFilters, $categoryIDs, $includeSubcategories);
 
         $this->processSearchCriteria($collection, $searchCriteria, $includeSubcategories,
             ['categoryIDs' => $categoryIDs, 'subcategoryFilter' => $subcategories],
@@ -290,18 +290,18 @@ class ProductRepository extends \Magento\Catalog\Model\ProductRepository impleme
     /**
      * @param array $attributeFilters
      * @param int|int[] $categoryIDs
+     * @param bool $includeSubcategories
      * @return array [ array, \Magento\Catalog\Model\ResourceModel\Eav\Attribute[] ]
      */
-    protected function getAttributeFilters($attributeFilters, $categoryIDs = [])
+    protected function getAttributeFilters($attributeFilters, $categoryIDs = [], $includeSubcategories = false)
     {
         $this->prepareFilterDataQueries();
         $result = [];
         $resultAttributes = [];
         foreach ($attributeFilters as $attributeFilter) {
-            if ($attributeFilter === 'category_id') {
+            if ($attributeFilter === 'category_id' && $includeSubcategories && !empty($categoryIDs)) {
                 $attributeResult = $this->addCategoryFilter($categoryIDs[0]);
-            }
-            else {
+            } else {
                 /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute */
                 $attribute = $this->eavConfig->getAttribute('catalog_product', $attributeFilter);
                 $attributeResult = $this->addAttributeFilter($attribute);
