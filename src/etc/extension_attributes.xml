@@ -44,4 +44,7 @@
     <extension_attributes for="Magento\Catalog\Api\Data\CategoryInterface">
         <attribute code="breadcrumbs" type="mixed"/>
     </extension_attributes>
+    <extension_attributes for="Magento\Store\Api\Data\StoreInterface">
+        <attribute code="is_active" type="int" />
+    </extension_attributes>
 </config>
