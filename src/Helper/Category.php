@@ -11,6 +11,8 @@ use Magento\Framework\App\Helper\Context as AppContext;
 
 class Category extends AbstractHelper
 {
+    const SHOW_CATEGORY_FILTER_PATH = 'reagento/catalog/show_category_filter';
+
     /** @var \Magento\Framework\View\ConfigInterface */
     private $viewConfig;
 
