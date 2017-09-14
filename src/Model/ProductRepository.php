@@ -295,7 +295,7 @@ class ProductRepository extends \Magento\Catalog\Model\ProductRepository impleme
      */
     protected function getAttributeFilters($attributeFilters, $categoryIDs = [], $includeSubcategories = false)
     {
-        $this->prepareFilterDataQueries();
+        $this->prepareFilterDataQueries($categoryIDs);
         $result = [];
         $resultAttributes = [];
         foreach ($attributeFilters as $attributeFilter) {
@@ -421,8 +421,10 @@ class ProductRepository extends \Magento\Catalog\Model\ProductRepository impleme
 
     /**
      * Prepare select queries to use when fetching options data
+     *
+     * @param int[] $categoryIDs
      */
-    protected function prepareFilterDataQueries()
+    protected function prepareFilterDataQueries($categoryIDs = [])
     {
         $connection = $this->connection;
 
