@@ -47,7 +47,7 @@ class Image extends AbstractHelper
      */
     public function getMainProductImageUrl(MagentoProduct $product, $size)
     {
-        return $this->getProductImageUrl($product, $product->getImage(), $size);
+        return $product->getImage() ? $this->getProductImageUrl($product, $product->getImage(), $size) : null;
     }
 
     /**

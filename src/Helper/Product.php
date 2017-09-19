@@ -72,7 +72,8 @@ class Product extends AbstractHelper
     public function addProductImageAttribute($product, $size = 'product_list_thumbnail', $attributeName = 'thumbnail_resized_url')
     {
         $productExtension = $this->getProductExtensionAttributes($product);
-        $productExtension->setData($attributeName, $this->mediaHelper->getMainProductImageUrl($product, $size));
+        $imageUrl = $this->mediaHelper->getMainProductImageUrl($product, $size);
+        $productExtension->setData($attributeName, $imageUrl ?: '');
         $product->setExtensionAttributes($productExtension);
     }
 
