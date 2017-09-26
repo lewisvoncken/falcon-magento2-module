@@ -18,6 +18,9 @@
     <type name="Magento\Quote\Model\QuoteManagement">
         <plugin name="hatimeriaReagentoAfterPlaceOrder" type="Hatimeria\Reagento\Model\Plugin\AfterPlaceOrder" />
     </type>
+    <type name="Magento\Store\Api\StoreConfigManagerInterface">
+        <plugin name="hatimeriaReagentoAdditionalConfig" type="Hatimeria\Reagento\Model\Plugin\AfterGetStoreConfigs" />
+    </type>
     <type name="Magento\Store\Api\StoreRepositoryInterface">
         <plugin name="hatimeriaReagentoAfterGetStoreViewList" type="Hatimeria\Reagento\Model\Plugin\AfterGetStoreViewList" />
     </type>
