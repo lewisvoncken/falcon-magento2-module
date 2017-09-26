@@ -33,10 +33,13 @@ class CategoryRepository extends \Magento\Catalog\Model\CategoryRepository imple
     }
 
     /**
+     * @param mixed $searchCriteria
      * @return \Hatimeria\Reagento\Api\Data\CategorySearchResultsInterface
      */
-    public function getHomepageList()
+    public function getHomepageList($searchCriteria = [])
     {
+        $pageSize = array_key_exists('pageSize', $searchCriteria) ? $searchCriteria['pageSize'] : 6;
+        $page = array_key_exists('currentPage', $searchCriteria) ? $searchCriteria['currentPage'] : 1;
         /** @var CategorySearchResultsInterface $searchResults */
         $searchResults = $this->searchResultsInterfaceFactory->create();
 
@@ -50,8 +53,8 @@ class CategoryRepository extends \Magento\Catalog\Model\CategoryRepository imple
             ->addFieldToSelect('url_key')
             ->addFieldToSelect('url_path')
             ->addFieldToSelect('include_in_menu')
-            ->setOrder('entity_id', 'desc')
-            ->setPageSize(6);
+            ->setOrder('homepage_position', 'asc')
+            ->setPage($page, $pageSize);
 
         $this->_eventDispatcher->dispatch('reagento_category_homepage_list_prepare_collection', 
             ['collection' => $collection]);

@@ -15,6 +15,14 @@ class Validate3d extends AdyenValidate3d
      * @param QuoteIdMaskFactory
      */
     protected $quoteIdMaskFactory;
+    /**
+     * @var \Magento\Quote\Model\QuoteFactory
+     */
+    protected $quoteFactory;
+    /**
+     * @var \Magento\Framework\Event\ManagerInterface
+     */
+    protected $_eventManager;
 
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
@@ -23,7 +31,9 @@ class Validate3d extends AdyenValidate3d
         \Adyen\Payment\Model\Api\PaymentRequest $paymentRequest,
         \Magento\Sales\Api\OrderRepositoryInterface $orderRepository,
         \Magento\Framework\Json\Helper\Data $jsonHelper,
-        QuoteIdMaskFactory $quoteIdMaskFactory
+        QuoteIdMaskFactory $quoteIdMaskFactory,
+        \Magento\Framework\Event\ManagerInterface $eventManager,
+        \Magento\Quote\Model\QuoteFactory $quoteFactory
     ) {
         parent::__construct(
             $context,
@@ -34,6 +44,8 @@ class Validate3d extends AdyenValidate3d
         );
         $this->jsonHelper         = $jsonHelper;
         $this->quoteIdMaskFactory = $quoteIdMaskFactory;
+        $this->_eventManager      = $eventManager;
+        $this->quoteFactory       = $quoteFactory;
     }
     
     /**
@@ -104,14 +116,11 @@ class Validate3d extends AdyenValidate3d
                         $this->_adyenHelper->cancelOrder($order);
                         $this->messageManager->addErrorMessage("3D-secure validation was unsuccessful");
                         
-                        // reactivate the quote
-                        $session = $this->_getCheckout();
-
                         // restore the quote
-                        $session->restoreQuote();
+                        $this->restoreQuote($order);
 
                         // generate masked quote id for failed validation to reload quote in reagento
-                        $quoteId = $session->getQuoteId();
+                        $quoteId = $order->getQuoteId();
                         $quoteIdMask = $this->quoteIdMaskFactory->create()->load($quoteId, 'quote_id');
                         if ($quoteIdMask->getMaskedId() === null) {
                             $quoteIdMask->setQuoteId($quoteId)->save();
@@ -153,14 +162,36 @@ class Validate3d extends AdyenValidate3d
     protected function _getOrder()
     {
         if (!$this->_order) {
-            $incrementId = $this->getRequest()->getPost('order_id');
-            if (!$incrementId) {
+            $orderId = $this->getRequest()->getPost('order_id');
+            if (!$orderId) {
                 throw new \Exception('Order ID is empty');
             }
-            $this->_adyenLogger->addAdyenResult('order id is #' . $incrementId);
+            $this->_adyenLogger->addAdyenResult('order id is #' . $orderId);
             $this->_orderFactory = $this->_objectManager->get('Magento\Sales\Model\OrderFactory');
-            $this->_order = $this->_orderFactory->create()->loadByIncrementId($incrementId);
+            $this->_order = $this->_orderFactory->create()->load($orderId);
         }
         return $this->_order;
+    }
+
+    public function restoreQuote($order)
+    {
+        if ($order->getId()) {
+            try {
+                $quote = $this->quoteFactory->create();
+                $quote->setStoreId($order->getStoreId())->load($order->getQuoteId());
+
+                if ($quote->getId()) {
+                    $quote->setIsActive(1)->setReservedOrderId(null);
+                    $quote->save();
+                    $this->_eventManager->dispatch('restore_quote', ['order' => $order, 'quote' => $quote]);
+
+                    return true;
+                }
+
+            } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
+            }
+        }
+
+        return false;
     }
 }

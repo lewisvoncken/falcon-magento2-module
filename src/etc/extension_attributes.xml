@@ -47,4 +47,7 @@
     <extension_attributes for="Magento\Store\Api\Data\StoreConfigInterface">
         <attribute code="optional_post_codes" type="mixed" />
     </extension_attributes>
+    <extension_attributes for="Magento\Store\Api\Data\StoreInterface">
+        <attribute code="is_active" type="int" />
+    </extension_attributes>
 </config>
