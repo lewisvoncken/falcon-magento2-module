@@ -1,10 +1,5 @@
 <?xml version="1.0"?>
-<!--
-/**
- * Copyright © 2016 Magento. All rights reserved.
- * See COPYING.txt for license details.
- */
--->
+
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
     <system>
         <tab id="hatimeria" translate="label" sortOrder="500">
@@ -30,6 +25,11 @@
                 <field id="show_category_filter" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Show category filter</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="breadcrumbs_attributes" translate="label comment" type="multiselect" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Breadcrumbs attributes</label>
+                    <comment>Select attributes that will be used while creating product breadcrumbs to return to filtered results</comment>
+                    <source_model>Hatimeria\Reagento\Model\Config\Source\BreadcrumbsAttribute</source_model>
                 </field>
             </group>
         </section>
