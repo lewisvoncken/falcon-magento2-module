@@ -316,7 +316,8 @@ class Product extends AbstractHelper
             if (array_key_exists('id', $crumb) && $crumb['id'] === $categoryId) {
                 if ($useSubcategoryFilter) {
                     //change subcategory url to use subcategory filter instead of link to subcategory page
-                    $parentCategory = $breadcrumbs[$id - 1];
+                    $prev = ($id > 0 ? $id : 1) - 1;
+                    $parentCategory = $breadcrumbs[$prev];
                     $crumb['url_path'] = $parentCategory['url_path'];
                     $crumb['url_query'] = ['filters' => ['in_category' => $categoryId]];
                 }
