@@ -42,4 +42,12 @@
     <type name="Magento\Framework\Webapi\Rest\Response">
         <plugin name="hatimeriaReagentoRestResponse" type="Hatimeria\Reagento\Plugin\Rest\Response" />
     </type>
+    <type name="Magento\Framework\Console\CommandListInterface">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="rapidflowAttributeOptions" xsi:type="object">Hatimeria\Reagento\Console\Command\Rapidflow\Attribute\OptionsCommand</item>
+            </argument>
+        </arguments>
+    </type>
+
 </config>
