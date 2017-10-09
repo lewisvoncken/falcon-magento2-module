@@ -52,7 +52,7 @@ class ProductRepository extends \Magento\Catalog\Model\ProductRepository impleme
     /** @var CategoryRepositoryInterface */
     protected $categoryRepository;
 
-    /** @var AdapterInterface  */
+    /** @var AdapterInterface */
     protected $connection;
 
     /** @var ScopeConfigInterface */
@@ -170,6 +170,7 @@ class ProductRepository extends \Magento\Catalog\Model\ProductRepository impleme
         }
 
         if (!empty($withAttributeFilters)) {
+            $attributeFilters = $this->setFiltersAvailability($collection, $searchCriteria, $attributeFilters);
             $searchResult->setFilters($attributeFilters);
         }
 
@@ -196,7 +197,7 @@ class ProductRepository extends \Magento\Catalog\Model\ProductRepository impleme
             );
         }
 
-        if(!empty($categoryIDs) && empty($sortOrders)) {
+        if (!empty($categoryIDs) && empty($sortOrders)) {
             // info: 3 statements below is an attempt to get products for provided categories taking into account
             // category level and product position for specific category
             $categoryLevelSelect = $this->connection
@@ -276,10 +277,10 @@ class ProductRepository extends \Magento\Catalog\Model\ProductRepository impleme
             }
         }
 
-        if(!empty($categoryIDs) && $includeSubcategories) {
+        if (!empty($categoryIDs) && $includeSubcategories) {
             /** @var \Magento\Catalog\Model\Category $categoryEntity */
             $categoryEntity = $this->categoryRepository->get($categoryIDs[0]);
-            if($categoryEntity) {
+            if ($categoryEntity) {
                 $categoryIDs = $categoryEntity->getAllChildren(true);
             }
         }
@@ -390,6 +391,8 @@ class ProductRepository extends \Magento\Catalog\Model\ProductRepository impleme
         $attributeResult = [
             'label' => $attribute->getStoreLabel(),
             'code' => $attribute->getAttributeCode(),
+            'attribute_id' => $attribute->getId(),
+            'type' => in_array($attribute->getFrontendInput(), ['multiselect', 'text']) ? 'varchar' : 'int',
             'options' => [],
         ];
 
@@ -439,20 +442,12 @@ class ProductRepository extends \Magento\Catalog\Model\ProductRepository impleme
             ->order('category.position ASC');
 
         // dropdown attributes
-        $selectInt = $connection->select()
-            ->distinct()
-            ->from(['int' => $connection->getTableName('catalog_product_entity_int')], ['value'])
-            ->joinLeft(['product' => $connection->getTableName('catalog_category_product')], 'int.entity_id = product.product_id', null)
-            ->where('int.attribute_id = :attribute_id');
+        $selectInt = $this->prepareAttributeSelectQuery('int');
 
         // multiselect attributes
-        $selectVarchar = $connection->select()
-            ->distinct()
-            ->from(['varchar' => $connection->getTableName('catalog_product_entity_varchar')], ['value'])
-            ->joinLeft(['product' => $connection->getTableName('catalog_category_product')], 'varchar.entity_id = product.product_id', null)
-            ->where('varchar.attribute_id = :attribute_id');
+        $selectVarchar = $this->prepareAttributeSelectQuery('varchar');
 
-        if ( !empty($categoryIDs) ) {
+        if (!empty($categoryIDs)) {
             $selectInt->where('product.category_id in (?)', $categoryIDs);
             $selectVarchar->where('product.category_id in (?)', $categoryIDs);
         }
@@ -480,16 +475,14 @@ class ProductRepository extends \Magento\Catalog\Model\ProductRepository impleme
                 ->where('value in (?)', $attributeValues)
                 ->where('attribute_code = ?', $attributeCode);
 
-            $selectInt->where('int.entity_id in ?', $attributeSelectInt);
-            $selectVarchar->where('varchar.entity_id in ?', $attributeSelectVarchar);
+            $selectInt->where('attr_value.entity_id in ?', $attributeSelectInt);
+            $selectVarchar->where('attr_value.entity_id in ?', $attributeSelectVarchar);
         }
 
         $this->queries['selectInt'] = $selectInt;
         $this->queries['selectVarchar'] = $selectVarchar;
         $this->queries['selectSubCategories'] = $selectSubCategories;
     }
-
-
 
     /**
      * Helper function that adds a FilterGroup to the collection.
@@ -523,5 +516,95 @@ class ProductRepository extends \Magento\Catalog\Model\ProductRepository impleme
         if ($fields) {
             $collection->addFieldToFilter($fields);
         }
+    }
+
+    /**
+     *
+     *
+     * @param ProductCollection $collection
+     * @param SearchCriteriaInterface $searchCriteria
+     * @param array $attributeFilters
+     * @return mixed
+     */
+    protected function setFiltersAvailability(ProductCollection $collection, SearchCriteriaInterface $searchCriteria, $attributeFilters)
+    {
+        $collection->clear();
+        $collection->setPageSize(null);
+        $productIds = $this->connection->fetchCol($collection->getAllIdsSql());
+
+        $usedFilters = [];
+        $activeOptions = [];
+        foreach($searchCriteria->getFilterGroups() as $filterGroup) {
+            foreach($filterGroup->getFilters() as $filter) {
+                $usedFilters[] = $filter->getField();
+            }
+        }
+
+        foreach($attributeFilters as $id => $filter) {
+            if (!in_array($filter['code'], $usedFilters)) {
+                if (array_key_exists('type', $filter)) {
+                    $activeOptions = $this->getActiveOptions($productIds, $filter['type'], $filter['attribute_id']);
+                } elseif($filter['code'] === 'in_category') {
+                    $activeOptions = $this->getActiveCategories($productIds);
+                }
+                $activeOptions[$filter['code']] = $activeOptions;
+            }
+            foreach($filter['options'] as $optId => $data) {
+                if (array_key_exists($filter['code'], $activeOptions)) {
+                    $active = in_array($data['value'], $activeOptions[$filter['code']]);
+                } else {
+                    $active = true;
+                }
+                $attributeFilters[$id]['options'][$optId]['active'] = $active;
+            }
+        }
+
+        return $attributeFilters;
+    }
+
+    /**
+     * Build basic select for getting used attribute data
+     *
+     * @param string $type int,varchar
+     * @return Select
+     */
+    protected function prepareAttributeSelectQuery($type)
+    {
+        return $this->connection->select()
+            ->distinct()
+            ->from(['attr_value' => $this->connection->getTableName('catalog_product_entity_' . $type)], ['value'])
+            ->joinLeft(['product' => $this->connection->getTableName('catalog_category_product')], 'attr_value.entity_id = product.product_id', null)
+            ->where('attr_value.attribute_id = :attribute_id');
+    }
+
+    /**
+     * @param int[] $productIds
+     * @param string $type
+     * @param int $attributeId
+     * @return array
+     */
+    protected function getActiveOptions($productIds, $type, $attributeId)
+    {
+        $select = $this->prepareAttributeSelectQuery($type)
+            ->where('attr_value.entity_id IN (?)', $productIds)
+            ->distinct(true);
+
+        return $this->connection->fetchCol($select, [
+            'attribute_id' => (int)$attributeId
+        ]);
+    }
+
+    /**
+     * @param int[] $productIds
+     * @return array
+     */
+    protected function getActiveCategories($productIds)
+    {
+        $select = $this->connection->select()
+            ->from($this->connection->getTableName('catalog_category_product'), 'category_id')
+            ->where('product_id IN (?)', $productIds)
+            ->distinct(true);
+
+        return $this->connection->fetchCol($select);
     }
 }
