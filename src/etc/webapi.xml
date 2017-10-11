@@ -79,4 +79,11 @@
             <resource ref="anonymous" />
         </resources>
     </route>
+
+    <route url="/V1/guest-orders/:orderId/order-info" method="GET">
+        <service class="\Hatimeria\Reagento\Api\HatimeriaOrderManagementInterface" method="getItem"/>
+        <resources>
+            <resource ref="anonymous" />
+        </resources>
+    </route>
 </routes>
