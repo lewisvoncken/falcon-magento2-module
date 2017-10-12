@@ -7,7 +7,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 
-class GuestOrderManagement implements HatimeriaOrderManagementInterface
+class GuestOrderManagement implements HatimeriaGuestOrderManagementInterface
 {
 
     /** @var OrderRepositoryInterface */
