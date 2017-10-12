@@ -34,9 +34,7 @@ class AfterPlaceOrder
      */
     public function afterPlace(OrderManagementInterface $subject, OrderInterface $result)
     {
-        $this->logger->debug('Generate Mask ID plugin');
         if (!$result->getCustomerId()) {
-            $this->logger->debug('Generate Mask ID for order ' . $result->getEntityId());
             $this->createMaskedIdForOrder($result);
         }
         return $result;
@@ -54,7 +52,6 @@ class AfterPlaceOrder
             $orderIdMask = $this->orderIdMaskFactory->create();
             $orderIdMask->setOrderId($order->getEntityId());
             $orderIdMask->getResource()->save($orderIdMask);
-            $this->logger->debug('Generated Mask ID: ' . $orderIdMask->getMaskedId());
         } catch (\Exception $e) {
             //order is already saved so do not escalate this exception to not break ordering process
             $this->logger->critical($e->getMessage());
