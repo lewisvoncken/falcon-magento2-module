@@ -2,7 +2,7 @@
 
 namespace Hatimeria\Reagento\Model;
 
-use Hatimeria\Reagento\Api\HatimeriaOrderManagementInterface;
+use Hatimeria\Reagento\Api\HatimeriaGuestOrderManagementInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
