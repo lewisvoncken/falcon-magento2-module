@@ -3,6 +3,7 @@
 namespace Hatimeria\Reagento\Model;
 
 use Hatimeria\Reagento\Api\HatimeriaOrderManagementInterface;
+use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
@@ -11,17 +12,22 @@ class OrderManagement implements HatimeriaOrderManagementInterface
 {
 
     /** @var OrderRepositoryInterface */
-    private $orderRepository;
+    protected $orderRepository;
 
-    /** @var OrderIdMaskFactory */
-    private $orderIdMaskFactory;
+    /** @var UserContextInterface */
+    protected $userContext;
 
+    /**
+     * OrderManagement constructor.
+     * @param OrderRepositoryInterface $orderRepository
+     * @param UserContextInterface $userContext
+     */
     public function __construct(
         OrderRepositoryInterface $orderRepository,
-        OrderIdMaskFactory $orderIdMaskFactory
+        UserContextInterface $userContext
     ) {
         $this->orderRepository = $orderRepository;
-        $this->orderIdMaskFactory = $orderIdMaskFactory;
+        $this->userContext = $userContext;
     }
 
     /**
@@ -31,15 +37,9 @@ class OrderManagement implements HatimeriaOrderManagementInterface
      */
     public function getItem($orderId)
     {
-        $orderIdMask = $this->orderIdMaskFactory->create()->load($orderId, 'masked_id');
-        $realOrderId = $orderIdMask->getOrderId();
-        if(!$realOrderId) {
-            throw new NoSuchEntityException();
-        }
-
-        $order = $this->orderRepository->get($realOrderId);
-        if(!$order->getId()) {
-            throw new NoSuchEntityException();
+        $order = $this->orderRepository->get($orderId);
+        if(!$order->getId() || $order->getCustomerId() !== $this->userContext->getUserId()) {
+            throw new NoSuchEntityException(__('Unable to find order %orderId', ['orderId' => $orderId]));
         }
 
         return $order;

@@ -100,9 +100,16 @@
     </route>
 
     <route url="/V1/guest-orders/:orderId/order-info" method="GET">
-        <service class="\Hatimeria\Reagento\Api\HatimeriaOrderManagementInterface" method="getItem"/>
+        <service class="\Hatimeria\Reagento\Api\HatimeriaGuestOrderManagementInterface" method="getItem"/>
         <resources>
             <resource ref="anonymous" />
+        </resources>
+    </route>
+
+    <route url="/V1/orders/:orderId/order-info" method="GET">
+        <service class="\Hatimeria\Reagento\Api\HatimeriaOrderManagementInterface" method="getItem"/>
+        <resources>
+            <resource ref="self" />
         </resources>
     </route>
 </routes>

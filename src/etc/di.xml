@@ -17,6 +17,7 @@
     <preference for="Hatimeria\Reagento\Api\ProductRepositoryInterface" type="Hatimeria\Reagento\Model\ProductRepository" />
     <preference for="Hatimeria\Reagento\Api\QuoteMaskInterface" type="Hatimeria\Reagento\Model\QuoteMask" />
     <preference for="Hatimeria\Reagento\Api\Data\OrderInfoInterface" type="Hatimeria\Reagento\Model\OrderInfo" />
+    <preference for="Hatimeria\Reagento\Api\HatimeriaGuestOrderManagementInterface" type="Hatimeria\Reagento\Model\GuestOrderManagement" />
     <preference for="Hatimeria\Reagento\Api\HatimeriaOrderManagementInterface" type="Hatimeria\Reagento\Model\OrderManagement" />
     <preference for="Magento\Paypal\Model\Express\Checkout" type="Hatimeria\Reagento\Model\Payment\Paypal\Express\Checkout" />
     <preference for="Magento\Paypal\Model\Express" type="Hatimeria\Reagento\Model\Payment\Paypal\Express" />
