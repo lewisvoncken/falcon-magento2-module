@@ -11,7 +11,7 @@ interface OrderInfoInterface
 
     /**
      * @param int $id
-     * @return mixed
+     * @return \Hatimeria\Reagento\Api\Data\OrderInfoInterface
      */
     public function setOrderId($id);
 
@@ -22,7 +22,7 @@ interface OrderInfoInterface
 
     /**
      * @param mixed $revenue
-     * @return mixed
+     * @return \Hatimeria\Reagento\Api\Data\OrderInfoInterface
      */
     public function setRevenue($revenue);
 
@@ -33,7 +33,7 @@ interface OrderInfoInterface
 
     /**
      * @param mixed $shipping
-     * @return mixed
+     * @return \Hatimeria\Reagento\Api\Data\OrderInfoInterface
      */
     public function setShipping($shipping);
 
@@ -44,7 +44,7 @@ interface OrderInfoInterface
 
     /**
      * @param mixed $tax
-     * @return mixed
+     * @return \Hatimeria\Reagento\Api\Data\OrderInfoInterface
      */
     public function setTax($tax);
 
@@ -55,7 +55,18 @@ interface OrderInfoInterface
 
     /**
      * @param mixed $id
-     * @return mixed
+     * @return \Hatimeria\Reagento\Api\Data\OrderInfoInterface
      */
     public function setQuoteId($id);
+
+    /**
+     * @return mixed
+     */
+    public function getMaskedId();
+
+    /**
+     * @param string $id
+     * @return \Hatimeria\Reagento\Api\Data\OrderInfoInterface
+     */
+    public function setMaskedId($id);
 }
