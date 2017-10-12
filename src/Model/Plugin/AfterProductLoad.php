@@ -51,9 +51,12 @@ class AfterProductLoad
 
     protected function getFilterableAttributes()
     {
-        return explode(
-            ',',
-            $this->scopeConfig->getValue(BreadcrumbsAttribute::BREADCRUMBS_ATTRIBUTES_CONFIG_PATH)
-        );
+        $attributes = [];
+            
+        if ($config = $this->scopeConfig->getValue(BreadcrumbsAttribute::BREADCRUMBS_ATTRIBUTES_CONFIG_PATH)) {
+            $attributes = explode(',', $config);
+        }
+
+        return $attributes;
     }
 }
