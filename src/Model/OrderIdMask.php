@@ -14,6 +14,8 @@ use Magento\Framework\Registry;
  *
  * @method string getMaskedId()
  * @method OrderIdMask setMaskedId()
+ * @method int getOrderId()
+ * @method OrderIdMask setOrderId()
  */
 class OrderIdMask extends AbstractModel
 {
