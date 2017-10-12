@@ -4,13 +4,18 @@ namespace Hatimeria\Reagento\Helper;
 
 use Hatimeria\Reagento\Api\Data\GalleryMediaEntrySizeInterface;
 use Hatimeria\Reagento\Helper\Media as MediaHelper;
+use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Api\Data\ProductExtension;
 use Magento\Catalog\Api\Data\ProductExtensionFactory;
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Product as MagentoProduct;
 use Magento\Catalog\Model\Product\Gallery\ReadHandler as GalleryReadHandler;
+use Magento\Eav\Model\Config;
 use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\App\Helper\Context as AppContext;
 use Magento\Framework\ObjectManagerInterface;
+use Magento\Store\Model\ScopeInterface;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\Tax\Api\TaxCalculationInterface;
 
 
@@ -20,10 +25,10 @@ use Magento\Tax\Api\TaxCalculationInterface;
 class Product extends AbstractHelper
 {
     /** @var MediaHelper */
-    private $mediaHelper;
+    protected $mediaHelper;
 
     /** @var ProductExtensionFactory */
-    private $productExtensionFactory;
+    protected $productExtensionFactory;
 
     /** @var ObjectManagerInterface */
     protected $objectManager;
@@ -31,20 +36,28 @@ class Product extends AbstractHelper
     /** @var GalleryReadHandler */
     protected $galleryReadHandler;
 
-    /**
-     * @var TaxCalculationInterface
-     */
+    /**  @var TaxCalculationInterface */
     protected $taxCalculation;
 
     /** @var \Magento\Eav\Model\Config */
     protected $eavConfig;
 
+    /** @var StoreManagerInterface */
+    protected $storeManager;
+
+    /** @var CategoryRepositoryInterface */
+    protected $categoryRepository;
+
     /**
      * @param AppContext $context
      * @param ProductExtensionFactory $productExtensionFactory
      * @param MediaHelper $mediaHelper
+     * @param GalleryReadHandler $galleryReadHandler
      * @param ObjectManagerInterface $objectManager
+     * @param TaxCalculationInterface $taxCalculation
      * @param \Magento\Eav\Model\Config $eavConfig
+     * @param StoreManagerInterface $storeManager
+     * @param CategoryRepositoryInterface $categoryRepository
      */
     public function __construct(
         AppContext $context,
@@ -53,7 +66,9 @@ class Product extends AbstractHelper
         GalleryReadHandler $galleryReadHandler,
         ObjectManagerInterface $objectManager,
         TaxCalculationInterface $taxCalculation,
-        \Magento\Eav\Model\Config $eavConfig
+        Config $eavConfig,
+        StoreManagerInterface $storeManager,
+        CategoryRepositoryInterface $categoryRepository
     ) {
         parent::__construct($context);
         $this->productExtensionFactory = $productExtensionFactory;
@@ -62,6 +77,8 @@ class Product extends AbstractHelper
         $this->galleryReadHandler = $galleryReadHandler;
         $this->eavConfig = $eavConfig;
         $this->taxCalculation = $taxCalculation;
+        $this->storeManager = $storeManager;
+        $this->categoryRepository = $categoryRepository;
     }
 
     /**
@@ -214,10 +231,10 @@ class Product extends AbstractHelper
     }
 
     /**
-     * @param MagentoProduct $product
+     * @param MagentoProduct|ProductInterface $product
      * @return ProductExtension|\Magento\Catalog\Api\Data\ProductExtensionInterface
      */
-    protected function getProductExtensionAttributes($product)
+    protected function getProductExtensionAttributes(ProductInterface $product)
     {
         $productExtension = $product->getExtensionAttributes();
         if ($productExtension === null) {
@@ -267,5 +284,69 @@ class Product extends AbstractHelper
 
             $product->setExtensionAttributes($productExtension);
         }
+    }
+
+    /**
+     * Add breadcrumb data to product
+     *
+     * @param MagentoProduct|ProductInterface $product
+     * @param string[] $filters
+     */
+    public function addBreadcrumbsData(ProductInterface $product, $filters = [])
+    {
+        $useSubcategoryFilter = $this->scopeConfig->getValue(
+            Category::SHOW_CATEGORY_FILTER_PATH,
+            ScopeInterface::SCOPE_STORE,
+            $this->storeManager->getStore()->getId()
+        );
+        $categories = $product->getCategoryIds();
+        $categoryId = array_shift($categories);
+        /** @var Category $category */
+        $category = $this->categoryRepository->get($categoryId);
+        $categoryExtensionAttributes = $category->getExtensionAttributes();
+        if ($categoryExtensionAttributes) {
+            $breadcrumbs = $categoryExtensionAttributes->getBreadcrumbs();
+        } else {
+            $breadcrumbs = [];
+        }
+
+        $categoryCrumb = end($breadcrumbs);
+        reset($categories);
+        foreach($breadcrumbs as $id => &$crumb) {
+            if (array_key_exists('id', $crumb) && $crumb['id'] === $categoryId) {
+                if ($useSubcategoryFilter) {
+                    //change subcategory url to use subcategory filter instead of link to subcategory page
+                    $prev = ($id > 0 ? $id : 1) - 1;
+                    $parentCategory = $breadcrumbs[$prev];
+                    $crumb['url_path'] = $parentCategory['url_path'];
+                    $crumb['url_query'] = ['filters' => ['in_category' => $categoryId]];
+                }
+                $categoryCrumb = $crumb;
+                break;
+            }
+        }
+
+        foreach($filters as $attribute) {
+            if ($product->hasData($attribute)) {
+                $attributeValue = $product->getData($attribute);
+                $attributeLabel = $product->getAttributeText($attribute);
+                if (is_array($attributeLabel)) {
+                    $attributeLabel = implode(', ', $attributeLabel);
+                }
+                $categoryCrumbFilters = $useSubcategoryFilter ? $categoryCrumb['url_query']['filters'] : [];
+                $attributeCrumb['name'] = $attributeLabel;
+                $attributeCrumb['url_path'] = $categoryCrumb['url_path'];
+                $attributeCrumb['url_query']['filters'] = $categoryCrumbFilters + [$attribute => $attributeValue];
+                $breadcrumbs[] = $attributeCrumb;
+            }
+        }
+
+        $breadcrumbs[] = [
+            'name' => $product->getName()
+        ];
+
+        $productExtension = $this->getProductExtensionAttributes($product);
+        $productExtension->setBreadcrumbs($breadcrumbs);
+        $product->setExtensionAttributes($productExtension);
     }
 }
