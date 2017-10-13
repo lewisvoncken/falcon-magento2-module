@@ -52,6 +52,6 @@
         </arguments>
     </type>
     <type name="Magento\Sales\Api\OrderManagementInterface">
-        <plugin name="hatimeriaReagentoOrderMaskedIdSetter" type="Hatimeria\Reagento\Plugin\Order\AfterPlaceOrder" />
+        <plugin name="hatimeriaReagentoOrderManagementPlugin" type="Hatimeria\Reagento\Plugin\Sales\Api\OrderManagement" />
     </type>
 </config>
