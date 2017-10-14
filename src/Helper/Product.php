@@ -2,6 +2,8 @@
 
 namespace Hatimeria\Reagento\Helper;
 
+use Hatimeria\Reagento\Api\Data\BreadcrumbInterface;
+use Hatimeria\Reagento\Api\Data\BreadcrumbInterfaceFactory;
 use Hatimeria\Reagento\Api\Data\GalleryMediaEntrySizeInterface;
 use Hatimeria\Reagento\Helper\Media as MediaHelper;
 use Magento\Catalog\Api\CategoryRepositoryInterface;
@@ -48,6 +50,9 @@ class Product extends AbstractHelper
     /** @var CategoryRepositoryInterface */
     protected $categoryRepository;
 
+    /** @var BreadcrumbInterfaceFactory */
+    protected $breadcrumbFactory;
+
     /**
      * @param AppContext $context
      * @param ProductExtensionFactory $productExtensionFactory
@@ -58,6 +63,7 @@ class Product extends AbstractHelper
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param StoreManagerInterface $storeManager
      * @param CategoryRepositoryInterface $categoryRepository
+     * @param BreadcrumbInterfaceFactory $breadcrumbFactory
      */
     public function __construct(
         AppContext $context,
@@ -68,7 +74,8 @@ class Product extends AbstractHelper
         TaxCalculationInterface $taxCalculation,
         Config $eavConfig,
         StoreManagerInterface $storeManager,
-        CategoryRepositoryInterface $categoryRepository
+        CategoryRepositoryInterface $categoryRepository,
+        BreadcrumbInterfaceFactory $breadcrumbFactory
     ) {
         parent::__construct($context);
         $this->productExtensionFactory = $productExtensionFactory;
@@ -79,6 +86,7 @@ class Product extends AbstractHelper
         $this->taxCalculation = $taxCalculation;
         $this->storeManager = $storeManager;
         $this->categoryRepository = $categoryRepository;
+        $this->breadcrumbFactory = $breadcrumbFactory;
     }
 
     /**
@@ -313,14 +321,14 @@ class Product extends AbstractHelper
 
         $categoryCrumb = end($breadcrumbs);
         reset($categories);
-        foreach($breadcrumbs as $id => &$crumb) {
-            if (array_key_exists('id', $crumb) && $crumb['id'] === $categoryId) {
+        foreach($breadcrumbs as $id => &$crumb) { /** @var BreadcrumbInterface $crumb */
+            if ($crumb->getId() === $categoryId) {
                 if ($useSubcategoryFilter) {
                     //change subcategory url to use subcategory filter instead of link to subcategory page
                     $prev = ($id > 0 ? $id : 1) - 1;
                     $parentCategory = $breadcrumbs[$prev];
-                    $crumb['url_path'] = $parentCategory['url_path'];
-                    $crumb['url_query'] = ['filters' => ['in_category' => $categoryId]];
+                    $crumb->setUrlPath($parentCategory->getUrlPath());
+                    $crumb->setUrlQuery(['filters' => ['in_category' => $categoryId]]);
                 }
                 $categoryCrumb = $crumb;
                 break;
@@ -338,16 +346,30 @@ class Product extends AbstractHelper
                 $attributeCrumb['name'] = $attributeLabel;
                 $attributeCrumb['url_path'] = $categoryCrumb['url_path'];
                 $attributeCrumb['url_query']['filters'] = $categoryCrumbFilters + [$attribute => $attributeValue];
-                $breadcrumbs[] = $attributeCrumb;
+                $breadcrumbs[] = $this->createBreadcrumb($attributeCrumb);
             }
         }
 
-        $breadcrumbs[] = [
+        $breadcrumbs[] = $this->createBreadcrumb([
             'name' => $product->getName()
-        ];
+        ]);
 
         $productExtension = $this->getProductExtensionAttributes($product);
         $productExtension->setBreadcrumbs($breadcrumbs);
         $product->setExtensionAttributes($productExtension);
+    }
+
+
+    /**
+     * @param mixed $data
+     * @return BreadcrumbInterface
+     */
+    protected function createBreadcrumb($data)
+    {
+        /** @var BreadcrumbInterface $breadcrumb */
+        $breadcrumb = $this->breadcrumbFactory->create();
+        $breadcrumb->loadFromData($data);
+
+        return $breadcrumb;
     }
 }

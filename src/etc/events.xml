@@ -1,10 +1,10 @@
 <?xml version="1.0"?>
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
-    <event name="clean_cache_by_tags">
-        <observer name="handle_cache" instance="Hatimeria\Reagento\Observer\Cache\InvalidateObserver"/>
-    </event>
     <event name="adminhtml_cache_flush_system">
         <observer name="handle_cache" instance="Hatimeria\Reagento\Observer\Cache\FlushAllObserver"/>
+    </event>
+    <event name="clean_cache_by_tags">
+        <observer name="handle_cache" instance="Hatimeria\Reagento\Observer\Cache\InvalidateObserver"/>
     </event>
     <event name="clean_media_cache_after">
         <observer name="handle_cache" instance="Hatimeria\Reagento\Observer\Cache\FlushAllObserver"/>
