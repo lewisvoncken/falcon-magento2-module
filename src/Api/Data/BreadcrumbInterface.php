@@ -55,7 +55,7 @@ interface BreadcrumbInterface
     public function setUrlKey($urlKey);
 
     /**
-     * @return mixed
+     * @return array
      */
     public function getUrlQuery();
 
