@@ -321,7 +321,7 @@ class Product extends AbstractHelper
 
         $categoryCrumb = end($breadcrumbs);
         reset($categories);
-        foreach($breadcrumbs as $id => &$crumb) { /** @var BreadcrumbInterface $crumb */
+        foreach($breadcrumbs as $id => $crumb) { /** @var BreadcrumbInterface $crumb */
             if ($crumb->getId() === $categoryId) {
                 if ($useSubcategoryFilter) {
                     //change subcategory url to use subcategory filter instead of link to subcategory page
