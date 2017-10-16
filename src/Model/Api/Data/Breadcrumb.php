@@ -9,6 +9,20 @@ use Magento\Framework\Model\AbstractExtensibleModel;
 class Breadcrumb extends AbstractExtensibleModel implements BreadcrumbInterface
 {
     /**
+     * List of available fields for loadFromData method
+     *
+     * @var array
+     */
+    protected $mappedFields = [
+        self::ID,
+        self::NAME,
+        self::URL_KEY,
+        self::URL_PATH,
+        self::URL_QUERY
+    ];
+
+
+    /**
      * @return int
      */
     public function getId()
@@ -99,13 +113,9 @@ class Breadcrumb extends AbstractExtensibleModel implements BreadcrumbInterface
      */
     public function loadFromData($data)
     {
+        $data = array_intersect_key($data, array_flip($this->mappedFields));
         foreach ($data as $key => $value) {
-            $method = 'set' . str_replace(' ', '', ucwords(str_replace('_', ' ', $key)));
-            if (method_exists($this, $method)) {
-                $this->$method($value);
-            } else {
-                $this->_logger->debug(__("Unknown field '{$key}' in BreadcrumbsInterface"));
-            }
+            $this->setData($key, $value);
         }
 
         return $this;
