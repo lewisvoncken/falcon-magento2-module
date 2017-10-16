@@ -5,6 +5,7 @@ namespace Hatimeria\Reagento\Helper;
 use Hatimeria\Reagento\Api\Data\BreadcrumbInterface;
 use Hatimeria\Reagento\Api\Data\BreadcrumbInterfaceFactory;
 use Magento\Catalog\Api\CategoryRepositoryInterface;
+use Magento\Catalog\Api\Data\CategoryInterface;
 use Magento\Catalog\Model\Category as MagentoCategory;
 use Magento\Catalog\Model\Category\Collection as MagentoCategoryCollection;
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -155,20 +156,10 @@ class Category extends AbstractHelper
                 continue;
             }
 
-            $result[] = $this->createBreadcrumb([
-                'id' => $parentCategory->getId(),
-                'name' => $parentCategory->getName(),
-                'url_path' => $parentCategory->getUrlPath(),
-                'url_key' => $parentCategory->getUrlKey()
-            ]);
+            $result[] = $this->createBreadcrumb($category);
         }
 
-        $result[] = $this->createBreadcrumb([
-            'id' => $category->getId(),
-            'name' => $category->getName(),
-            'url_path' => $category->getUrlPath(),
-            'url_key' => $category->getUrlKey()
-        ]);
+        $result[] = $this->createBreadcrumb($category);
 
         $extensionAttributes = $category->getExtensionAttributes();
         if($extensionAttributes === null) {
@@ -180,13 +171,19 @@ class Category extends AbstractHelper
     }
 
     /**
-     * @param mixed $data
+     * @param CategoryInterface $category
      * @return BreadcrumbInterface
      */
-    protected function createBreadcrumb($data)
+    protected function createBreadcrumb($category)
     {
         /** @var BreadcrumbInterface $breadcrumb */
         $breadcrumb = $this->breadcrumbFactory->create();
+        $data = [
+            'id' => $category->getId(),
+            'name' => $category->getName(),
+            'url_path' => $category->getUrlPath(),
+            'url_key' => $category->getUrlKey()
+        ];
         $breadcrumb->loadFromData($data);
 
         return $breadcrumb;

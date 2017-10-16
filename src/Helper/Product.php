@@ -342,9 +342,9 @@ class Product extends AbstractHelper
                 if (is_array($attributeLabel)) {
                     $attributeLabel = implode(', ', $attributeLabel);
                 }
-                $categoryCrumbFilters = $useSubcategoryFilter ? $categoryCrumb['url_query']['filters'] : [];
+                $categoryCrumbFilters = $useSubcategoryFilter ? $categoryCrumb->getUrlQuery()['filters'] : [];
                 $attributeCrumb['name'] = $attributeLabel;
-                $attributeCrumb['url_path'] = $categoryCrumb['url_path'];
+                $attributeCrumb['url_path'] = $categoryCrumb->getUrlPath();
                 $attributeCrumb['url_query']['filters'] = $categoryCrumbFilters + [$attribute => $attributeValue];
                 $breadcrumbs[] = $this->createBreadcrumb($attributeCrumb);
             }
