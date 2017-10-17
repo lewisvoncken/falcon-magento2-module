@@ -3,6 +3,7 @@
 namespace Hatimeria\Reagento\Observer\Catalog\Product\Collection;
 
 use Hatimeria\Reagento\Helper\Product as HatimeriaProductHelper;
+use Hatimeria\Reagento\Helper\Stock as HatimeriaStockHelper;
 use Magento\Catalog\Model\Product as Product;
 use Magento\Catalog\Model\ResourceModel\Product\Collection as ProductCollection;
 use Magento\Framework\Event\Observer as EventObserver;
@@ -14,14 +15,21 @@ use Magento\Framework\Event\ObserverInterface;
 class AfterLoadObserver implements ObserverInterface
 {
     /** @var HatimeriaProductHelper */
-    private $productHelper;
+    protected $productHelper;
+
+    /** @var HatimeriaStockHelper */
+    protected $stockHelper;
 
     /**
      * @param HatimeriaProductHelper $productHelper
+     * @param HatimeriaStockHelper $stockHelper
      */
-    public function __construct(HatimeriaProductHelper $productHelper)
-    {
+    public function __construct(
+        HatimeriaProductHelper $productHelper,
+        HatimeriaStockHelper $stockHelper
+    ) {
         $this->productHelper = $productHelper;
+        $this->stockHelper = $stockHelper;
     }
 
     /**
@@ -31,7 +39,6 @@ class AfterLoadObserver implements ObserverInterface
     {
         /** @var ProductCollection $collection */
         $collection = $observer->getEvent()->getCollection();
-
         foreach ($collection as $item) {
             /** @var Product $item */
 
@@ -44,5 +51,7 @@ class AfterLoadObserver implements ObserverInterface
 
             $this->productHelper->calculateCatalogDisplayPrice($item);
         }
+
+        $this->stockHelper->addStockDataToCollection($collection);
     }
 }
