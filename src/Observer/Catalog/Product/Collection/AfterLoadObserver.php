@@ -39,6 +39,7 @@ class AfterLoadObserver implements ObserverInterface
     {
         /** @var ProductCollection $collection */
         $collection = $observer->getEvent()->getCollection();
+
         foreach ($collection as $item) {
             /** @var Product $item */
 
