@@ -58,6 +58,9 @@ class ProductRepository extends \Magento\Catalog\Model\ProductRepository impleme
     /** @var ScopeConfigInterface */
     protected $scopeConfig;
 
+    /** @var Filter */
+    protected $filter;
+
     /** @var Select[] */
     protected $queries = [];
 
@@ -93,6 +96,7 @@ class ProductRepository extends \Magento\Catalog\Model\ProductRepository impleme
      * @param CategoryFactory $categoryFactory
      * @param ResourceConnection $resource
      * @param ScopeConfigInterface $scopeConfig
+     * @param Filter $filter
      */
     public function __construct(
         ProductFactory $productFactory,
@@ -119,9 +123,9 @@ class ProductRepository extends \Magento\Catalog\Model\ProductRepository impleme
         Config $eavConfig,
         CategoryFactory $categoryFactory,
         ResourceConnection $resource,
-        ScopeConfigInterface $scopeConfig
-    )
-    {
+        ScopeConfigInterface $scopeConfig,
+        Filter $filter
+    ) {
         parent::__construct($productFactory, $initializationHelper, $searchResultsFactory, $collectionFactory, $searchCriteriaBuilder, $attributeRepository, $resourceModel, $linkInitializer, $linkTypeProvider, $storeManager, $filterBuilder, $metadataServiceInterface, $extensibleDataObjectConverter, $optionConverter, $fileSystem, $contentValidator, $contentFactory, $mimeTypeExtensionMap, $imageProcessor, $extensionAttributesJoinProcessor);
         $this->eavConfig = $eavConfig;
         $this->categoryFactory = $categoryFactory;
@@ -129,6 +133,29 @@ class ProductRepository extends \Magento\Catalog\Model\ProductRepository impleme
         $this->categoryRepository = $categoryRepository;
         $this->scopeConfig = $scopeConfig;
         $this->connection = $this->resource->getConnection();
+        $this->filter = $filter;
+    }
+
+    /**
+     * Get IDs of products in given categories.
+     * As this method uses index table it is already filtered by status and visibility
+     *
+     * @param $categoryIDs
+     * @return array
+     */
+    protected function getAllProductIds($categoryIDs)
+    {
+        $allProductIdsSql = $this->resource
+            ->getConnection()
+            ->select()
+            ->from(
+                $this->resource->getTableName('catalog_category_product_index'),
+                ['product_id' => new \Zend_Db_Expr('DISTINCT product_id')]
+            )
+            ->where('store_id = ?', $this->storeManager->getStore()->getId())
+            ->where('category_id IN (?)', $categoryIDs);
+
+        return $this->resource->getConnection()->fetchCol($allProductIdsSql);
     }
 
     /**
@@ -138,6 +165,33 @@ class ProductRepository extends \Magento\Catalog\Model\ProductRepository impleme
     {
         list ($categoryIDs, $subcategories) = $this->getCategoryIdFromSearchCriteria($searchCriteria, $includeSubcategories);
 
+        /** @var get all ids available in this category $allProductIds */
+        $allProductIds = $this->getAllProductIds($categoryIDs);
+        $productFilterOptionValues = $this->filter->getFiltersOptions($allProductIds, $withAttributeFilters, $categoryIDs);
+        $filters = $this->getAttributeFilters($withAttributeFilters, $categoryIDs, $includeSubcategories);
+        $this->filter->setFiltersAvailability($filters, $productFilterOptionValues, $searchCriteria);
+
+
+        $searchResult = $this->getListResult(
+            $searchCriteria,
+            $categoryIDs,
+            $withAttributeFilters,
+            $includeSubcategories,
+            $subcategories
+            );
+
+
+
+        return $searchResult;
+    }
+
+    protected function getListResult(
+        $searchCriteria,
+        $categoryIDs,
+        $withAttributeFilters,
+        $includeSubcategories,
+        $subcategories
+    ) {
         /** @var ProductCollection $collection */
         $collection = $this->collectionFactory->create();
         $this->extensionAttributesJoinProcessor->process($collection);
@@ -148,6 +202,8 @@ class ProductRepository extends \Magento\Catalog\Model\ProductRepository impleme
         $collection->joinAttribute('status', 'catalog_product/status', 'entity_id', null, 'inner');
         $collection->joinAttribute('visibility', 'catalog_product/visibility', 'entity_id', null, 'inner');
         $this->setListPosition($collection, $searchCriteria, $categoryIDs);
+        $collection->setCurPage($searchCriteria->getCurrentPage());
+        $collection->setPageSize($searchCriteria->getPageSize());
 
         list($attributeFilters, $attributes) = $this->getAttributeFilters($withAttributeFilters, $categoryIDs, $includeSubcategories);
 
@@ -155,24 +211,11 @@ class ProductRepository extends \Magento\Catalog\Model\ProductRepository impleme
             ['categoryIDs' => $categoryIDs, 'subcategoryFilter' => $subcategories],
             $attributes);
 
-        $collection->setCurPage($searchCriteria->getCurrentPage());
-        $collection->setPageSize($searchCriteria->getPageSize());
-        $collection->load();
-
         /** @var \Hatimeria\Reagento\Api\SearchResults $searchResult */
         $searchResult = $this->searchResultsFactory->create();
         $searchResult->setSearchCriteria($searchCriteria);
         $searchResult->setItems($collection->getItems());
         $searchResult->setTotalCount($collection->getSize());
-
-        if ($withAttributeFilters && is_string($withAttributeFilters)) {
-            $withAttributeFilters = [$withAttributeFilters];
-        }
-
-        if (!empty($withAttributeFilters)) {
-            $attributeFilters = $this->setFiltersAvailability($collection, $searchCriteria, $attributeFilters);
-            $searchResult->setFilters($attributeFilters);
-        }
 
         return $searchResult;
     }
@@ -292,13 +335,12 @@ class ProductRepository extends \Magento\Catalog\Model\ProductRepository impleme
      * @param array $attributeFilters
      * @param int|int[] $categoryIDs
      * @param bool $includeSubcategories
-     * @return array [ array, \Magento\Catalog\Model\ResourceModel\Eav\Attribute[] ]
+     * @return array
      */
     protected function getAttributeFilters($attributeFilters, $categoryIDs = [], $includeSubcategories = false)
     {
         $this->prepareFilterDataQueries($categoryIDs);
         $result = [];
-        $resultAttributes = [];
         foreach ($attributeFilters as $attributeFilter) {
             if ($attributeFilter === 'category_id' && $includeSubcategories && !empty($categoryIDs)) {
                 $attributeResult = $this->addCategoryFilter($categoryIDs[0]);
@@ -519,50 +561,6 @@ class ProductRepository extends \Magento\Catalog\Model\ProductRepository impleme
     }
 
     /**
-     *
-     *
-     * @param ProductCollection $collection
-     * @param SearchCriteriaInterface $searchCriteria
-     * @param array $attributeFilters
-     * @return mixed
-     */
-    protected function setFiltersAvailability(ProductCollection $collection, SearchCriteriaInterface $searchCriteria, $attributeFilters)
-    {
-        $collection->clear();
-        $collection->setPageSize(null);
-        $productIds = $this->connection->fetchCol($collection->getAllIdsSql());
-
-        $usedFilters = [];
-        $activeOptions = [];
-        foreach($searchCriteria->getFilterGroups() as $filterGroup) {
-            foreach($filterGroup->getFilters() as $filter) {
-                $usedFilters[] = $filter->getField();
-            }
-        }
-
-        foreach($attributeFilters as $id => $filter) {
-            if (!in_array($filter['code'], $usedFilters)) {
-                if (array_key_exists('type', $filter)) {
-                    $activeOptions = $this->getActiveOptions($productIds, $filter['type'], $filter['attribute_id']);
-                } elseif($filter['code'] === 'in_category') {
-                    $activeOptions = $this->getActiveCategories($productIds);
-                }
-                $activeOptions[$filter['code']] = $activeOptions;
-            }
-            foreach($filter['options'] as $optId => $data) {
-                if (array_key_exists($filter['code'], $activeOptions)) {
-                    $active = in_array($data['value'], $activeOptions[$filter['code']]);
-                } else {
-                    $active = true;
-                }
-                $attributeFilters[$id]['options'][$optId]['active'] = $active;
-            }
-        }
-
-        return $attributeFilters;
-    }
-
-    /**
      * Build basic select for getting used attribute data
      *
      * @param string $type int,varchar
@@ -575,36 +573,5 @@ class ProductRepository extends \Magento\Catalog\Model\ProductRepository impleme
             ->from(['attr_value' => $this->connection->getTableName('catalog_product_entity_' . $type)], ['value'])
             ->joinLeft(['product' => $this->connection->getTableName('catalog_category_product')], 'attr_value.entity_id = product.product_id', null)
             ->where('attr_value.attribute_id = :attribute_id');
-    }
-
-    /**
-     * @param int[] $productIds
-     * @param string $type
-     * @param int $attributeId
-     * @return array
-     */
-    protected function getActiveOptions($productIds, $type, $attributeId)
-    {
-        $select = $this->prepareAttributeSelectQuery($type)
-            ->where('attr_value.entity_id IN (?)', $productIds)
-            ->distinct(true);
-
-        return $this->connection->fetchCol($select, [
-            'attribute_id' => (int)$attributeId
-        ]);
-    }
-
-    /**
-     * @param int[] $productIds
-     * @return array
-     */
-    protected function getActiveCategories($productIds)
-    {
-        $select = $this->connection->select()
-            ->from($this->connection->getTableName('catalog_category_product'), 'category_id')
-            ->where('product_id IN (?)', $productIds)
-            ->distinct(true);
-
-        return $this->connection->fetchCol($select);
     }
 }
