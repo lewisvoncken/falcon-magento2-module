@@ -39,5 +39,8 @@
     <event name="clean_cache_after_reindex">
         <observer name="handle_cache" instance="Hatimeria\Reagento\Observer\Cache\InvalidateObserver"/>
     </event>
+    <event name="sales_order_load_after">
+        <observer name="set_masked_id" instance="Hatimeria\Reagento\Observer\Order\SetMaskedId"/>
+    </event>
 </config>
 

@@ -68,7 +68,7 @@
     </route>
 
     <route url="/V1/guest-carts/:cartId/reagento-order" method="PUT">
-        <service class="\Hatimeria\Reagento\Api\HatimeriaCartManagementInterface" method="placeOrder"/>
+        <service class="\Hatimeria\Reagento\Api\HatimeriaGuestCartManagementInterface" method="placeOrder"/>
         <resources>
             <resource ref="anonymous" />
         </resources>
@@ -77,6 +77,46 @@
         <service class="\Hatimeria\Reagento\Api\HatimeriaGuestPaymentInformationManagementInterface" method="savePaymentInformationAndPlaceOrder"/>
         <resources>
             <resource ref="anonymous" />
+        </resources>
+    </route>
+
+    <route url="/V1/carts/mine/reagento-order" method="PUT">
+        <service class="\Hatimeria\Reagento\Api\HatimeriaCartManagementInterface" method="placeOrder"/>
+        <resources>
+            <resource ref="self" />
+        </resources>
+        <data>
+            <parameter name="cartId" force="true">%cart_id%</parameter>
+        </data>
+    </route>
+    <route url="/V1/carts/mine/payment-information" method="POST">
+        <service class="\Hatimeria\Reagento\Api\HatimeriaPaymentInformationManagementInterface" method="savePaymentInformationAndPlaceOrder"/>
+        <resources>
+            <resource ref="self" />
+        </resources>
+        <data>
+            <parameter name="cartId" force="true">%cart_id%</parameter>
+        </data>
+    </route>
+
+    <route url="/V1/guest-orders/:orderId/order-info" method="GET">
+        <service class="\Hatimeria\Reagento\Api\HatimeriaGuestOrderManagementInterface" method="getItem"/>
+        <resources>
+            <resource ref="anonymous" />
+        </resources>
+    </route>
+
+    <route url="/V1/orders/:orderId/order-info" method="GET">
+        <service class="\Hatimeria\Reagento\Api\HatimeriaOrderManagementInterface" method="getItem"/>
+        <resources>
+            <resource ref="self" />
+        </resources>
+    </route>
+
+    <route url="/V1/orders/mine" method="GET">
+        <service class="\Hatimeria\Reagento\Api\HatimeriaOrderManagementInterface" method="getCustomerOrders"/>
+        <resources>
+            <resource ref="self" />
         </resources>
     </route>
 </routes>

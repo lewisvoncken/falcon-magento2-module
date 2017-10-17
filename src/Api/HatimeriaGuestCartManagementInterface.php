@@ -3,18 +3,18 @@
 namespace Hatimeria\Reagento\Api;
 
 use Magento\Quote\Api\Data\PaymentInterface;
-use Magento\Quote\Api\CartManagementInterface;
+use Magento\Quote\Api\GuestCartManagementInterface;
 
 /**
  * Interface HatimeriaCartManagementInterface
  * @api
  */
-interface HatimeriaCartManagementInterface extends CartManagementInterface
+interface HatimeriaGuestCartManagementInterface extends GuestCartManagementInterface
 {
     /**
      * Places an order for a specified cart.
      *
-     * @param int $cartId The cart ID.
+     * @param string $cartId The cart ID.
      * @param PaymentInterface|null $paymentMethod
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      * @return \Hatimeria\Reagento\Model\Api\OrderResponse

@@ -4,8 +4,10 @@
     <preference for="Magento\Cms\Model\ResourceModel\Block\Collection" type="\Hatimeria\Reagento\Model\ResourceModel\Block\Collection" />
     <preference for="Magento\Catalog\Model\ResourceModel\Category" type="\Hatimeria\Reagento\Model\ResourceModel\Category" />
     <preference for="Magento\Catalog\Model\ResourceModel\Category\Collection" type="\Hatimeria\Reagento\Model\ResourceModel\Category\Collection" />
-    <preference for="Hatimeria\Reagento\Api\HatimeriaCartManagementInterface" type="\Magento\Quote\Model\GuestCart\GuestCartManagement" />
+    <preference for="Hatimeria\Reagento\Api\HatimeriaGuestCartManagementInterface" type="\Magento\Quote\Model\GuestCart\GuestCartManagement" />
+    <preference for="Hatimeria\Reagento\Api\HatimeriaCartManagementInterface" type="\Magento\Quote\Model\QuoteManagement" />
     <preference for="Hatimeria\Reagento\Api\HatimeriaGuestPaymentInformationManagementInterface" type="\Magento\Checkout\Model\GuestPaymentInformationManagement" />
+    <preference for="Hatimeria\Reagento\Api\HatimeriaPaymentInformationManagementInterface" type="\Magento\Checkout\Model\PaymentInformationManagement" />
     <type name="Magento\Catalog\Model\Product">
         <plugin name="hatimeriaReagentoAfterProductLoad" type="\Hatimeria\Reagento\Model\Plugin\AfterProductLoad"/>
     </type>

@@ -20,14 +20,26 @@ class QuoteMask implements QuoteMaskInterface
     /** @var ObjectManagerInterface */
     protected $objectManager;
 
+    /** @var OrderIdMaskFactory */
+    protected $orderIdMaskFactory;
+
+    /**
+     * QuoteMask constructor.
+     * @param \Magento\Sales\Model\OrderFactory $orderFactory
+     * @param QuoteIdMaskFactory $quoteIdMaskFactory
+     * @param OrderIdMaskFactory $orderIdMaskFactory
+     * @param ObjectManagerInterface $objectManager
+     */
     public function __construct(
         \Magento\Sales\Model\OrderFactory $orderFactory,
         QuoteIdMaskFactory $quoteIdMaskFactory,
+        OrderIdMaskFactory$orderIdMaskFactory,
         ObjectManagerInterface $objectManager
     ) {
         $this->quoteIdMaskFactory = $quoteIdMaskFactory;
         $this->orderFactory = $orderFactory;
         $this->objectManager = $objectManager;
+        $this->orderIdMaskFactory = $orderIdMaskFactory;
     }
 
     /**
@@ -46,6 +58,17 @@ class QuoteMask implements QuoteMaskInterface
     protected function getOrderByQuote($quoteId)
     {
         return $this->orderFactory->create()->load($quoteId, 'quote_id');
+    }
+
+    /**
+     * @param int $orderId
+     * @return string
+     */
+    protected function getMaskedOrderId($orderId)
+    {
+        $maskedId = $this->orderIdMaskFactory->create();
+        $maskedId ->getResource()->load($maskedId, $orderId, 'order_id');
+        return $maskedId->getMaskedId();
     }
 
     public function getItem($quoteId)
@@ -68,6 +91,7 @@ class QuoteMask implements QuoteMaskInterface
         $result->setShipping($order->getShippingInclTax());
         $result->setTax($order->getTaxAmount());
         $result->setQuoteId($quoteId);
+        $result->setMaskedId($this->getMaskedOrderId($order->getEntityId()));
 
         return $result;
     }
