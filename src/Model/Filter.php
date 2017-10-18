@@ -174,7 +174,7 @@ class Filter
             }
             $attributeFilters[$id]['options'] = $this->setOptionAvailability(
                 $filter['options'],
-                isset($optionValuesProducts[$code]) ? $optionValuesProducts[$code] : [],
+                $optionValuesProducts[$code],
                 $productBasis
             );
         }
