@@ -164,7 +164,7 @@ class Filter
 
         foreach($attributeFilters as $id => $filter) {
             $code = $filter['code'];
-            if (!array_key_exists($code, $productOptionValues)) {
+            if (!array_key_exists($code, $optionValuesProducts)) {
                 continue;
             }
             $productBasis = $usedProducts;
