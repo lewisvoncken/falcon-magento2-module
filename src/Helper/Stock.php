@@ -65,10 +65,21 @@ class Stock
         /** @var StockItemCriteriaInterface $searchCriteria */
         $searchCriteria = $this->stockCriteriaInterfaceFactory->create();
         $searchCriteria->addFilter('products', 'product_id', ['in' => $productIds], 'public');
+
+        /**
+         * Stock item can be defined on website level so we may need either item from current website or default.
+         * Unfortunately repository does not have means to return the correct one (ie. default if website is missing).
+         * To mitigate this problem we need to fetch both values and select them ourselves
+         */
         $searchCriteria->addFilter('website', 'website_id', ['in' => [0, $websiteId]], 'public');
 
         $list = [];
         foreach($this->stockRepository->getList($searchCriteria)->getItems() as $item) { /** @var StockItemInterface $item */
+            /**
+             * This condition will add item for website 0 if no data is in the list. If item for current website
+             * is present in the result it will override default item element. If item for default website is later
+             * in the result than the one for the current website it will not be added.
+             */
             if ($item->getWebsiteId() === $websiteId || !array_key_exists($item->getProductId(), $list)) {
                 $list[$item->getProductId()] = $item;
             }
