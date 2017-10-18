@@ -1,6 +1,6 @@
 <?php
 
-namespace Hatimeria\Reagento\Plugin\Order;
+namespace Hatimeria\Reagento\Plugin\Sales\Api;
 
 use Hatimeria\Reagento\Model\OrderIdMask;
 use Hatimeria\Reagento\Model\OrderIdMaskFactory;
@@ -8,7 +8,7 @@ use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\OrderManagementInterface;
 use Psr\Log\LoggerInterface;
 
-class AfterPlaceOrder
+class OrderManagement
 {
     /** @var OrderIdMaskFactory */
     protected $orderIdMaskFactory;
