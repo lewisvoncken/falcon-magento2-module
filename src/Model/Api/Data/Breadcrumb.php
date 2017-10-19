@@ -14,11 +14,11 @@ class Breadcrumb extends AbstractExtensibleModel implements BreadcrumbInterface
      * @var array
      */
     protected $mappedFields = [
-        self::ID,
-        self::NAME,
-        self::URL_KEY,
-        self::URL_PATH,
-        self::URL_QUERY
+        self::ID => self::ID,
+        self::NAME => self::NAME,
+        self::URL_KEY => self::URL_KEY,
+        self::URL_PATH => self::URL_PATH,
+        self::URL_QUERY => self::URL_QUERY
     ];
 
 
@@ -113,7 +113,7 @@ class Breadcrumb extends AbstractExtensibleModel implements BreadcrumbInterface
      */
     public function loadFromData($data)
     {
-        $data = array_intersect_key($data, array_flip($this->mappedFields));
+        $data = array_intersect_key($data, $this->mappedFields);
         foreach ($data as $key => $value) {
             $this->setData($key, $value);
         }
