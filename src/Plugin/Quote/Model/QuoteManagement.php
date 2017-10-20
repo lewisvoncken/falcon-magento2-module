@@ -1,15 +1,16 @@
 <?php
 
-namespace Hatimeria\Reagento\Model\Plugin;
+namespace Hatimeria\Reagento\Plugin\Quote\Model;
 
-use Hatimeria\Reagento\Api\UrlInterface;
 use Hatimeria\Reagento\Model\Api\AdyenRedirect;
+use Hatimeria\Reagento\Model\Api\AdyenRedirectFactory;
 use Hatimeria\Reagento\Model\Api\OrderResponse;
+use Magento\Framework\UrlInterface as MagentoUrlInterface;
+use Magento\Quote\Model\QuoteManagement as MagentoQuoteManagement;
 use Magento\Sales\Model\Order;
-use Adyen\Payment\Block\Redirect\Validate3d;
 use Magento\Sales\Api\OrderRepositoryInterface;
 
-class AfterPlaceOrder
+class QuoteManagement
 {
     /**
      * @var OrderRepositoryInterface
@@ -17,28 +18,35 @@ class AfterPlaceOrder
     protected $orderRepository;
 
     /**
-     * @var UrlInterface
+     * @var MagentoUrlInterface
      */
     protected $urlBuilder;
+
+    /** @var AdyenRedirectFactory */
+    protected $adyenRedirectFactory;
 
     /**
      * AfterPlaceOrder constructor.
      * @param OrderRepositoryInterface $orderRepository
+     * @param MagentoUrlInterface $urlBuilder
+     * @param AdyenRedirectFactory $adyenRedirectFactory
      */
     public function __construct(
         OrderRepositoryInterface $orderRepository,
-        \Magento\Framework\UrlInterface $urlBuilder
+        MagentoUrlInterface $urlBuilder,
+        AdyenRedirectFactory $adyenRedirectFactory
     ) {
         $this->orderRepository = $orderRepository;
         $this->urlBuilder = $urlBuilder;
+        $this->adyenRedirectFactory = $adyenRedirectFactory;
     }
 
     /**
-     * @param $subject
-     * @param $orderId
+     * @param MagentoQuoteManagement $subject
+     * @param int $orderId
      * @return OrderResponse | string
      */
-    public function afterPlaceOrder($subject, $orderId)
+    public function afterPlaceOrder(MagentoQuoteManagement $subject, $orderId)
     {
         /** @var Order $order */
         $order = $this->orderRepository->get($orderId);
@@ -48,8 +56,9 @@ class AfterPlaceOrder
         $paymentAdditionalInfo = $payment->getAdditionalInformation();
         if ($paymentAdditionalInfo) {
             if ($payment->getMethod() == 'adyen_cc' && isset($paymentAdditionalInfo['3dActive']) && true === $paymentAdditionalInfo['3dActive'] ) {
-                // TODO replace the object creation with dependency injection of interface, and make object implement it
-                $adyen = new AdyenRedirect();
+                // TODO replace the object factory with interface factory
+                /** @var AdyenRedirect $adyen */
+                $adyen = $this->adyenRedirectFactory->create();
                 $adyen->setIssuerUrl($paymentAdditionalInfo['issuerUrl']);
                 $adyen->setMd($paymentAdditionalInfo['md']);
                 $adyen->setPaRequest($paymentAdditionalInfo['paRequest']);
@@ -64,7 +73,7 @@ class AfterPlaceOrder
     }
 
     /**
-     * @return \Hatimeria\Reagento\Api\Data\UrlDataInterface
+     * @return string
      */
     protected function _getTermUrl()
     {

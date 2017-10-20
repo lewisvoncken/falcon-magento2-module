@@ -1,16 +1,16 @@
 <?php
 
-namespace Hatimeria\Reagento\Model\Plugin;
+namespace Hatimeria\Reagento\Plugin\Catalog\Model;
 
 use Hatimeria\Reagento\Helper\Product as HatimeriaProductHelper;
 use Hatimeria\Reagento\Model\Config\Source\BreadcrumbsAttribute;
-use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product as MagentoProduct;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 
 /**
  * @package Hatimeria\Reagento\Model\Plugin
  */
-class AfterProductLoad
+class Product
 {
     /** @var HatimeriaProductHelper */
     protected $productHelper;
@@ -31,10 +31,10 @@ class AfterProductLoad
     /**
      * Add resized image information to the product's extension attributes.
      *
-     * @param Product $product
-     * @return Product
+     * @param MagentoProduct $product
+     * @return MagentoProduct
      */
-    public function afterLoad(Product $product)
+    public function afterLoad(MagentoProduct $product)
     {
         $this->productHelper->ensurePriceForConfigurableProduct($product);
         $this->productHelper->ensureOptionsForConfigurableProduct($product);
@@ -49,6 +49,9 @@ class AfterProductLoad
         return $product;
     }
 
+    /**
+     * @return array
+     */
     protected function getFilterableAttributes()
     {
         $attributes = [];

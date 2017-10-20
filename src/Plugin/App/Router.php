@@ -1,11 +1,12 @@
 <?php
 
-namespace Hatimeria\Reagento\Model\Plugin;
+namespace Hatimeria\Reagento\Plugin\App;
 
 use Magento\Framework\App\Action\AbstractAction;
+use Magento\Framework\App\RouterInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
-class StoreSetter
+class Router
 {
     /**
      * @var StoreManagerInterface
@@ -23,11 +24,11 @@ class StoreSetter
     }
 
     /**
-     * @param $subject
-     * @param \Magento\Framework\App\Action\AbstractAction $actionInstance
-     * @return \Magento\Framework\App\Action\AbstractAction
+     * @param RouterInterface $subject
+     * @param AbstractAction $actionInstance
+     * @return AbstractAction
      */
-    public function afterMatch($subject, $actionInstance)
+    public function afterMatch(RouterInterface $subject, AbstractAction $actionInstance)
     {
         if ($actionInstance && $actionInstance instanceof AbstractAction) {
             $request = $actionInstance->getRequest();

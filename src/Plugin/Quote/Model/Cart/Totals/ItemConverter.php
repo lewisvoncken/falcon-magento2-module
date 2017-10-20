@@ -1,27 +1,35 @@
 <?php
 
-namespace Hatimeria\Reagento\Model\Plugin;
+namespace Hatimeria\Reagento\Plugin\Quote\Model\Cart\Totals;
 
+use Magento\CatalogInventory\Api\StockRegistryInterface;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
+use Magento\Quote\Api\Data\TotalsItemExtensionFactory;
+use Magento\Quote\Model\Cart\Totals\ItemConverter as MagentoItemConverter;
+use Magento\Quote\Model\Cart\Totals\Item as TotalsItem;
+use Magento\Quote\Model\Quote\Item as QuoteItem;
+use Hatimeria\Reagento\Model\Cart\Item\AttributeList;
 
 class ItemConverter
 {
-    /** @var \Magento\Quote\Api\Data\TotalsItemExtensionFactory */
+    /** @var TotalsItemExtensionFactory */
     protected $factory;
 
-    /** @var \Magento\CatalogInventory\Api\StockRegistryInterface */
+    /** @var StockRegistryInterface */
     protected $stockRegistry;
 
-    /** @var \Hatimeria\Reagento\Model\Cart\Item\AttributeList */
+    /** @var AttributeList */
     protected $attributeList;
 
     /**
-     * @param \Magento\Quote\Api\Data\TotalsItemExtensionFactory $factory
+     * @param TotalsItemExtensionFactory $factory
+     * @param StockRegistryInterface $stockRegistry
+     * @param AttributeList $attributeList
      */
     public function __construct(
-        \Magento\Quote\Api\Data\TotalsItemExtensionFactory $factory,
-        \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry,
-        \Hatimeria\Reagento\Model\Cart\Item\AttributeList $attributeList
+        TotalsItemExtensionFactory $factory,
+        StockRegistryInterface $stockRegistry,
+        AttributeList $attributeList
     ) {
         $this->factory = $factory;
         $this->stockRegistry = $stockRegistry;
@@ -29,13 +37,13 @@ class ItemConverter
     }
 
     /**
-     * @param \Magento\Quote\Model\Cart\Totals\ItemConverter $subject
+     * @param MagentoItemConverter $subject
      * @param \Closure $proceed
-     * @param \Magento\Quote\Model\Quote\Item $item
-     * @return \Magento\Quote\Model\Cart\Totals\Item
+     * @param QuoteItem $item
+     * @return TotalsItem
      */
     public function aroundModelToDataObject(
-        \Magento\Quote\Model\Cart\Totals\ItemConverter $subject,
+        MagentoItemConverter $subject,
         \Closure $proceed,
         $item
     ) {
