@@ -58,7 +58,9 @@ class ItemConverter
 
         $attributes = [];
         foreach ($this->attributeList->getAttributes() as $attribute) {
-            $attributes[$attribute] = $product->getData($attribute);
+            $customAttribute = $product->getCustomAttribute($attribute);
+            $value = $customAttribute ? $customAttribute->getValue() : $product->getData($attribute);
+            $attributes[$attribute] = $value;
         }
 
         $extensionAttributes = $this->factory->create(
