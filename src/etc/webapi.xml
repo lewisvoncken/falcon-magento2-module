@@ -12,6 +12,12 @@
             <resource ref="anonymous"/>
         </resources>
     </route>
+    <route url="/V1/menu" method="GET">
+        <service class="Hatimeria\Reagento\Api\MenuRepositoryInterface" method="getTree"/>
+        <resources>
+            <resource ref="anonymous"/>
+        </resources>
+    </route>
     <route url="/V1/categories/homepage" method="GET">
         <service class="Hatimeria\Reagento\Api\HomeCategoriesInterface" method="getHomepageList"/>
         <resources>

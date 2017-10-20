@@ -6,6 +6,7 @@
     <preference for="Hatimeria\Reagento\Api\Data\CategorySearchResultsInterface" type="Magento\Framework\Api\SearchResults" />
     <preference for="Hatimeria\Reagento\Api\Data\GalleryMediaEntrySizeInterface" type="Hatimeria\Reagento\Model\GalleryMediaEntrySize" />
     <preference for="Hatimeria\Reagento\Api\Data\InfoDataInterface" type="Hatimeria\Reagento\Model\InfoData" />
+    <preference for="Hatimeria\Reagento\Api\Data\MenuInterface" type="Hatimeria\Reagento\Model\Api\Data\Menu" />
     <preference for="Hatimeria\Reagento\Api\Data\UrlDataInterface" type="Hatimeria\Reagento\Model\UrlData" />
     <preference for="Hatimeria\Reagento\Api\CategoryBreadcrumbsInterface" type="Hatimeria\Reagento\Model\CategoryBreadcrumbs" />
     <preference for="Hatimeria\Reagento\Api\Payment\PaypalInterface" type="Hatimeria\Reagento\Model\Payment\Paypal" />
@@ -16,6 +17,7 @@
     <preference for="Hatimeria\Reagento\Api\CategoryManagementInterface" type="Hatimeria\Reagento\Model\CategoryManagement" />
     <preference for="Hatimeria\Reagento\Api\ProductRepositoryInterface" type="Hatimeria\Reagento\Model\ProductRepository" />
     <preference for="Hatimeria\Reagento\Api\QuoteMaskInterface" type="Hatimeria\Reagento\Model\QuoteMask" />
+    <preference for="Hatimeria\Reagento\Api\MenuRepositoryInterface" type="Hatimeria\Reagento\Model\MenuRepository" />
     <preference for="Hatimeria\Reagento\Api\Data\OrderInfoInterface" type="Hatimeria\Reagento\Model\OrderInfo" />
     <preference for="Hatimeria\Reagento\Api\HatimeriaGuestOrderManagementInterface" type="Hatimeria\Reagento\Model\GuestOrderManagement" />
     <preference for="Hatimeria\Reagento\Api\HatimeriaOrderManagementInterface" type="Hatimeria\Reagento\Model\OrderManagement" />
