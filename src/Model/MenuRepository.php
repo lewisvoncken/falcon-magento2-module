@@ -60,23 +60,25 @@ class MenuRepository implements MenuRepositoryInterface
     }
 
     /**
-     * @return \Hatimeria\Reagento\Api\Data\MenuInterface
+     * @return \Hatimeria\Reagento\Api\Data\MenuInterface[]
      */
     public function getTree()
     {
         /** @var Node $menuTree */
         $menuTree = $this->getMenuFromTopmenuBlock();
 
-
+        /** @var MenuInterface[] $items */
         $items = $this->convertMenuNodesToMenuItems($menuTree);
 
-        /** @var MenuInterface $menu */
-        $menu = $this->menuFactory->create();
-
-
-        return $menu;
+        return $items;
     }
 
+    /**
+     * Convert node tree from topmenu block into array of MenuInterface objects
+     *
+     * @param Node $node
+     * @return MenuInterface[]
+     */
     protected function convertMenuNodesToMenuItems(Node $node)
     {
         $items = [];
@@ -84,6 +86,13 @@ class MenuRepository implements MenuRepositoryInterface
             $menuItem = $this->menuFactory->create();
             $menuItem->setName($childNode->getName());
             $menuItem->setId($childNode->getId());
+            $menuItem->setUrl($childNode->getUrl());
+            $menuItem->setLevel($childNode->getLevel());
+            $menuItem->setIsActive($childNode->getIsActive());
+            $menuItem->setHasActive($childNode->getHasActive());
+            $menuItem->setIsFirst($childNode->getIsFirst());
+            $menuItem->setIsLast($childNode->getIsLast());
+            $menuItem->setPositionClass($childNode->getPositionClass());
             if ($childNode->hasChildren()) {
                 $children = $this->convertMenuNodesToMenuItems($childNode);
                 $menuItem->setChildren($children);

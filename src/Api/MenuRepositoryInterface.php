@@ -10,7 +10,7 @@ namespace Hatimeria\Reagento\Api;
 interface MenuRepositoryInterface
 {
     /**
-     * @return \Hatimeria\Reagento\Api\Data\MenuInterface
+     * @return \Hatimeria\Reagento\Api\Data\MenuInterface[]
      */
     public function getTree();
 }
