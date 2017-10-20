@@ -21,7 +21,7 @@ In other words major of the module defines compatibility with the minor release 
 - `[module-minor]` defines possible backward incompatible changes
 - `[module-update]` defines backward compatible changes
 - Any change to `@api` interface or class that adds new methods and/or fields does not constitute backward compatibility break
-- Only changes to public classes and properties in `@api` interfaces and classes constitute backward compatibility break  
+- Only definition changes of public methods and properties in `@api` interfaces and classes constitute backward compatibility break  
 - Make sure magento internal module version in `etc/module.xml` matches version set in `composer.json` file
 - There is no official support for Magento 2.0.x line
 - Each new release should contain an entry in `CHANGELOG.md` file with short description of the changes
