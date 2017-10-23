@@ -2,8 +2,8 @@
 
 namespace Hatimeria\Reagento\Plugin\Quote\Model;
 
-use Hatimeria\Reagento\Model\Api\AdyenRedirect;
-use Hatimeria\Reagento\Model\Api\AdyenRedirectFactory;
+use Hatimeria\Reagento\Api\Data\AdyenRedirectInterface;
+use Hatimeria\Reagento\Api\Data\AdyenRedirectInterfaceFactory;
 use Hatimeria\Reagento\Model\Api\OrderResponse;
 use Magento\Framework\UrlInterface as MagentoUrlInterface;
 use Magento\Quote\Model\QuoteManagement as MagentoQuoteManagement;
@@ -22,19 +22,19 @@ class QuoteManagement
      */
     protected $urlBuilder;
 
-    /** @var AdyenRedirectFactory */
+    /** @var AdyenRedirectInterfaceFactory */
     protected $adyenRedirectFactory;
 
     /**
      * AfterPlaceOrder constructor.
      * @param OrderRepositoryInterface $orderRepository
      * @param MagentoUrlInterface $urlBuilder
-     * @param AdyenRedirectFactory $adyenRedirectFactory
+     * @param AdyenRedirectInterfaceFactory $adyenRedirectFactory
      */
     public function __construct(
         OrderRepositoryInterface $orderRepository,
         MagentoUrlInterface $urlBuilder,
-        AdyenRedirectFactory $adyenRedirectFactory
+        AdyenRedirectInterfaceFactory $adyenRedirectFactory
     ) {
         $this->orderRepository = $orderRepository;
         $this->urlBuilder = $urlBuilder;
@@ -55,9 +55,12 @@ class QuoteManagement
         $obj = new OrderResponse();
         $paymentAdditionalInfo = $payment->getAdditionalInformation();
         if ($paymentAdditionalInfo) {
-            if ($payment->getMethod() == 'adyen_cc' && isset($paymentAdditionalInfo['3dActive']) && true === $paymentAdditionalInfo['3dActive'] ) {
-                // TODO replace the object factory with interface factory
-                /** @var AdyenRedirect $adyen */
+            if (
+                $payment->getMethod() == 'adyen_cc'
+                && isset($paymentAdditionalInfo['3dActive'])
+                && true === $paymentAdditionalInfo['3dActive']
+            ) {
+                /** @var AdyenRedirectInterface $adyen */
                 $adyen = $this->adyenRedirectFactory->create();
                 $adyen->setIssuerUrl($paymentAdditionalInfo['issuerUrl']);
                 $adyen->setMd($paymentAdditionalInfo['md']);

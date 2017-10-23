@@ -6,7 +6,7 @@ use Magento\Framework\DataObject;
 class OrderResponse extends DataObject
 {
     /**
-     * @var \Hatimeria\Reagento\Model\Api\AdyenRedirect
+     * @var \Hatimeria\Reagento\Api\Data\AdyenRedirectInterface
      */
     protected $adyen;
 
@@ -16,7 +16,7 @@ class OrderResponse extends DataObject
     protected $orderId;
 
     /**
-     * @return \Hatimeria\Reagento\Model\Api\AdyenRedirect
+     * @return \Hatimeria\Reagento\Api\Data\AdyenRedirectInterface
      */
     public function getAdyen()
     {

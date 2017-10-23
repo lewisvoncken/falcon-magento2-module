@@ -25,10 +25,10 @@ class Router
 
     /**
      * @param RouterInterface $subject
-     * @param AbstractAction $actionInstance
+     * @param AbstractAction|array $actionInstance
      * @return AbstractAction
      */
-    public function afterMatch(RouterInterface $subject, AbstractAction $actionInstance)
+    public function afterMatch(RouterInterface $subject, $actionInstance)
     {
         if ($actionInstance && $actionInstance instanceof AbstractAction) {
             $request = $actionInstance->getRequest();
