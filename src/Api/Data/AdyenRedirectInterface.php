@@ -8,6 +8,7 @@ interface AdyenRedirectInterface
     const MD = 'md';
     const PA_REQUEST = 'pa_request';
     const TERM_URL = 'term_url';
+
     /**
      * @param $param
      * @return \Hatimeria\Reagento\Api\Data\AdyenRedirectInterface
