@@ -12,6 +12,7 @@
     <preference for="Hatimeria\Reagento\Api\Data\InfoDataInterface" type="Hatimeria\Reagento\Model\InfoData" />
     <preference for="Hatimeria\Reagento\Api\Data\MenuInterface" type="Hatimeria\Reagento\Model\Api\Data\Menu" />
     <preference for="Hatimeria\Reagento\Api\Data\OrderInfoInterface" type="Hatimeria\Reagento\Model\OrderInfo" />
+    <preference for="Hatimeria\Reagento\Api\Data\OrderResponseInterface" type="Hatimeria\Reagento\Model\Api\Data\OrderResponse" />
     <preference for="Hatimeria\Reagento\Api\Data\UrlDataInterface" type="Hatimeria\Reagento\Model\UrlData" />
     <preference for="Hatimeria\Reagento\Api\HatimeriaGuestOrderManagementInterface" type="Hatimeria\Reagento\Model\GuestOrderManagement" />
     <preference for="Hatimeria\Reagento\Api\HatimeriaOrderManagementInterface" type="Hatimeria\Reagento\Model\OrderManagement" />

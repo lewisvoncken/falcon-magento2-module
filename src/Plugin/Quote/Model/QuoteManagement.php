@@ -4,7 +4,8 @@ namespace Hatimeria\Reagento\Plugin\Quote\Model;
 
 use Hatimeria\Reagento\Api\Data\AdyenRedirectInterface;
 use Hatimeria\Reagento\Api\Data\AdyenRedirectInterfaceFactory;
-use Hatimeria\Reagento\Model\Api\OrderResponse;
+use Hatimeria\Reagento\Api\Data\OrderResponseInterface;
+use Hatimeria\Reagento\Api\Data\OrderResponseInterfaceFactory;
 use Magento\Framework\UrlInterface as MagentoUrlInterface;
 use Magento\Quote\Model\QuoteManagement as MagentoQuoteManagement;
 use Magento\Sales\Model\Order;
@@ -25,34 +26,41 @@ class QuoteManagement
     /** @var AdyenRedirectInterfaceFactory */
     protected $adyenRedirectFactory;
 
+    /** @var OrderResponseInterfaceFactory */
+    protected $orderResponseFactory;
+
     /**
      * AfterPlaceOrder constructor.
      * @param OrderRepositoryInterface $orderRepository
      * @param MagentoUrlInterface $urlBuilder
      * @param AdyenRedirectInterfaceFactory $adyenRedirectFactory
+     * @param OrderResponseInterfaceFactory $orderResponseFactory
      */
     public function __construct(
         OrderRepositoryInterface $orderRepository,
         MagentoUrlInterface $urlBuilder,
-        AdyenRedirectInterfaceFactory $adyenRedirectFactory
+        AdyenRedirectInterfaceFactory $adyenRedirectFactory,
+        OrderResponseInterfaceFactory $orderResponseFactory
     ) {
         $this->orderRepository = $orderRepository;
         $this->urlBuilder = $urlBuilder;
         $this->adyenRedirectFactory = $adyenRedirectFactory;
+        $this->orderResponseFactory = $orderResponseFactory;
     }
 
     /**
      * @param MagentoQuoteManagement $subject
      * @param int $orderId
-     * @return OrderResponse | string
+     * @return OrderResponseInterface | string
      */
     public function afterPlaceOrder(MagentoQuoteManagement $subject, $orderId)
     {
         /** @var Order $order */
         $order = $this->orderRepository->get($orderId);
         $payment = $order->getPayment();
-        // TODO replace the object creation with dependency injection of interface, and make object implement it
-        $obj = new OrderResponse();
+
+        /** @var OrderResponseInterface $obj */
+        $obj = $this->orderResponseFactory->create();
         $paymentAdditionalInfo = $payment->getAdditionalInformation();
         if ($paymentAdditionalInfo) {
             if (
