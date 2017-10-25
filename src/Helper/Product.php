@@ -86,10 +86,10 @@ class Product extends AbstractHelper
      * @param string $size
      * @param string $attributeName
      */
-    public function addProductImageAttribute($product, $size = 'product_list_thumbnail', $attributeName = 'thumbnail_resized_url')
+    public function addProductImageAttribute($product, $size = 'product_list_thumbnail', $attributeName = 'thumbnail_resized_url', $imageName = 'image')
     {
         $productExtension = $this->getProductExtensionAttributes($product);
-        $imageUrl = $this->mediaHelper->getMainProductImageUrl($product, $size);
+        $imageUrl = $this->mediaHelper->getProductImageUrl($product, $product->getData($imageName), $size);
         $productExtension->setData($attributeName, $imageUrl ?: '');
         $product->setExtensionAttributes($productExtension);
     }
@@ -110,7 +110,7 @@ class Product extends AbstractHelper
         $extAttrs = $this->getProductExtensionAttributes($product);
 
         foreach ($mediaGalleryEntries as $mediaGalleryEntry) {
-            if ($mediaGalleryEntry->isDisabled()) {
+            if (!$this->isValidMediaGalleryEntry($mediaGalleryEntry)) {
                 continue;
             }
 
@@ -130,6 +130,20 @@ class Product extends AbstractHelper
 
         $extAttrs->setMediaGallerySizes($sizes);
         $product->setExtensionAttributes($extAttrs);
+    }
+
+    /**
+     * Validate if media entry can be included in gallery
+     *
+     * @return bool
+     */
+    public function isValidMediaGalleryEntry($entity)
+    {
+        if ($entity->isDisabled()) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
