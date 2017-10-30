@@ -448,7 +448,7 @@ class Filter
         $usedProducts = $allProductsIds;
         foreach($searchCriteria->getFilterGroups() as $filterGroup) {
             foreach($filterGroup->getFilters() as $filter) {
-                if (array_key_exists($filter->getField(), $optionValuesProducts)) {
+                if (isset($optionValuesProducts[$filter->getField()][$filter->getValue()])) {
                     $products = $optionValuesProducts[$filter->getField()][$filter->getValue()];
                 } else {
                     continue;
