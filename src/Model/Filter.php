@@ -24,6 +24,8 @@ use Magento\Catalog\Model\ResourceModel\Eav\Attribute as CatalogResourceAttribut
  */
 class Filter
 {
+    const AVAILABILITY_ENABLED = 'reagento/catalog/availability_status';
+
     /** @var ResourceConnection */
     protected $resourceConnection;
 
@@ -68,6 +70,20 @@ class Filter
         $this->scopeConfig = $scopeConfig;
         $this->categoryRepository = $categoryRepository;
         $this->logger = $logger;
+    }
+
+    /**
+     * Get value of filter availability setting
+     *
+     * @return bool
+     */
+    public function isAvailabilityEnabled()
+    {
+        return (bool)$this->scopeConfig->getValue(
+            self::AVAILABILITY_ENABLED,
+            ScopeInterface::SCOPE_STORE,
+            $this->storeManager->getStore()->getId()
+        );
     }
 
     /**
@@ -448,7 +464,7 @@ class Filter
         $usedProducts = $allProductsIds;
         foreach($searchCriteria->getFilterGroups() as $filterGroup) {
             foreach($filterGroup->getFilters() as $filter) {
-                if (array_key_exists($filter->getField(), $optionValuesProducts)) {
+                if (isset($optionValuesProducts[$filter->getField()][$filter->getValue()])) {
                     $products = $optionValuesProducts[$filter->getField()][$filter->getValue()];
                 } else {
                     continue;
