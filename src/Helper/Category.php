@@ -156,7 +156,7 @@ class Category extends AbstractHelper
                 continue;
             }
 
-            $result[] = $this->createBreadcrumb($category);
+            $result[] = $this->createBreadcrumb($parentCategory);
         }
 
         $result[] = $this->createBreadcrumb($category);
