@@ -8,9 +8,6 @@
     <preference for="Hatimeria\Reagento\Api\HatimeriaCartManagementInterface" type="\Magento\Quote\Model\QuoteManagement" />
     <preference for="Hatimeria\Reagento\Api\HatimeriaGuestPaymentInformationManagementInterface" type="\Magento\Checkout\Model\GuestPaymentInformationManagement" />
     <preference for="Hatimeria\Reagento\Api\HatimeriaPaymentInformationManagementInterface" type="\Magento\Checkout\Model\PaymentInformationManagement" />
-    <type name="Magento\Catalog\Model\Product">
-        <plugin name="hatimeriaReagentoAfterProductLoad" type="\Hatimeria\Reagento\Model\Plugin\AfterProductLoad"/>
-    </type>
     <type name="Magento\Catalog\Model\Category">
         <plugin name="hatimeriaReagentoAfterCategoryLoad" type="\Hatimeria\Reagento\Model\Plugin\AfterCategoryLoad" />
     </type>

@@ -4,6 +4,7 @@ namespace Hatimeria\Reagento\Helper;
 
 use Hatimeria\Reagento\Api\Data\GalleryMediaEntrySizeInterface;
 use Hatimeria\Reagento\Helper\Media as MediaHelper;
+use Hatimeria\Reagento\Model\Config\Source\BreadcrumbsAttribute;
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Api\Data\ProductExtension;
 use Magento\Catalog\Api\Data\ProductExtensionFactory;
@@ -349,5 +350,29 @@ class Product extends AbstractHelper
         $productExtension = $this->getProductExtensionAttributes($product);
         $productExtension->setBreadcrumbs($breadcrumbs);
         $product->setExtensionAttributes($productExtension);
+    }
+
+    public function addAdditionalInformation($product)
+    {
+        $this->ensurePriceForConfigurableProduct($product);
+        $this->ensureOptionsForConfigurableProduct($product);
+
+        $this->addProductImageAttribute($product);
+        $this->addProductImageAttribute($product, 'product_list_image', 'thumbnail_url');
+        $this->addMediaGallerySizes($product);
+        $this->addBreadcrumbsData($product, $this->getFilterableAttributes());
+
+        $this->calculateCatalogDisplayPrice($product);
+    }
+
+    protected function getFilterableAttributes()
+    {
+        $attributes = [];
+            
+        if ($config = $this->scopeConfig->getValue(BreadcrumbsAttribute::BREADCRUMBS_ATTRIBUTES_CONFIG_PATH)) {
+            $attributes = explode(',', $config);
+        }
+
+        return $attributes;
     }
 }
