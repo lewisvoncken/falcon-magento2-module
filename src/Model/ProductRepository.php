@@ -155,7 +155,7 @@ class ProductRepository extends \Magento\Catalog\Model\ProductRepository impleme
         $collection->setCurPage($searchCriteria->getCurrentPage());
         $collection->setPageSize($searchCriteria->getPageSize());
 
-        list($filters, $attributes) = $this->filter->getAttributeFilters($withAttributeFilters, $categoryIDs, $includeSubcategories);
+        list($attributeFilters, $attributes) = $this->filter->getAttributeFilters($withAttributeFilters, $categoryIDs, $includeSubcategories);
 
         $this->processSearchCriteria($collection, $searchCriteria, $includeSubcategories,
             ['categoryIDs' => $categoryIDs, 'subcategoryFilter' => $subcategories],
@@ -167,10 +167,12 @@ class ProductRepository extends \Magento\Catalog\Model\ProductRepository impleme
         $searchResult->setItems($collection->getItems());
         $searchResult->setTotalCount($collection->getSize());
 
-        /** @var get all ids available in this category $allProductIds */
-        $allProductIds = $this->getAllProductIds($categoryIDs);
-        $productFilterOptionValues = $this->filter->getFiltersOptions($allProductIds, $withAttributeFilters, $categoryIDs);
-        $attributeFilters = $this->filter->setFiltersAvailability($filters, $productFilterOptionValues, $searchCriteria, $allProductIds);
+        if ($this->filter->isAvailabilityEnabled()) {
+            /** @var int[] $allProductIds get all ids available in this category */
+            $allProductIds = $this->getAllProductIds($categoryIDs);
+            $productFilterOptionValues = $this->filter->getFiltersOptions($allProductIds, $withAttributeFilters, $categoryIDs);
+            $attributeFilters = $this->filter->setFiltersAvailability($attributeFilters, $productFilterOptionValues, $searchCriteria, $allProductIds);
+        }
         $searchResult->setFilters($attributeFilters);
 
         return $searchResult;

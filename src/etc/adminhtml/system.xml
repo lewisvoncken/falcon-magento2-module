@@ -26,7 +26,12 @@
                     <label>Show category filter</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
-                <field id="breadcrumbs_attributes" translate="label comment" type="multiselect" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="availability_status" translate="label comment" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Show filter availability</label>
+                    <comment>If set to `Yes` filter option availability will be calculated and returned with product list</comment>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="breadcrumbs_attributes" translate="label comment" type="multiselect" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Breadcrumbs attributes</label>
                     <comment>Select attributes that will be used while creating product breadcrumbs to return to filtered results</comment>
                     <source_model>Hatimeria\Reagento\Model\Config\Source\BreadcrumbsAttribute</source_model>
