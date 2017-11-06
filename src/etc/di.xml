@@ -24,6 +24,7 @@
     <preference for="Magento\Paypal\Model\Express\Checkout" type="Hatimeria\Reagento\Model\Payment\Paypal\Express\Checkout" />
     <preference for="Magento\Paypal\Model\Express" type="Hatimeria\Reagento\Model\Payment\Paypal\Express" />
     <preference for="Magento\Paypal\Model\Pro" type="Hatimeria\Reagento\Model\Payment\Paypal\Pro" />
+    <preference for="Magento\Catalog\Helper\Image" type="Hatimeria\Reagento\Helper\Catalog\Image" />
     <type name="Magento\Catalog\Model\ProductRepository">
         <arguments>
             <argument name="collectionFactory" xsi:type="object">ProductRepositoryCollectionFactory</argument>
