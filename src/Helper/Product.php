@@ -264,7 +264,6 @@ class Product extends AbstractHelper
      */
     public function calculateCatalogDisplayPrice($product)
     {
-        file_put_contents(BP.'/var/log/pr.log', "Calculate price for: {$product->getId()}\n", FILE_APPEND);
         $displayPrice = $this->priceHelper->calculateCatalogDisplayPrice($product);
         $productExtension = $this->getProductExtensionAttributes($product);
         $productExtension->setCatalogDisplayPrice($displayPrice);
