@@ -36,6 +36,10 @@
                     <comment>Select attributes that will be used while creating product breadcrumbs to return to filtered results</comment>
                     <source_model>Hatimeria\Reagento\Model\Config\Source\BreadcrumbsAttribute</source_model>
                 </field>
+                <field id="disable_product_links" translate="label comment" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Disable Product Links in Product List Api Endpoint</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
             </group>
         </section>
         <section id="hatimeria" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="0" showInStore="0">
