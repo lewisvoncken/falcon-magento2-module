@@ -6,10 +6,11 @@ class Image extends \Magento\Catalog\Helper\Image
 {
     public function getFrame()
     {
-        $frame = (bool)$this->getAttribute('frame');
+        $frame = $this->getAttribute('frame');
         if (is_null($frame)) {
             $frame = $this->getConfigView()->getVarValue('Magento_Catalog', 'product_image_white_borders');
         }
+
         return (bool)$frame;
     }
 
