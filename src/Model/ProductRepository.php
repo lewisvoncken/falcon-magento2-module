@@ -3,7 +3,6 @@
 namespace Hatimeria\Reagento\Model;
 
 use Hatimeria\Reagento\Api\ProductRepositoryInterface;
-use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Api\Data\ProductSearchResultsInterfaceFactory;
 use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
 use Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper;
@@ -15,6 +14,7 @@ use Magento\Catalog\Model\Product\LinkTypeProvider;
 use Magento\Catalog\Model\Product\Option\Converter;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute as CatalogResourceAttribute;
 use Magento\Catalog\Model\ResourceModel\Product as ResourceProduct;
+use Magento\Catalog\Model\ResourceModel\Category as ResourceCategory;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory as ProductCollectionFactory;
 use Magento\Catalog\Model\ResourceModel\Product\Collection as ProductCollection;
 use Magento\Framework\Api\Data\ImageContentInterfaceFactory;
@@ -37,11 +37,11 @@ class ProductRepository extends \Magento\Catalog\Model\ProductRepository impleme
     /** @var CategoryFactory */
     protected $categoryFactory;
 
+    /** @var ResourceCategory */
+    protected $categoryResource;
+
     /** @var ResourceConnection */
     protected $resource;
-
-    /** @var CategoryRepositoryInterface */
-    protected $categoryRepository;
 
     /** @var AdapterInterface */
     protected $connection;
@@ -60,7 +60,6 @@ class ProductRepository extends \Magento\Catalog\Model\ProductRepository impleme
      * @param ProductCollectionFactory $collectionFactory
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param ProductAttributeRepositoryInterface $attributeRepository
-     * @param CategoryRepositoryInterface $categoryRepository
      * @param ResourceProduct $resourceModel
      * @param ProductLinks $linkInitializer
      * @param LinkTypeProvider $linkTypeProvider
@@ -76,6 +75,7 @@ class ProductRepository extends \Magento\Catalog\Model\ProductRepository impleme
      * @param ImageProcessorInterface $imageProcessor
      * @param JoinProcessorInterface $extensionAttributesJoinProcessor
      * @param CategoryFactory $categoryFactory
+     * @param ResourceCategory $categoryResource
      * @param ResourceConnection $resource
      * @param Filter $filter
      */
@@ -86,7 +86,6 @@ class ProductRepository extends \Magento\Catalog\Model\ProductRepository impleme
         ProductCollectionFactory $collectionFactory,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         ProductAttributeRepositoryInterface $attributeRepository,
-        CategoryRepositoryInterface $categoryRepository,
         ResourceProduct $resourceModel,
         ProductLinks $linkInitializer,
         LinkTypeProvider $linkTypeProvider,
@@ -102,13 +101,14 @@ class ProductRepository extends \Magento\Catalog\Model\ProductRepository impleme
         ImageProcessorInterface $imageProcessor,
         JoinProcessorInterface $extensionAttributesJoinProcessor,
         CategoryFactory $categoryFactory,
+        ResourceCategory $categoryResource,
         ResourceConnection $resource,
         Filter $filter
     ) {
         parent::__construct($productFactory, $initializationHelper, $searchResultsFactory, $collectionFactory, $searchCriteriaBuilder, $attributeRepository, $resourceModel, $linkInitializer, $linkTypeProvider, $storeManager, $filterBuilder, $metadataServiceInterface, $extensibleDataObjectConverter, $optionConverter, $fileSystem, $contentValidator, $contentFactory, $mimeTypeExtensionMap, $imageProcessor, $extensionAttributesJoinProcessor);
         $this->categoryFactory = $categoryFactory;
+        $this->categoryResource = $categoryResource;
         $this->resource = $resource;
-        $this->categoryRepository = $categoryRepository;
         $this->connection = $this->resource->getConnection();
         $this->filter = $filter;
     }
@@ -280,10 +280,15 @@ class ProductRepository extends \Magento\Catalog\Model\ProductRepository impleme
 
         if (!empty($categoryIDs) && $includeSubcategories) {
             /** @var \Magento\Catalog\Model\Category $categoryEntity */
-            $categoryEntity = $this->categoryRepository->get($categoryIDs[0]);
-            if ($categoryEntity) {
-                $categoryIDs = $categoryEntity->getAllChildren(true);
-            }
+            // not loading category as the overhaul on CategoryRepositoryINterface::get is too big,
+            // we just need store and path to fetch child category ids
+            $categoryEntity = $this->categoryFactory->create();
+            $categoryEntity->setStoreId($this->storeManager->getStore()->getId());
+            $categoryEntity->setPath($this->getCategoryPath($categoryIDs[0]));
+            $categoryIDs = array_merge(
+                [$categoryIDs[0]],
+                $this->categoryResource->getChildren($categoryEntity, true)
+            );
         }
 
         return [$categoryIDs, $subcategoryIds];
@@ -321,5 +326,22 @@ class ProductRepository extends \Magento\Catalog\Model\ProductRepository impleme
         if ($fields) {
             $collection->addFieldToFilter($fields);
         }
+    }
+
+    /**
+     * Get category path base on category id directly from database
+     *
+     * @param int $categoryId
+     * @return string
+     */
+    protected function getCategoryPath($categoryId)
+    {
+        $select = $this->connection->select()
+                        ->from($this->connection->getTableName('catalog_category_entity'), 'path')
+                        ->where('entity_id = ?', $categoryId);
+
+        $path = $this->connection->fetchCol($select);
+
+        return $path[0];
     }
 }
