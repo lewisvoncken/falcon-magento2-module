@@ -5,6 +5,7 @@ namespace Hatimeria\Reagento\Model;
 use Hatimeria\Reagento\Api\UrlInterface;
 use Hatimeria\Reagento\Api\Data\UrlDataInterface;
 use Hatimeria\Reagento\Helper\Data as ReagentoHelper;
+use Hatimeria\Reagento\Helper\Product as ReagentoProductHelper;
 use Hatimeria\Reagento\Model\UrlDataFactory;
 use Magento\Cms\Api\PageRepositoryInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
@@ -34,6 +35,10 @@ class Url implements UrlInterface
      * @var ReagentoHelper
      */
     protected $reagentoHelper;
+    /**
+     * @var ReagentoProductHelper
+     */
+    protected $reagentoProductHelper;
 
     public function __construct(
         DataObjectHelper $dataFactory,
@@ -42,7 +47,8 @@ class Url implements UrlInterface
         ProductRepositoryInterface $productRepository,
         CategoryRepositoryInterface $categoryRepository,
         UrlDataFactory $urlDataFactory,
-        ReagentoHelper $reagentoHelper
+        ReagentoHelper $reagentoHelper,
+        ReagentoProductHelper $reagentoProductHelper
     ) {
         $this->dataFactory = $dataFactory;
         $this->pageRepository = $pageRepository;
@@ -51,6 +57,7 @@ class Url implements UrlInterface
         $this->categoryRepository = $categoryRepository;
         $this->urlDataFactory = $urlDataFactory;
         $this->reagentoHelper = $reagentoHelper;
+        $this->reagentoProductHelper = $reagentoProductHelper;
     }
 
     /**
@@ -67,6 +74,7 @@ class Url implements UrlInterface
             switch ($urlModel->getEntityType()) {
                 case 'product':
                     $entity = $this->productRepository->getById($urlModel->getEntityId());
+                    $this->reagentoProductHelper->addAdditionalInformation($entity);
                     $this->reagentoHelper->addResponseTagsByObject($entity);
                     $urlData->setProduct($entity);
                     break;

@@ -17,7 +17,7 @@ interface HatimeriaGuestCartManagementInterface extends GuestCartManagementInter
      * @param string $cartId The cart ID.
      * @param PaymentInterface|null $paymentMethod
      * @throws \Magento\Framework\Exception\CouldNotSaveException
-     * @return \Hatimeria\Reagento\Model\Api\OrderResponse
+     * @return \Hatimeria\Reagento\Api\Data\OrderResponseInterface
      */
     public function placeOrder($cartId, PaymentInterface $paymentMethod = null);
 }

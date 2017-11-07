@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 0.1.46
+
+- removed loading additional information on product collection load (media gallery, configurable options,
+  thumbnail_resized_url)
+
 ## 0.1.11
 
 - Adyen module included to the package dependencies

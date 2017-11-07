@@ -1,6 +1,6 @@
 <?php
 
-namespace Hatimeria\Reagento\Model\Plugin;
+namespace Hatimeria\Reagento\Plugin\Store\Api;
 
 
 use Magento\Store\Api\Data\StoreExtensionInterface;
@@ -8,7 +8,7 @@ use Magento\Store\Api\Data\StoreExtensionFactory;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Api\StoreRepositoryInterface;
 
-class AfterGetStoreViewList
+class StoreRepository
 {
     /**
      * @var StoreExtensionFactory

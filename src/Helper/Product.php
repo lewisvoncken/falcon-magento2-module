@@ -6,6 +6,7 @@ use Hatimeria\Reagento\Api\Data\BreadcrumbInterface;
 use Hatimeria\Reagento\Api\Data\BreadcrumbInterfaceFactory;
 use Hatimeria\Reagento\Api\Data\GalleryMediaEntrySizeInterface;
 use Hatimeria\Reagento\Helper\Media as MediaHelper;
+use Hatimeria\Reagento\Model\Config\Source\BreadcrumbsAttribute;
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Api\Data\ProductExtension;
 use Magento\Catalog\Api\Data\ProductExtensionFactory;
@@ -94,10 +95,10 @@ class Product extends AbstractHelper
      * @param string $size
      * @param string $attributeName
      */
-    public function addProductImageAttribute($product, $size = 'product_list_thumbnail', $attributeName = 'thumbnail_resized_url')
+    public function addProductImageAttribute($product, $size = 'product_list_thumbnail', $attributeName = 'thumbnail_resized_url', $imageName = 'image')
     {
         $productExtension = $this->getProductExtensionAttributes($product);
-        $imageUrl = $this->mediaHelper->getMainProductImageUrl($product, $size);
+        $imageUrl = $this->mediaHelper->getProductImageUrl($product, $product->getData($imageName), $size);
         $productExtension->setData($attributeName, $imageUrl ?: '');
         $product->setExtensionAttributes($productExtension);
     }
@@ -118,7 +119,7 @@ class Product extends AbstractHelper
         $extAttrs = $this->getProductExtensionAttributes($product);
 
         foreach ($mediaGalleryEntries as $mediaGalleryEntry) {
-            if ($mediaGalleryEntry->isDisabled()) {
+            if (!$this->isValidMediaGalleryEntry($mediaGalleryEntry)) {
                 continue;
             }
 
@@ -138,6 +139,20 @@ class Product extends AbstractHelper
 
         $extAttrs->setMediaGallerySizes($sizes);
         $product->setExtensionAttributes($extAttrs);
+    }
+
+    /**
+     * Validate if media entry can be included in gallery
+     *
+     * @return bool
+     */
+    public function isValidMediaGalleryEntry($entity)
+    {
+        if ($entity->isDisabled()) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -371,5 +386,29 @@ class Product extends AbstractHelper
         $breadcrumb->loadFromData($data);
 
         return $breadcrumb;
+    }
+
+    public function addAdditionalInformation($product)
+    {
+        $this->ensurePriceForConfigurableProduct($product);
+        $this->ensureOptionsForConfigurableProduct($product);
+
+        $this->addProductImageAttribute($product);
+        $this->addProductImageAttribute($product, 'product_list_image', 'thumbnail_url');
+        $this->addMediaGallerySizes($product);
+        $this->addBreadcrumbsData($product, $this->getFilterableAttributes());
+
+        $this->calculateCatalogDisplayPrice($product);
+    }
+
+    protected function getFilterableAttributes()
+    {
+        $attributes = [];
+            
+        if ($config = $this->scopeConfig->getValue(BreadcrumbsAttribute::BREADCRUMBS_ATTRIBUTES_CONFIG_PATH)) {
+            $attributes = explode(',', $config);
+        }
+
+        return $attributes;
     }
 }

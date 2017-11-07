@@ -1,6 +1,6 @@
 <?php
 
-namespace Hatimeria\Reagento\Model\Plugin;
+namespace Hatimeria\Reagento\Plugin\Store\Api;
 
 use Magento\Directory\Helper\Data;
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -10,7 +10,7 @@ use Magento\Store\Api\Data\StoreConfigExtensionInterface;
 use Magento\Store\Api\Data\StoreConfigExtensionFactory;
 
 
-class AfterGetStoreConfigs
+class StoreConfigManager
 {
     /**
      * @var ScopeConfigInterface
