@@ -1,30 +1,48 @@
 <?xml version="1.0"?>
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <preference for="Hatimeria\Reagento\Api\InfoInterface" type="Hatimeria\Reagento\Model\Info" />
-    <preference for="Hatimeria\Reagento\Api\UrlInterface" type="Hatimeria\Reagento\Model\Url" />
-    <preference for="Hatimeria\Reagento\Api\HomeCategoriesInterface" type="Hatimeria\Reagento\Model\CategoryRepository" />
+
+    <!-- INTERFACE PREFERENCES FOR DI -->
+    <preference for="Hatimeria\Reagento\Api\CategoryBreadcrumbsInterface" type="Hatimeria\Reagento\Model\CategoryBreadcrumbs" />
+    <preference for="Hatimeria\Reagento\Api\CategoryManagementInterface" type="Hatimeria\Reagento\Model\CategoryManagement" />
+    <preference for="Hatimeria\Reagento\Api\ContactFormInterface" type="Hatimeria\Reagento\Model\ContactForm" />
+    <preference for="Hatimeria\Reagento\Api\Data\AdyenRedirectInterface" type="Hatimeria\Reagento\Model\Api\Data\AdyenRedirect" />
     <preference for="Hatimeria\Reagento\Api\Data\CategorySearchResultsInterface" type="Magento\Framework\Api\SearchResults" />
+    <preference for="Hatimeria\Reagento\Api\Data\CategoryTreeInterface" type="Hatimeria\Reagento\Model\Category" />
     <preference for="Hatimeria\Reagento\Api\Data\GalleryMediaEntrySizeInterface" type="Hatimeria\Reagento\Model\GalleryMediaEntrySize" />
     <preference for="Hatimeria\Reagento\Api\Data\InfoDataInterface" type="Hatimeria\Reagento\Model\InfoData" />
     <preference for="Hatimeria\Reagento\Api\Data\MenuInterface" type="Hatimeria\Reagento\Model\Api\Data\Menu" />
-    <preference for="Hatimeria\Reagento\Api\Data\UrlDataInterface" type="Hatimeria\Reagento\Model\UrlData" />
-    <preference for="Hatimeria\Reagento\Api\CategoryBreadcrumbsInterface" type="Hatimeria\Reagento\Model\CategoryBreadcrumbs" />
-    <preference for="Hatimeria\Reagento\Api\Payment\PaypalInterface" type="Hatimeria\Reagento\Model\Payment\Paypal" />
-    <preference for="Hatimeria\Reagento\Api\Payment\Data\PaypalDataInterface" type="Hatimeria\Reagento\Model\Payment\PaypalData" />
-    <preference for="Hatimeria\Reagento\Api\Payment\AdyenLinkInterface" type="Hatimeria\Reagento\Model\Payment\AdyenHPP" />
-    <preference for="Hatimeria\Reagento\Api\ContactFormInterface" type="Hatimeria\Reagento\Model\ContactForm" />
-    <preference for="Hatimeria\Reagento\Api\Data\CategoryTreeInterface" type="Hatimeria\Reagento\Model\Category" />
-    <preference for="Hatimeria\Reagento\Api\CategoryManagementInterface" type="Hatimeria\Reagento\Model\CategoryManagement" />
-    <preference for="Hatimeria\Reagento\Api\ProductRepositoryInterface" type="Hatimeria\Reagento\Model\ProductRepository" />
-    <preference for="Hatimeria\Reagento\Api\QuoteMaskInterface" type="Hatimeria\Reagento\Model\QuoteMask" />
-    <preference for="Hatimeria\Reagento\Api\MenuRepositoryInterface" type="Hatimeria\Reagento\Model\MenuRepository" />
     <preference for="Hatimeria\Reagento\Api\Data\OrderInfoInterface" type="Hatimeria\Reagento\Model\OrderInfo" />
+    <preference for="Hatimeria\Reagento\Api\Data\OrderResponseInterface" type="Hatimeria\Reagento\Model\Api\Data\OrderResponse" />
+    <preference for="Hatimeria\Reagento\Api\Data\UrlDataInterface" type="Hatimeria\Reagento\Model\UrlData" />
     <preference for="Hatimeria\Reagento\Api\HatimeriaGuestOrderManagementInterface" type="Hatimeria\Reagento\Model\GuestOrderManagement" />
     <preference for="Hatimeria\Reagento\Api\HatimeriaOrderManagementInterface" type="Hatimeria\Reagento\Model\OrderManagement" />
+    <preference for="Hatimeria\Reagento\Api\HomeCategoriesInterface" type="Hatimeria\Reagento\Model\CategoryRepository" />
+    <preference for="Hatimeria\Reagento\Api\InfoInterface" type="Hatimeria\Reagento\Model\Info" />
+    <preference for="Hatimeria\Reagento\Api\MenuRepositoryInterface" type="Hatimeria\Reagento\Model\MenuRepository" />
+    <preference for="Hatimeria\Reagento\Api\Payment\AdyenLinkInterface" type="Hatimeria\Reagento\Model\Payment\AdyenHPP" />
+    <preference for="Hatimeria\Reagento\Api\Payment\Data\PaypalDataInterface" type="Hatimeria\Reagento\Model\Payment\PaypalData" />
+    <preference for="Hatimeria\Reagento\Api\Payment\PaypalInterface" type="Hatimeria\Reagento\Model\Payment\Paypal" />
+    <preference for="Hatimeria\Reagento\Api\ProductRepositoryInterface" type="Hatimeria\Reagento\Model\ProductRepository" />
+    <preference for="Hatimeria\Reagento\Api\QuoteMaskInterface" type="Hatimeria\Reagento\Model\QuoteMask" />
+    <preference for="Hatimeria\Reagento\Api\UrlInterface" type="Hatimeria\Reagento\Model\Url" />
+
+    <!-- OVERRIDES -->
+    <preference for="Magento\Catalog\Helper\Image" type="Hatimeria\Reagento\Helper\Catalog\Image" />
     <preference for="Magento\Paypal\Model\Express\Checkout" type="Hatimeria\Reagento\Model\Payment\Paypal\Express\Checkout" />
     <preference for="Magento\Paypal\Model\Express" type="Hatimeria\Reagento\Model\Payment\Paypal\Express" />
+    <preference for="Magento\Paypal\Model\Express\Checkout" type="Hatimeria\Reagento\Model\Payment\Paypal\Express\Checkout" />
     <preference for="Magento\Paypal\Model\Pro" type="Hatimeria\Reagento\Model\Payment\Paypal\Pro" />
-    <preference for="Magento\Catalog\Helper\Image" type="Hatimeria\Reagento\Helper\Catalog\Image" />
+
+    <!-- CUSTOM MAGENTO COMMANDS -->
+    <type name="Magento\Framework\Console\CommandListInterface">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="rapidflowAttributeOptions" xsi:type="object">Hatimeria\Reagento\Console\Command\Rapidflow\Attribute\OptionsCommand</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <!-- ARGUMENTS FOR CONSTRUCTORS -->
     <type name="Magento\Catalog\Model\ProductRepository">
         <arguments>
             <argument name="collectionFactory" xsi:type="object">ProductRepositoryCollectionFactory</argument>
@@ -41,19 +59,8 @@
             <argument name="instanceName" xsi:type="string">Hatimeria\Reagento\Api\SearchResults</argument>
         </arguments>
     </virtualType>
-    <type name="Magento\Framework\App\RouterInterface">
-        <plugin name="hatimeriaReagentoStoreSetter" type="Hatimeria\Reagento\Model\Plugin\StoreSetter"/>
-    </type>
-    <type name="Magento\Framework\Webapi\Rest\Response">
-        <plugin name="hatimeriaReagentoRestResponse" type="Hatimeria\Reagento\Plugin\Rest\Response" />
-    </type>
-    <type name="Magento\Framework\Console\CommandListInterface">
-        <arguments>
-            <argument name="commands" xsi:type="array">
-                <item name="rapidflowAttributeOptions" xsi:type="object">Hatimeria\Reagento\Console\Command\Rapidflow\Attribute\OptionsCommand</item>
-            </argument>
-        </arguments>
-    </type>
+
+    <!-- PLUGINS -->
     <type name="Magento\Sales\Api\OrderManagementInterface">
         <plugin name="hatimeriaReagentoOrderManagementPlugin" type="Hatimeria\Reagento\Plugin\Sales\Api\OrderManagement" />
     </type>

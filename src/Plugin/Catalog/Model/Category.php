@@ -1,11 +1,11 @@
 <?php
 
-namespace Hatimeria\Reagento\Model\Plugin;
+namespace Hatimeria\Reagento\Plugin\Catalog\Model;
 
 use Hatimeria\Reagento\Helper\Category as HatimeriaCategoryHelper;
-use Magento\Catalog\Model\Category;
+use Magento\Catalog\Model\Category as MagentoCategory;
 
-class AfterCategoryLoad
+class Category
 {
     /** @var HatimeriaCategoryHelper */
     private $categoryHelper;
@@ -19,10 +19,10 @@ class AfterCategoryLoad
     }
 
     /**
-     * @param Category $category
-     * @return Category
+     * @param MagentoCategory $category
+     * @return MagentoCategory
      */
-    public function afterLoad(Category $category)
+    public function afterLoad(MagentoCategory $category)
     {
         $this->categoryHelper->addImageAttribute($category);
         $this->categoryHelper->addBreadcrumbsData($category);
