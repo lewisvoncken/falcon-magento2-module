@@ -2,7 +2,10 @@
 
 namespace Hatimeria\Reagento\Helper;
 
+use Hatimeria\Reagento\Api\Data\BreadcrumbInterface;
+use Hatimeria\Reagento\Api\Data\BreadcrumbInterfaceFactory;
 use Magento\Catalog\Api\CategoryRepositoryInterface;
+use Magento\Catalog\Api\Data\CategoryInterface;
 use Magento\Catalog\Model\Category as MagentoCategory;
 use Magento\Catalog\Model\Category\Collection as MagentoCategoryCollection;
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -31,23 +34,30 @@ class Category extends AbstractHelper
     /** @var \Magento\Catalog\Api\Data\CategoryExtensionFactory */
     protected $extensionFactory;
 
+    /** @var BreadcrumbInterfaceFactory */
+    protected $breadcrumbFactory;
+
     protected $loadedCategories = [];
 
     /**
      * @param AppContext $context
      * @param \Magento\Framework\Image\AdapterFactory $imageFactory
+     * @param \Magento\Catalog\Api\Data\CategoryExtensionFactory $extensionFactory
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\View\ConfigInterface $viewConfig
      * @param CategoryRepositoryInterface $categoryRepository
+     * @param BreadcrumbInterfaceFactory $breadcrumbFactory
      */
-    public function __construct(AppContext $context,
-                                \Magento\Framework\Image\AdapterFactory $imageFactory,
-                                \Magento\Catalog\Api\Data\CategoryExtensionFactory $extensionFactory,
-                                \Magento\Framework\Filesystem $filesystem,
-                                \Magento\Store\Model\StoreManagerInterface $storeManager,
-                                \Magento\Framework\View\ConfigInterface $viewConfig,
-                                CategoryRepositoryInterface $categoryRepository
+    public function __construct(
+        AppContext $context,
+        \Magento\Framework\Image\AdapterFactory $imageFactory,
+        \Magento\Catalog\Api\Data\CategoryExtensionFactory $extensionFactory,
+        \Magento\Framework\Filesystem $filesystem,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\View\ConfigInterface $viewConfig,
+        CategoryRepositoryInterface $categoryRepository,
+        BreadcrumbInterfaceFactory $breadcrumbFactory
     ) {
         parent::__construct($context);
         $this->viewConfig = $viewConfig;
@@ -56,6 +66,7 @@ class Category extends AbstractHelper
         $this->imageFactory = $imageFactory;
         $this->categoryRepository = $categoryRepository;
         $this->extensionFactory = $extensionFactory;
+        $this->breadcrumbFactory = $breadcrumbFactory;
     }
 
     /**
@@ -145,20 +156,10 @@ class Category extends AbstractHelper
                 continue;
             }
 
-            $result[] = [
-                'id' => $parentCategory->getId(),
-                'name' => $parentCategory->getName(),
-                'url_path' => $parentCategory->getUrlPath(),
-                'url_key' => $parentCategory->getUrlKey()
-            ];
+            $result[] = $this->createBreadcrumb($parentCategory);
         }
 
-        $result[] = [
-            'id' => $category->getId(),
-            'name' => $category->getName(),
-            'url_path' => $category->getUrlPath(),
-            'url_key' => $category->getUrlKey()
-        ];
+        $result[] = $this->createBreadcrumb($category);
 
         $extensionAttributes = $category->getExtensionAttributes();
         if($extensionAttributes === null) {
@@ -167,5 +168,24 @@ class Category extends AbstractHelper
 
         $extensionAttributes->setData('breadcrumbs', $result);
         $category->setExtensionAttributes($extensionAttributes);
+    }
+
+    /**
+     * @param CategoryInterface $category
+     * @return BreadcrumbInterface
+     */
+    protected function createBreadcrumb($category)
+    {
+        /** @var BreadcrumbInterface $breadcrumb */
+        $breadcrumb = $this->breadcrumbFactory->create();
+        $data = [
+            'id' => $category->getId(),
+            'name' => $category->getName(),
+            'url_path' => $category->getUrlPath(),
+            'url_key' => $category->getUrlKey()
+        ];
+        $breadcrumb->loadFromData($data);
+
+        return $breadcrumb;
     }
 }

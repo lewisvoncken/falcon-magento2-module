@@ -6,6 +6,7 @@
     <preference for="Hatimeria\Reagento\Api\CategoryManagementInterface" type="Hatimeria\Reagento\Model\CategoryManagement" />
     <preference for="Hatimeria\Reagento\Api\ContactFormInterface" type="Hatimeria\Reagento\Model\ContactForm" />
     <preference for="Hatimeria\Reagento\Api\Data\AdyenRedirectInterface" type="Hatimeria\Reagento\Model\Api\Data\AdyenRedirect" />
+    <preference for="Hatimeria\Reagento\Api\Data\BreadcrumbInterface" type="Hatimeria\Reagento\Model\Api\Data\Breadcrumb" />
     <preference for="Hatimeria\Reagento\Api\Data\CategorySearchResultsInterface" type="Magento\Framework\Api\SearchResults" />
     <preference for="Hatimeria\Reagento\Api\Data\CategoryTreeInterface" type="Hatimeria\Reagento\Model\Category" />
     <preference for="Hatimeria\Reagento\Api\Data\GalleryMediaEntrySizeInterface" type="Hatimeria\Reagento\Model\GalleryMediaEntrySize" />
