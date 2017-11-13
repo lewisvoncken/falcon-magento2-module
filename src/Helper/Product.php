@@ -19,7 +19,6 @@ use Magento\Framework\App\Helper\Context as AppContext;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\Tax\Api\TaxCalculationInterface;
 
 
 /**
@@ -39,8 +38,8 @@ class Product extends AbstractHelper
     /** @var GalleryReadHandler */
     protected $galleryReadHandler;
 
-    /**  @var TaxCalculationInterface */
-    protected $taxCalculation;
+    /** @var Price */
+    protected $priceHelper;
 
     /** @var \Magento\Eav\Model\Config */
     protected $eavConfig;
@@ -60,7 +59,7 @@ class Product extends AbstractHelper
      * @param MediaHelper $mediaHelper
      * @param GalleryReadHandler $galleryReadHandler
      * @param ObjectManagerInterface $objectManager
-     * @param TaxCalculationInterface $taxCalculation
+     * @param Price $priceHelper
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param StoreManagerInterface $storeManager
      * @param CategoryRepositoryInterface $categoryRepository
@@ -72,7 +71,7 @@ class Product extends AbstractHelper
         MediaHelper $mediaHelper,
         GalleryReadHandler $galleryReadHandler,
         ObjectManagerInterface $objectManager,
-        TaxCalculationInterface $taxCalculation,
+        Price $priceHelper,
         Config $eavConfig,
         StoreManagerInterface $storeManager,
         CategoryRepositoryInterface $categoryRepository,
@@ -83,8 +82,8 @@ class Product extends AbstractHelper
         $this->objectManager = $objectManager;
         $this->mediaHelper = $mediaHelper;
         $this->galleryReadHandler = $galleryReadHandler;
+        $this->priceHelper = $priceHelper;
         $this->eavConfig = $eavConfig;
-        $this->taxCalculation = $taxCalculation;
         $this->storeManager = $storeManager;
         $this->categoryRepository = $categoryRepository;
         $this->breadcrumbFactory = $breadcrumbFactory;
@@ -273,41 +272,10 @@ class Product extends AbstractHelper
      */
     public function calculateCatalogDisplayPrice($product)
     {
-        $taxAttribute = $product->getCustomAttribute('tax_class_id');
-        if ($taxAttribute) {
-            // First get base price (=price excluding tax)
-            $productRateId = $taxAttribute->getValue();
-            $rate = $this->taxCalculation->getCalculatedRate($productRateId);
-
-            // Product price in catalog is including tax.
-            $basePriceInclTax = (int) $this->scopeConfig->getValue(
-                    'tax/calculation/price_includes_tax',
-                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE) === 1;
-
-            if ($basePriceInclTax) {
-                $priceExcludingTax = $product->getPrice() / (1 + ($rate / 100));
-            } else {
-                // Product price in catalog is excluding tax.
-                $priceExcludingTax = $product->getPrice();
-            }
-
-            $priceIncludingTax = round($priceExcludingTax + ($priceExcludingTax * ($rate / 100)), 2);
-
-            // 2 - display prices including tax
-            $catalogPriceInclTax = (int) $this->scopeConfig->getValue(
-                    'tax/display/type',
-                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE) === 2;
-
-            $productExtension = $this->getProductExtensionAttributes($product);
-
-            if ($catalogPriceInclTax) {
-                $productExtension->setCatalogDisplayPrice($priceIncludingTax);
-            } else {
-                $productExtension->setCatalogDisplayPrice($priceExcludingTax);
-            }
-
-            $product->setExtensionAttributes($productExtension);
-        }
+        $displayPrice = $this->priceHelper->calculateCatalogDisplayPrice($product);
+        $productExtension = $this->getProductExtensionAttributes($product);
+        $productExtension->setCatalogDisplayPrice($displayPrice);
+        $product->setExtensionAttributes($productExtension);
     }
 
     /**
