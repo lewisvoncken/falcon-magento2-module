@@ -5,6 +5,7 @@
     <preference for="Hatimeria\Reagento\Api\CategoryBreadcrumbsInterface" type="Hatimeria\Reagento\Model\CategoryBreadcrumbs" />
     <preference for="Hatimeria\Reagento\Api\CategoryManagementInterface" type="Hatimeria\Reagento\Model\CategoryManagement" />
     <preference for="Hatimeria\Reagento\Api\ContactFormInterface" type="Hatimeria\Reagento\Model\ContactForm" />
+    <preference for="Hatimeria\Reagento\Api\Data\AdyenConfigInterface" type="Hatimeria\Reagento\Model\Api\Data\AdyenConfig" />
     <preference for="Hatimeria\Reagento\Api\Data\AdyenRedirectInterface" type="Hatimeria\Reagento\Model\Api\Data\AdyenRedirect" />
     <preference for="Hatimeria\Reagento\Api\Data\BreadcrumbInterface" type="Hatimeria\Reagento\Model\Api\Data\Breadcrumb" />
     <preference for="Hatimeria\Reagento\Api\Data\CategorySearchResultsInterface" type="Magento\Framework\Api\SearchResults" />
@@ -15,6 +16,7 @@
     <preference for="Hatimeria\Reagento\Api\Data\OrderInfoInterface" type="Hatimeria\Reagento\Model\OrderInfo" />
     <preference for="Hatimeria\Reagento\Api\Data\OrderResponseInterface" type="Hatimeria\Reagento\Model\Api\Data\OrderResponse" />
     <preference for="Hatimeria\Reagento\Api\Data\UrlDataInterface" type="Hatimeria\Reagento\Model\UrlData" />
+    <preference for="Hatimeria\Reagento\Api\HatimeriaAdyenConfigInterface" type="Hatimeria\Reagento\Model\Adyen\Config" />
     <preference for="Hatimeria\Reagento\Api\HatimeriaGuestOrderManagementInterface" type="Hatimeria\Reagento\Model\GuestOrderManagement" />
     <preference for="Hatimeria\Reagento\Api\HatimeriaOrderManagementInterface" type="Hatimeria\Reagento\Model\OrderManagement" />
     <preference for="Hatimeria\Reagento\Api\HomeCategoriesInterface" type="Hatimeria\Reagento\Model\CategoryRepository" />
