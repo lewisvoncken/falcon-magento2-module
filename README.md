@@ -8,6 +8,7 @@ Custom API endpoints provided by this module:
 - `[GET] /rest/V1/categories/homepage` - get categories marked as "Show on homepage" (max - 6)
 - `[GET] /rest/V1/categories` (**overridden**) - get category tree with `url_path` data
 - `[GET] /rest/V1/customer-payment/:customerId/:orderId/adyen-link` - get Adyen payment link for redirection (for registered customer)
+- `[PUT] /rest/V1/customers/password/reset` - reset password with reset token (missing in magento API)
 - `[GET] /rest/V1/guest-carts/:cartId/paypal-fetch-token` - get PayPal token
 - `[GET] /rest/V1/guest-orders/:orderId/order-info` - get data for the order specified by masked id for guest orders
 - `[GET] /rest/V1/guest-payment/:cartId/:orderId/adyen-link` - get Adyen payment link for redirection
