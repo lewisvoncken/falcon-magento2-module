@@ -22,6 +22,10 @@
         <plugin name="hatimeriaReagentoProductPlugin" type="\Hatimeria\Reagento\Plugin\Catalog\Model\Product"/>
     </type>
 
+    <type name="Magento\Customer\Api\AccountManagementInterface">
+        <plugin name="hatimeriaReagentoAccountManagement" type="\Hatimeria\Reagento\Plugin\Customer\Api\AccountManagement" />
+    </type>
+
     <type name="Magento\Framework\App\RouterInterface">
         <plugin name="hatimeriaReagentoRouterPlugin" type="Hatimeria\Reagento\Plugin\App\Router"/>
     </type>
