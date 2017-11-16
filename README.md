@@ -27,6 +27,12 @@ Custom API endpoints provided by this module:
 
 Extension attributes:
 
+- `Magento\Bundle\Api\Data\LinkInterface`:
+    ```json
+    {
+      "name": "string"
+    }
+    ```
 - `Magento\Catalog\Api\Data\ProductInterface`:
     ```json
     {
