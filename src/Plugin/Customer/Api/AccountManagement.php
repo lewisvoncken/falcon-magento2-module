@@ -4,7 +4,6 @@ namespace Hatimeria\Reagento\Plugin\Customer\Api;
 
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
-use Magento\Customer\Model\Customer\CredentialsValidator;
 use Magento\Framework\Exception\InputException;
 
 class AccountManagement
@@ -12,16 +11,15 @@ class AccountManagement
     /** @var CustomerRepositoryInterface */
     private $customerRepository;
 
-    /** @var CredentialsValidator */
-    private $credentialsValidator;
-
+    /**
+     * AccountManagement constructor.
+     * @param CustomerRepositoryInterface $customerRepository
+     */
     public function __construct(
-        CustomerRepositoryInterface $customerRepository,
-        CredentialsValidator $credentialsValidator
+        CustomerRepositoryInterface $customerRepository
     )
     {
         $this->customerRepository = $customerRepository;
-        $this->credentialsValidator = $credentialsValidator;
     }
 
     /**
@@ -37,8 +35,6 @@ class AccountManagement
         if (ctype_digit($email)) {
             $email = $this->customerRepository->getById($email)->getEmail();
         }
-
-        $this->credentialsValidator->checkPasswordDifferentFromEmail($email, $newPassword);
 
         return [$email, $resetToken, $newPassword];
     }
