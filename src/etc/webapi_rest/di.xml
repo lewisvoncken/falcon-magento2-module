@@ -14,12 +14,24 @@
     <preference for="Magento\Cms\Model\ResourceModel\Page\Collection" type="\Hatimeria\Reagento\Model\ResourceModel\Page\Collection" />
 
     <!-- PLUGINS -->
+    <type name="Magento\Bundle\Model\Product\LinksList">
+        <plugin name="hatimeriaReagentoBundleProductLinkListPlugin" type="\Hatimeria\Reagento\Plugin\Bundle\Product\LinksList" />
+    </type>
+
     <type name="Magento\Catalog\Model\Category">
         <plugin name="hatimeriaReagentoCategoryPlugin" type="\Hatimeria\Reagento\Plugin\Catalog\Model\Category" />
     </type>
 
     <type name="Magento\Catalog\Model\Product">
         <plugin name="hatimeriaReagentoProductPlugin" type="\Hatimeria\Reagento\Plugin\Catalog\Model\Product"/>
+    </type>
+
+    <type name="Magento\Customer\Api\AccountManagementInterface">
+        <plugin name="hatimeriaReagentoAccountManagement" type="\Hatimeria\Reagento\Plugin\Customer\Api\AccountManagement" />
+    </type>
+
+    <type name="Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface">
+        <plugin name="hatimeriaReagentoExtensionAttributeJoinProcessorPlugin" type="Hatimeria\Reagento\Plugin\ExtensionAttribute\JoinProcessor" />
     </type>
 
     <type name="Magento\Framework\App\RouterInterface">

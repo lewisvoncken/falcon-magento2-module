@@ -132,4 +132,11 @@
             <resource ref="Magento_Config::system_config" />
         </resources>
     </route>
+
+    <route url="/V1/customers/password/reset" method="PUT">
+        <service class="Magento\Customer\Api\AccountManagementInterface" method="resetPassword"/>
+        <resources>
+            <resource ref="anonymous"/>
+        </resources>
+    </route>
 </routes>
