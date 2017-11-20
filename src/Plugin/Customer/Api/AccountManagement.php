@@ -5,6 +5,7 @@ namespace Hatimeria\Reagento\Plugin\Customer\Api;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\NoSuchEntityException;
 
 class AccountManagement
 {
@@ -20,6 +21,21 @@ class AccountManagement
     )
     {
         $this->customerRepository = $customerRepository;
+    }
+
+    public function aroundInitiatePasswordReset(
+        AccountManagementInterface $subject,
+        callable $proceed,
+        $email,
+        $template,
+        $websiteId = null
+    ) {
+        try {
+            return $proceed($email, $email, $websiteId);
+        } catch (NoSuchEntityException $e) {
+            return true;
+        }
+
     }
 
     /**
