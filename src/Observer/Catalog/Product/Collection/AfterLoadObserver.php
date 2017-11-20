@@ -8,6 +8,7 @@ use Magento\Catalog\Model\Product as Product;
 use Magento\Catalog\Model\ResourceModel\Product\Collection as ProductCollection;
 use Magento\Catalog\Model\ResourceModel\Product\Compare\Item\Collection as CompareProductItemCollection;
 use Magento\Catalog\Model\ResourceModel\Product\Link\Product\Collection as ProductLinkCollection;
+use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Product\Collection as ConfigurableProductCollection;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Event\Observer as EventObserver;
 use Magento\Framework\Event\ObserverInterface;
@@ -56,6 +57,7 @@ class AfterLoadObserver implements ObserverInterface
         if (
             $collection instanceof ProductLinkCollection
             || $collection instanceof CompareProductItemCollection
+            || $collection instanceof ConfigurableProductCollection
         ) {
             return;
         }
