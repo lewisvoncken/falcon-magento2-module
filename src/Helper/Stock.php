@@ -2,6 +2,8 @@
 
 namespace Hatimeria\Reagento\Helper;
 
+use Hatimeria\Reagento\Model\Api\Data\StockItem;
+use Hatimeria\Reagento\Model\Api\Data\StockItemFactory;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\ResourceModel\Product\Collection as ProductCollection;
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
@@ -21,20 +23,26 @@ class Stock
     /** @var StoreManagerInterface */
     protected $storeManager;
 
+    /** @var StockItemFactory */
+    protected $reagentoStockItemFactory;
+
     /**
      * Stock constructor.
      * @param StockItemRepositoryInterface $stockRepository
      * @param StockItemCriteriaInterfaceFactory $stockCriteriaInterfaceFactory
      * @param StoreManagerInterface $storeManager
+     * @param StockItemFactory $reagentoStockItemFactory
      */
     public function __construct(
         StockItemRepositoryInterface $stockRepository,
         StockItemCriteriaInterfaceFactory $stockCriteriaInterfaceFactory,
-        StoreManagerInterface $storeManager
+        StoreManagerInterface $storeManager,
+        StockItemFactory $reagentoStockItemFactory
     ) {
         $this->stockRepository = $stockRepository;
         $this->stockCriteriaInterfaceFactory = $stockCriteriaInterfaceFactory;
         $this->storeManager = $storeManager;
+        $this->reagentoStockItemFactory = $reagentoStockItemFactory;
     }
 
     /**
@@ -48,7 +56,7 @@ class Stock
         foreach ($collection as $item) { /** @var ProductInterface $item */
             if (array_key_exists($item->getId(), $stockCollection)) {
                 $extensionAttributes = $item->getExtensionAttributes();
-                $extensionAttributes->setStockItem($stockCollection[$item->getId()]);
+                $extensionAttributes->setStockItem($this->prepareStockItem($stockCollection[$item->getId()]));
                 $item->setExtensionAttributes($extensionAttributes);
             }
         }
@@ -86,5 +94,23 @@ class Stock
         }
 
         return $list;
+    }
+
+    /**
+     * Copy stock item data in order to have an object with only data.
+     * Default stock item object will cache with a lot of additional objects.
+     *
+     * @param StockItemInterface $stockItem
+     * @return StockItem
+     */
+    protected function prepareStockItem(StockItemInterface $stockItem)
+    {
+        $reagentoStockItem = $this->reagentoStockItemFactory->create();
+        foreach(StockItem::FIELDS as $key) {
+            $reagentoStockItem->setData($key, $stockItem->getData($key));
+        }
+
+        /** @var StockItem $reagentoStockItem */
+        return $reagentoStockItem;
     }
 }
