@@ -35,7 +35,6 @@ class AccountManagement
         } catch (NoSuchEntityException $e) {
             return true;
         }
-
     }
 
     /**
