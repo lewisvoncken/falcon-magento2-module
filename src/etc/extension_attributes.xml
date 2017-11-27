@@ -2,6 +2,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Api/etc/extension_attributes.xsd">
     <extension_attributes for="Magento\Bundle\Api\Data\LinkInterface">
         <attribute code="name" type="string" />
+        <attribute code="catalog_display_price" type="string" />
     </extension_attributes>
     <extension_attributes for="Magento\Catalog\Api\Data\ProductInterface">
         <attribute code="thumbnail_resized_url" type="string" />

@@ -18,6 +18,10 @@
         <plugin name="hatimeriaReagentoBundleProductLinkListPlugin" type="\Hatimeria\Reagento\Plugin\Bundle\Product\LinksList" />
     </type>
 
+    <type name="Magento\Bundle\Model\Product\Type">
+        <plugin name="hatimeriaReagentoBundleProductTypePlugin" type="\Hatimeria\Reagento\Plugin\Bundle\Product\Type" />
+    </type>
+
     <type name="Magento\Catalog\Model\Category">
         <plugin name="hatimeriaReagentoCategoryPlugin" type="\Hatimeria\Reagento\Plugin\Catalog\Model\Category" />
     </type>

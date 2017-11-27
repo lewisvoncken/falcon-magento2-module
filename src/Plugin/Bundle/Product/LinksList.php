@@ -45,9 +45,11 @@ class LinksList
         $selectionCollection = $this->type->getSelectionsCollection([$optionId], $product);
 
         foreach ($productLinks as $productLink) { /** @var LinkInterface $productLink */
+            /** @var ProductInterface $product */
             $product = $selectionCollection->getItemById($productLink->getId());
             $extensionAttributes = $this->getExtensionAttributes($productLink);
             $extensionAttributes->setName($product->getName());
+            $extensionAttributes->setCatalogDisplayPrice($this->getProductCatalogDisplayPrice($product));
             $productLink->setExtensionAttributes($extensionAttributes);
         }
 
@@ -68,5 +70,20 @@ class LinksList
         }
 
         return $extensionAttributes;
+    }
+
+    /**
+     * Get price data for selection
+     * @param ProductInterface $product
+     * @return float|null
+     */
+    protected function getProductCatalogDisplayPrice(ProductInterface $product)
+    {
+        $extensionAttribute = $product->getExtensionAttribute();
+        if ($extensionAttribute) {
+            return $extensionAttribute->getCatalogDisplayPrice();
+        }
+
+        return $product->getPrice();
     }
 }
