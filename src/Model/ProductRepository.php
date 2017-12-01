@@ -6,6 +6,7 @@ use Hatimeria\Reagento\Api\ProductRepositoryInterface;
 use Magento\Catalog\Api\Data\ProductSearchResultsInterfaceFactory;
 use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
 use Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper;
+use Magento\Catalog\Helper\Product\ProductList;
 use Magento\Catalog\Model\CategoryFactory;
 use Magento\Catalog\Model\ProductFactory;
 use Magento\Catalog\Model\Product\Gallery\MimeTypeExtensionMap;
@@ -49,6 +50,9 @@ class ProductRepository extends \Magento\Catalog\Model\ProductRepository impleme
     /** @var Filter */
     protected $filter;
 
+    /** @var ProductList */
+    protected $productListHelper;
+
     /** @var string[] List of filters that are not regular attributes */
     protected $specialFilters = ['in_category'];
 
@@ -78,6 +82,7 @@ class ProductRepository extends \Magento\Catalog\Model\ProductRepository impleme
      * @param ResourceCategory $categoryResource
      * @param ResourceConnection $resource
      * @param Filter $filter
+     * @param ProductList $productListHelper
      */
     public function __construct(
         ProductFactory $productFactory,
@@ -103,7 +108,8 @@ class ProductRepository extends \Magento\Catalog\Model\ProductRepository impleme
         CategoryFactory $categoryFactory,
         ResourceCategory $categoryResource,
         ResourceConnection $resource,
-        Filter $filter
+        Filter $filter,
+        ProductList $productListHelper
     ) {
         parent::__construct($productFactory, $initializationHelper, $searchResultsFactory, $collectionFactory, $searchCriteriaBuilder, $attributeRepository, $resourceModel, $linkInitializer, $linkTypeProvider, $storeManager, $filterBuilder, $metadataServiceInterface, $extensibleDataObjectConverter, $optionConverter, $fileSystem, $contentValidator, $contentFactory, $mimeTypeExtensionMap, $imageProcessor, $extensionAttributesJoinProcessor);
         $this->categoryFactory = $categoryFactory;
@@ -111,6 +117,7 @@ class ProductRepository extends \Magento\Catalog\Model\ProductRepository impleme
         $this->resource = $resource;
         $this->connection = $this->resource->getConnection();
         $this->filter = $filter;
+        $this->productListHelper = $productListHelper;
     }
 
     /**
@@ -152,14 +159,15 @@ class ProductRepository extends \Magento\Catalog\Model\ProductRepository impleme
         $collection->joinAttribute('status', 'catalog_product/status', 'entity_id', null, 'inner');
         $collection->joinAttribute('visibility', 'catalog_product/visibility', 'entity_id', null, 'inner');
         $this->setListPosition($collection, $searchCriteria, $categoryIDs);
-        $collection->setCurPage($searchCriteria->getCurrentPage());
-        $collection->setPageSize($searchCriteria->getPageSize());
 
         list($attributeFilters, $attributes) = $this->filter->getAttributeFilters($withAttributeFilters, $categoryIDs, $includeSubcategories);
-
-        $this->processSearchCriteria($collection, $searchCriteria, $includeSubcategories,
+        $this->processSearchCriteria(
+            $collection,
+            $searchCriteria,
+            $includeSubcategories,
             ['categoryIDs' => $categoryIDs, 'subcategoryFilter' => $subcategories],
-            $attributes);
+            $attributes
+        );
 
         /** @var \Hatimeria\Reagento\Api\SearchResults $searchResult */
         $searchResult = $this->searchResultsFactory->create();
@@ -220,7 +228,7 @@ class ProductRepository extends \Magento\Catalog\Model\ProductRepository impleme
     }
 
     /**
-     * Process search criteria data
+     * Process search criteria data (add filters and set page and page size)
      *
      * @param ProductCollection $collection
      * @param SearchCriteriaInterface $searchCriteria
@@ -253,6 +261,12 @@ class ProductRepository extends \Magento\Catalog\Model\ProductRepository impleme
 
             $this->addFilterGroupToCollection($group, $collection);
         }
+
+        if (!$searchCriteria->getPageSize()) {
+            $searchCriteria->setPageSize($this->getDefaultPageSize());
+        }
+        $collection->setCurPage($searchCriteria->getCurrentPage());
+        $collection->setPageSize($searchCriteria->getPageSize());
     }
 
     /**
@@ -343,5 +357,13 @@ class ProductRepository extends \Magento\Catalog\Model\ProductRepository impleme
         $path = $this->connection->fetchCol($select);
 
         return $path[0];
+    }
+
+    /**
+     * @return string
+     */
+    protected function getDefaultPageSize()
+    {
+        return $this->productListHelper->getDefaultLimitPerPageValue(ProductList::VIEW_MODE_GRID);
     }
 }
