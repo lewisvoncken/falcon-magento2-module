@@ -31,7 +31,7 @@ class AccountManagement
         $websiteId = null
     ) {
         try {
-            return $proceed($email, $email, $websiteId);
+            return $proceed($email, $template, $websiteId);
         } catch (NoSuchEntityException $e) {
             return true;
         }
