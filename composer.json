@@ -2,7 +2,7 @@
     "name": "hatimeria/reagento-magento-api",
     "description": "Hatimeria Reagento Rest API",
     "type": "magento2-module",
-    "version": "0.1.52",
+    "version": "0.1.53",
     "license": "proprietary",
     "autoload": {
         "files": [
