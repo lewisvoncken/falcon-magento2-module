@@ -4,6 +4,7 @@
 
 Custom API endpoints provided by this module:
 
+- `[GET] /rest/V1/adyen/config` - get adyen public config data (cc enabled, card types, CSE public key, etc.)
 - `[GET] /rest/V1/categories/:categoryId/breadcrumbs` - get category breadcrumbs to the root category
 - `[GET] /rest/V1/categories/homepage` - get categories marked as "Show on homepage" (max - 6)
 - `[GET] /rest/V1/categories` (**overridden**) - get category tree with `url_path` data
@@ -13,11 +14,12 @@ Custom API endpoints provided by this module:
 - `[GET] /rest/V1/guest-orders/:orderId/order-info` - get data for the order specified by masked id for guest orders
 - `[GET] /rest/V1/guest-payment/:cartId/:orderId/adyen-link` - get Adyen payment link for redirection
 - `[GET] /rest/V1/info` - get basic settings for current shop
+- `[GET] /rest/V1/menu` - get menu tree from magento
 - `[GET] /rest/V1/order-info/:quoteId` - get order information from quote ID (orderId, revenue, shipping, tax etc)
 - `[GET] /rest/V1/orders/:orderId/order-info` - get data for the order specified by order id for logged in customer
 - `[GET] /rest/V1/orders/mine` - get list of logged customer orders
 - `[GET] /rest/V1/products` (**overridden**) - get product list with a custom `filters` data in response
-- `[GET] /rest/V1/url/?requestPath=:url` - get info about cms page by the given URL
+- `[GET] /rest/V1/url/?requestPath=:url` - get info about product, category or cms page by the given URL
 - `[POST] /rest/V1/carts/mine/payment-information` (**overridden**) - modifies the docblock of function return type (may be int or OrderResponse object)
 - `[POST] /rest/V1/contact` - send a contact email
 - `[POST] /rest/V1/guest-carts/:cartId/payment-information` (**overridden**) - modifies the docblock of function return type (may be int or OrderResponse object)
@@ -30,7 +32,8 @@ Extension attributes:
 - `Magento\Bundle\Api\Data\LinkInterface`:
     ```json
     {
-      "name": "string"
+      "name": "string",
+      "catalog_display_price": "string"
     }
     ```
 - `Magento\Catalog\Api\Data\ProductInterface`:
@@ -39,6 +42,7 @@ Extension attributes:
       "thumbnail_resized_url": "string",
       "thumbnail_url": "string",
       "media_gallery_sizes": "Hatimeria\Reagento\Api\Data\GalleryMediaEntrySizeInterface[]",
+      "catalog_display_price": "string"
       "breadcrumbs": "Hatimeria\Reagento\Api\Data\BreadcrumbInterface[]"
     }
     ```
