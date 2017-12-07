@@ -2,13 +2,18 @@
 
 namespace Hatimeria\Reagento\Helper;
 
+use Magento\Framework\App\Cache\Tag\Resolver\Proxy as TagResolver;
 use Magento\Framework\App\Helper\Context;
 use Magento\Framework\App\Helper\AbstractHelper;
+use Magento\Framework\Registry;
 use Magento\Store\Model\ScopeInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
 class Data extends AbstractHelper
 {
     const RESPONSE_TAGS_REGISTRY = 'response_tags';
+    const GENERATE_CATEGORY_PRODUCT_URL_PATH = 'reagento/catalog/disable_product_category_rewrites';
+
     /**
      * Default response tag sent in X-Cache-Tags header in REST
      */
@@ -18,27 +23,30 @@ class Data extends AbstractHelper
      * @var \Magento\Framework\Registry
      */
     protected $registry;
+
     /**
      * Store manager
      *
      * @var \Magento\Store\Model\StoreManagerInterface 
      */
     protected $storeManager;
+
     /**
      * @var \Magento\Framework\App\Cache\Tag\Resolver\Proxy
      */
     protected $tagResolver;
+
     /**
      * @param Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\App\Cache\Tag\Resolver\Proxy $registry
+     * @param \Magento\Framework\App\Cache\Tag\Resolver\Proxy $tagResolver
      */
     public function __construct(
         Context $context,
-        \Magento\Framework\Registry $registry,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\App\Cache\Tag\Resolver\Proxy $tagResolver
+        Registry $registry,
+        StoreManagerInterface $storeManager,
+        TagResolver $tagResolver
     ) {
         $this->registry     = $registry;
         $this->storeManager = $storeManager;
@@ -55,6 +63,11 @@ class Data extends AbstractHelper
     public function getAppHomeUrl()
     {
         return $this->getConfigValue('app_home_url');
+    }
+
+    public function shouldGenerateProductUrls($storeId = null)
+    {
+        return $this->getConfigValue(self::GENERATE_CATEGORY_PRODUCT_URL_PATH, ScopeInterface::SCOPE_STORE, $storeId);
     }
 
     /**
@@ -83,15 +96,25 @@ class Data extends AbstractHelper
         return $this->scopeConfig->isSetFlag("reagento/general/clear_cache", ScopeInterface::SCOPE_STORE);
     }
 
-    private function getConfigValue($key, $scope = ScopeInterface::SCOPE_STORE)
+    /**
+     * Get config value
+     *
+     * @param string $key
+     * @param string $scope
+     * @param null $storeId
+     * @return mixed
+     */
+    private function getConfigValue($key, $scope = ScopeInterface::SCOPE_STORE, $storeId = null)
     {
-        return $this->scopeConfig->getValue("hatimeria/reagento/$key", $scope);
+        $path = strstr($key, '/') ? $key : "hatimeria/reagento/$key";
+        return $this->scopeConfig->getValue($path, $scope, $storeId);
     }
 
     /**
      * Add tags to response tag registry
      *
      * @param mixed $tags
+     * @throws \Exception
      */
     public function addResponseTags($tags)
     {
@@ -113,6 +136,7 @@ class Data extends AbstractHelper
      * Add response tags from object to registry
      *
      * @param mixed $object
+     * @throws \Exception
      */
     public function addResponseTagsByObject($object)
     {
@@ -121,8 +145,9 @@ class Data extends AbstractHelper
 
     /**
      * Set list of response tags in registry
-     * 
+     *
      * @param mixed $tags
+     * @throws \Exception
      */
     public function setResponseTags($tags)
     {
