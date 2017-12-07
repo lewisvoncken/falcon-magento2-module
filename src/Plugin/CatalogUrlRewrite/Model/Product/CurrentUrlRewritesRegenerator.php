@@ -5,6 +5,7 @@ namespace Hatimeria\Reagento\Plugin\CatalogUrlRewrite\Model\Product;
 use Hatimeria\Reagento\Helper\Data;
 use Magento\Catalog\Model\Product;
 use Magento\CatalogUrlRewrite\Model\ObjectRegistry;
+use Magento\CatalogUrlRewrite\Model\ObjectRegistryFactory;
 use Magento\CatalogUrlRewrite\Model\Product\CurrentUrlRewritesRegenerator as MagentoCurrentUrlRewritesRegenerator;
 
 class CurrentUrlRewritesRegenerator
@@ -44,7 +45,7 @@ class CurrentUrlRewritesRegenerator
         ObjectRegistry $productCategories
     ) {
         if (!$this->helper->shouldGenerateProductUrls($storeId)) {
-            $productCategories = $this->objectRegistryFactory->create();
+            $productCategories = $this->objectRegistryFactory->create(['entities' => []]);
         }
 
         return $proceed($storeId, $product, $productCategories);

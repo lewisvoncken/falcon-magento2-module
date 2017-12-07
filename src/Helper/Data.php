@@ -67,7 +67,7 @@ class Data extends AbstractHelper
 
     public function shouldGenerateProductUrls($storeId = null)
     {
-        return $this->getConfigValue(self::GENERATE_CATEGORY_PRODUCT_URL_PATH, ScopeInterface::SCOPE_STORE, $storeId);
+        return !$this->getConfigValue(self::GENERATE_CATEGORY_PRODUCT_URL_PATH, ScopeInterface::SCOPE_STORE, $storeId);
     }
 
     /**
