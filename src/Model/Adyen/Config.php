@@ -6,6 +6,7 @@ use Hatimeria\Reagento\Api\Data\AdyenConfigInterface;
 use Hatimeria\Reagento\Api\Data\AdyenConfigInterfaceFactory;
 use Hatimeria\Reagento\Api\HatimeriaAdyenConfigInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\UrlInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
@@ -16,6 +17,7 @@ class Config implements HatimeriaAdyenConfigInterface
     const ADYEN_CSE_CONFIG_TEST = 'payment/adyen_cc/cse_publickey_test';
     const ADYEN_CC_ENABLED = 'payment/adyen_cc/active';
     const ADYEN_CC_TYPES = 'payment/adyen_cc/cctypes';
+    const ADYEN_CC_IMAGE = 'payment/adyen_cc/cc_image';
 
     /** @var StoreManagerInterface */
     protected $storeManager;
@@ -26,20 +28,26 @@ class Config implements HatimeriaAdyenConfigInterface
     /** @var AdyenConfigInterfaceFactory */
     protected $adyenConfigFactory;
 
+    /** @var UrlInterface */
+    protected $urlBuilder;
+
     /**
      * Config constructor.
      * @param StoreManagerInterface $storeManager
      * @param ScopeConfigInterface $scopeConfig
      * @param AdyenConfigInterfaceFactory $adyenConfigFactory
+     * @param UrlInterface $urlBuilder
      */
     public function __construct(
         StoreManagerInterface $storeManager,
         ScopeConfigInterface $scopeConfig,
-        AdyenConfigInterfaceFactory $adyenConfigFactory
+        AdyenConfigInterfaceFactory $adyenConfigFactory,
+        UrlInterface $urlBuilder
     ) {
         $this->storeManager = $storeManager;
         $this->scopeConfig = $scopeConfig;
         $this->adyenConfigFactory = $adyenConfigFactory;
+        $this->urlBuilder = $urlBuilder;
     }
 
     /**
@@ -55,6 +63,7 @@ class Config implements HatimeriaAdyenConfigInterface
         $configPaths = [
             self::ADYEN_CC_ENABLED,
             self::ADYEN_CC_TYPES,
+            self::ADYEN_CC_IMAGE,
             $csePath
         ];
 
@@ -63,7 +72,12 @@ class Config implements HatimeriaAdyenConfigInterface
         $adyenConfig = $this->getAdyenConfigDataObject();
         $adyenConfig->setCcEnabled($configs[self::ADYEN_CC_ENABLED]);
         $adyenConfig->setCcAvailableCards($configs[self::ADYEN_CC_TYPES]);
-        $adyenConfig->setCsePublicKey($configs[$csePath ]);
+        $adyenConfig->setCsePublicKey($configs[$csePath]);
+
+        $imageFile = $configs[self::ADYEN_CC_IMAGE];
+        if ($imageFile) {
+            $adyenConfig->setCcImage($this->getImageUrl($imageFile));
+        }
 
         return $adyenConfig;
     }
@@ -93,5 +107,16 @@ class Config implements HatimeriaAdyenConfigInterface
         }
 
         return $data;
+    }
+
+    /**
+     * Generate url to the cc image
+     *
+     * @param $file
+     * @return string
+     */
+    protected function getImageUrl($file)
+    {
+        return $this->urlBuilder->getBaseUrl(['_type' => 'media']) . 'adyen/cc_logo/' . $file;
     }
 }

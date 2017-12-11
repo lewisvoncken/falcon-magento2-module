@@ -7,6 +7,7 @@ interface AdyenConfigInterface extends \Magento\Framework\Api\ExtensibleDataInte
     const CSE_PUBLIC_KEY = 'cse_public_key';
     const CC_ENABLED = 'cc_enabled';
     const CC_AVAILABLE_CARDS = 'cc_available_cards';
+    const CC_IMAGE = 'cc_image';
 
     /**
      * @return string
@@ -40,6 +41,17 @@ interface AdyenConfigInterface extends \Magento\Framework\Api\ExtensibleDataInte
      * @return \Hatimeria\Reagento\Api\Data\AdyenConfigInterface
      */
     public function setCcAvailableCards($cards);
+
+    /**
+     * @return string
+     */
+    public function getCcImage();
+
+    /**
+     * @param string $imageUrl
+     * @return \Hatimeria\Reagento\Api\Data\AdyenConfigInterface
+     */
+    public function setCcImage($imageUrl);
 
     /**
      * Retrieve existing extension attributes object or create a new one.
