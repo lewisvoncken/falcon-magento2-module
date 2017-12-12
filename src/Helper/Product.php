@@ -167,6 +167,7 @@ class Product extends AbstractHelper
 
     /**
      * @param MagentoProduct $product
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function ensureOptionsForConfigurableProduct($product)
     {
@@ -274,7 +275,9 @@ class Product extends AbstractHelper
     {
         $displayPrice = $this->priceHelper->calculateCatalogDisplayPrice($product);
         $productExtension = $this->getProductExtensionAttributes($product);
-        $productExtension->setCatalogDisplayPrice($displayPrice);
+        $productExtension->setCatalogDisplayPrice($displayPrice['calculated_price']);
+        $productExtension->setMinPrice($displayPrice['min_price']);
+        $productExtension->setMaxPrice($displayPrice['max_price']);
         $product->setExtensionAttributes($productExtension);
     }
 
@@ -283,6 +286,7 @@ class Product extends AbstractHelper
      *
      * @param MagentoProduct|ProductInterface $product
      * @param string[] $filters
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function addBreadcrumbsData(ProductInterface $product, $filters = [])
     {
@@ -356,6 +360,13 @@ class Product extends AbstractHelper
         return $breadcrumb;
     }
 
+    /**
+     * Add additional data to product
+     *
+     * @param MagentoProduct|ProductInterface $product
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
     public function addAdditionalInformation($product)
     {
         $this->ensurePriceForConfigurableProduct($product);
@@ -369,10 +380,14 @@ class Product extends AbstractHelper
         $this->calculateCatalogDisplayPrice($product);
     }
 
+    /**
+     * Get list of attributes used in filters from config
+     *
+     * @return array
+     */
     protected function getFilterableAttributes()
     {
         $attributes = [];
-            
         if ($config = $this->scopeConfig->getValue(BreadcrumbsAttribute::BREADCRUMBS_ATTRIBUTES_CONFIG_PATH)) {
             $attributes = explode(',', $config);
         }
