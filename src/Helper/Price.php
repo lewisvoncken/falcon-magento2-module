@@ -55,6 +55,14 @@ class Price extends AbstractHelper
         return null;
     }
 
+    /**
+     * Get display price value
+     *
+     * @param float $price
+     * @param int $storeId
+     * @param mixed $rate
+     * @return float|int
+     */
     protected function getDisplayPrice($price, $storeId, $rate)
     {
         // Product price in catalog is including tax.
