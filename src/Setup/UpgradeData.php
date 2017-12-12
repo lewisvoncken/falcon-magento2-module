@@ -2,7 +2,10 @@
 
 namespace Hatimeria\Reagento\Setup;
 
+use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Catalog\Model\Category;
+use Magento\Catalog\Model\Product;
+use Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface;
 use Magento\Eav\Setup\EavSetup;
 use Magento\Eav\Setup\EavSetupFactory;
 use Magento\Framework\DB\Adapter\AdapterInterface;
@@ -42,6 +45,9 @@ class UpgradeData implements UpgradeDataInterface
         }
         if(version_compare($context->getVersion(), '0.1.20') < 0) {
             $this->addCategoryShowOnHomePositionField($setup, $eavSetup);
+        }
+        if(version_compare($context->getVersion(), '0.1.22') < 0) {
+            $this->addProductShowOnHomePositionField($setup, $eavSetup);
         }
 
         $setup->endSetup();
@@ -130,7 +136,82 @@ class UpgradeData implements UpgradeDataInterface
             ];
         }
 
-
         $connection->insertOnDuplicate($connection->getTableName('catalog_category_entity_int'), $data, []);
+    }
+
+    /**
+     * @param ModuleDataSetupInterface $setup
+     * @param EavSetup $eavSetup
+     */
+    protected function addProductShowOnHomePositionField(ModuleDataSetupInterface $setup, EavSetup $eavSetup)
+    {
+        $eavSetup->addAttribute(
+            Product::ENTITY,
+            'is_on_homepage',
+            [
+                'type' => 'int',
+                'input' => 'boolean',
+                'label' => 'On homepage',
+                'source' => 'Magento\Eav\Model\Entity\Attribute\Source\Boolean',
+                'required' => false,
+                'searchable' => true,
+                'default' => 0,
+                'filterable' => true,
+                'is_filterable_in_grid' => true,
+                'is_used_in_grid' => false,
+                'is_searchable' => true,
+                'is_visible_in_grid' => false,
+                'comparable' => false,
+                'visible_on_front' => false,
+                'used_in_product_listing' => true,
+                'user_defined' => true,
+                'global' => ScopedAttributeInterface::SCOPE_STORE,
+                'group' => 'Product Details',
+                'sort_order' => 1,
+            ]
+        );
+
+        $eavSetup->addAttribute(
+            Product::ENTITY,
+            'homepage_sort_order',
+            [
+                'type' => 'int',
+                'input' => 'text',
+                'label' => 'Homepage Product Sort Order',
+                'required' => false,
+                'searchable' => true,
+                'default' => 100,
+                'filterable' => true,
+                'is_filterable_in_grid' => true,
+                'is_used_in_grid' => false,
+                'is_searchable' => true,
+                'is_visible_in_grid' => false,
+                'comparable' => false,
+                'visible_on_front' => false,
+                'used_in_product_listing' => true,
+                'user_defined' => true,
+                'global' => ScopedAttributeInterface::SCOPE_STORE,
+                'group' => 'Product Details',
+                'sort_order' => 1,
+            ]
+        );
+
+        foreach($eavSetup->getAllAttributeSetIds(Product::ENTITY) as $setId) {
+            $eavSetup->addAttributeToGroup(
+                ProductAttributeInterface::ENTITY_TYPE_CODE,
+                $setId,
+                'Product Details',
+                'is_on_homepage',
+                100
+            );
+
+            $eavSetup->addAttributeToGroup(
+                ProductAttributeInterface::ENTITY_TYPE_CODE,
+                $setId,
+                'Product Details',
+                'homepage_sort_order',
+                101
+            );
+        }
     }
 }
