@@ -3,13 +3,7 @@ namespace Hatimeria\Reagento\Model\Api\Data;
 
 use Hatimeria\Reagento\Api\Data\AdyenConfigInterface;
 use Hatimeria\Reagento\Api\Data\AdyenConfigExtensionInterface;
-use Magento\Framework\Api\AttributeValueFactory;
-use Magento\Framework\Api\ExtensionAttributesFactory;
 use Magento\Framework\Model\AbstractExtensibleModel;
-use Magento\Framework\Model\Context;
-use Magento\Framework\Registry;
-use Magento\Framework\Model\ResourceModel\AbstractResource;
-use Magento\Framework\Data\Collection\AbstractDb;
 
 class AdyenConfig extends AbstractExtensibleModel implements AdyenConfigInterface
 {
@@ -68,12 +62,30 @@ class AdyenConfig extends AbstractExtensibleModel implements AdyenConfigInterfac
     }
 
     /**
-     * @return AdyenConfigExtensionInterface
+     * @param string $imageUrl
+     * @return \Hatimeria\Reagento\Api\Data\AdyenRedirectInterface
+     */
+    public function setCcImage($imageUrl)
+    {
+        return $this->setData(AdyenConfigInterface::CC_IMAGE, $imageUrl);
+    }
+
+    /**
+     * @return string
+     */
+    public function getCcImage()
+    {
+        return $this->_getData(AdyenConfigInterface::CC_IMAGE);
+    }
+
+    /**
+     * @return \Hatimeria\Reagento\Api\Data\AdyenConfigExtensionInterface
      */
     public function getExtensionAttributes()
     {
         $extensionAttributes = $this->_getExtensionAttributes();
         if (!$extensionAttributes) {
+            /** @var AdyenConfigExtensionInterface $extensionAttributes */
             $extensionAttributes = $this->extensionAttributesFactory->create(AdyenConfigInterface::class);
         }
 
@@ -81,7 +93,7 @@ class AdyenConfig extends AbstractExtensibleModel implements AdyenConfigInterfac
     }
 
     /**
-     * @param AdyenConfigExtensionInterface $extensionAttributes
+     * @param \Hatimeria\Reagento\Api\Data\AdyenConfigExtensionInterface $extensionAttributes
      * @return AdyenConfigInterface
      */
     public function setExtensionAttributes(AdyenConfigExtensionInterface $extensionAttributes)
