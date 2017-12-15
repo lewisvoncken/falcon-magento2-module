@@ -10,6 +10,8 @@
     <preference for="Hatimeria\Reagento\Api\Data\BreadcrumbInterface" type="Hatimeria\Reagento\Model\Api\Data\Breadcrumb" />
     <preference for="Hatimeria\Reagento\Api\Data\CategorySearchResultsInterface" type="Magento\Framework\Api\SearchResults" />
     <preference for="Hatimeria\Reagento\Api\Data\CategoryTreeInterface" type="Hatimeria\Reagento\Model\Category" />
+    <preference for="Hatimeria\Reagento\Api\Data\FilterInterface" type="Hatimeria\Reagento\Model\Api\Data\Filter" />
+    <preference for="Hatimeria\Reagento\Api\Data\FilterOptionInterface" type="Hatimeria\Reagento\Model\Api\Data\FilterOption" />
     <preference for="Hatimeria\Reagento\Api\Data\GalleryMediaEntrySizeInterface" type="Hatimeria\Reagento\Model\GalleryMediaEntrySize" />
     <preference for="Hatimeria\Reagento\Api\Data\InfoDataInterface" type="Hatimeria\Reagento\Model\InfoData" />
     <preference for="Hatimeria\Reagento\Api\Data\MenuInterface" type="Hatimeria\Reagento\Model\Api\Data\Menu" />

@@ -6,14 +6,14 @@ interface ProductSearchResultsInterface extends \Magento\Catalog\Api\Data\Produc
 {
     /**
      * Get filters
-     * @return mixed
+     * @return \Hatimeria\Reagento\Api\Data\FilterInterface[]
      */
     public function getFilters();
 
     /**
      * Set filters
-     * @param mixed $items
+     * @param \Hatimeria\Reagento\Api\Data\FilterInterface[] $items
      * @return $this
      */
-    public function setFilters(array $items);
+    public function setFilters($items);
 }

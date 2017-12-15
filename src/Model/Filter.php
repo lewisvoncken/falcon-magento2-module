@@ -2,6 +2,10 @@
 
 namespace Hatimeria\Reagento\Model;
 
+use Hatimeria\Reagento\Api\Data\FilterInterface;
+use Hatimeria\Reagento\Api\Data\FilterInterfaceFactory;
+use Hatimeria\Reagento\Api\Data\FilterOptionInterface;
+use Hatimeria\Reagento\Api\Data\FilterOptionInterfaceFactory;
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Eav\Model\Config;
@@ -44,6 +48,12 @@ class Filter
     /** @var LoggerInterface */
     protected $logger;
 
+    /** @var FilterInterfaceFactory */
+    protected $filterFactory;
+
+    /** @var FilterOptionInterfaceFactory */
+    protected $filterOptionFactory;
+
     /** @var Select[] */
     protected $queries = [];
 
@@ -55,6 +65,8 @@ class Filter
      * @param ScopeConfigInterface $scopeConfig
      * @param CategoryRepositoryInterface $categoryRepository
      * @param LoggerInterface $logger
+     * @param FilterInterfaceFactory $filterFactory
+     * @param FilterOptionInterfaceFactory $filterOptionFactory
      */
     public function __construct(
         ResourceConnection $resourceConnection,
@@ -62,7 +74,9 @@ class Filter
         StoreManagerInterface $storeManager,
         ScopeConfigInterface $scopeConfig,
         CategoryRepositoryInterface $categoryRepository,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        FilterInterfaceFactory $filterFactory,
+        FilterOptionInterfaceFactory $filterOptionFactory
     ) {
         $this->resourceConnection = $resourceConnection;
         $this->eavConfig = $eavConfig;
@@ -70,6 +84,8 @@ class Filter
         $this->scopeConfig = $scopeConfig;
         $this->categoryRepository = $categoryRepository;
         $this->logger = $logger;
+        $this->filterFactory = $filterFactory;
+        $this->filterOptionFactory = $filterOptionFactory;
     }
 
     /**
@@ -91,6 +107,8 @@ class Filter
      * @param int|int[] $categoryIDs
      * @param bool $includeSubcategories
      * @return array
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function getAttributeFilters($attributeFilters, $categoryIDs = [], $includeSubcategories = false)
     {
@@ -126,6 +144,7 @@ class Filter
      * @param string[] $attributes
      * @param int[] $categories
      * @return array
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getFiltersOptions($productIds, $attributes, $categories)
     {
@@ -163,7 +182,7 @@ class Filter
     /**
      *
      *
-     * @param array $attributeFilters
+     * @param FilterInterface[] $attributeFilters
      * @param array $productOptionValues
      * @param SearchCriteriaInterface $searchCriteria
      * @param int[] $allProductsIds
@@ -178,8 +197,8 @@ class Filter
         $optionValuesProducts = $this->convertProductOptionsValuesToOptionValuesProducts($productOptionValues);
         list ($usedFilters, $usedProducts) = $this->getUsedProducts($searchCriteria, $optionValuesProducts, $allProductsIds);
 
-        foreach($attributeFilters as $id => $filter) {
-            $code = $filter['code'];
+        foreach($attributeFilters as $filter) { /** @var FilterInterface $filter */
+            $code = $filter->getCode();
             if (!array_key_exists($code, $optionValuesProducts)) {
                 continue;
             }
@@ -188,10 +207,13 @@ class Filter
                 //create a basis without currently used filter
                 $productBasis = $this->getProductIdBaseWithoutFilter($allProductsIds, $usedFilters, $code);
             }
-            $attributeFilters[$id]['options'] = $this->setOptionAvailability(
-                $filter['options'],
-                $optionValuesProducts[$code],
-                $productBasis
+
+            $filter->setOptions(
+                $this->setOptionAvailability(
+                    $filter->getOptions(),
+                    $optionValuesProducts[$code],
+                    $productBasis
+                )
             );
         }
 
@@ -202,7 +224,9 @@ class Filter
      * Create data for subcategory filter
      *
      * @param int $categoryID
-     * @return array
+     * @return FilterInterface
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     protected function addCategoryFilter($categoryID)
     {
@@ -218,11 +242,11 @@ class Filter
         }
 
         $connection = $this->resourceConnection->getConnection();
-        $attributeResult = [
-            'label' => __('Categories'),
-            'code' => 'in_category',
-            'options' => [],
-        ];
+        /** @var FilterInterface $attributeResult */
+        $attributeResult = $this->filterFactory->create();
+        $attributeResult->setLabel(__('Categories'));
+        $attributeResult->setCode('in_category');
+
         $category = $this->categoryRepository->get($categoryID);
         $attribute = $this->eavConfig->getAttribute('catalog_category', 'name');
         $subcategories = $connection->fetchAll($selectSubCategories, [
@@ -230,12 +254,16 @@ class Filter
             'attribute_id' => $attribute->getAttributeId(),
             'level' => $category->getLevel() + 1
         ]);
+
+        $options = [];
         foreach ($subcategories as $item) {
-            $attributeResult['options'][] = [
-                'label' => $item['value'],
-                'value' => $item['entity_id']
-            ];
+            /** @var FilterOptionInterface $attributeResultOption */
+            $attributeResultOption = $this->filterOptionFactory->create();
+            $attributeResultOption->setLabel($item['value']);
+            $attributeResultOption->setValue($item['entity_id']);
+            $options[] = $attributeResultOption;
         }
+        $attributeResult->setOptions($options);
 
         return $attributeResult;
     }
@@ -244,7 +272,7 @@ class Filter
      * Create data for regular attribute filter
      *
      * @param CatalogResourceAttribute $attribute
-     * @return array
+     * @return FilterInterface
      */
     protected function addAttributeFilter(CatalogResourceAttribute $attribute)
     {
@@ -268,20 +296,21 @@ class Filter
             return null;
         }
 
-        $attributeResult = [
-            'label' => $attribute->getStoreLabel(),
-            'code' => $attribute->getAttributeCode(),
-            'attribute_id' => $attribute->getId(),
-            'type' => in_array($attribute->getFrontendInput(), ['multiselect', 'text']) ? 'varchar' : 'int',
-            'options' => [],
-        ];
+        /** @var FilterInterface $attributeResult */
+        $attributeResult = $this->filterFactory->create();
+        $attributeResult->setLabel($attribute->getStoreLabel())
+            ->setCode($attribute->getAttributeCode())
+            ->setAttributeId($attribute->getId())
+            ->setType(in_array($attribute->getFrontendInput(), ['multiselect', 'text']) ? 'varchar' : 'int');
 
+        $options = [];
         if ('text' == $attribute->getFrontendInput()) {
             foreach ($availableOptions as $availableOption) {
-                $attributeResult['options'][] = [
-                    'label' => $availableOption,
-                    'value' => $availableOption
-                ];
+                /** @var FilterOptionInterface $attributeResultOption */
+                $attributeResultOption = $this->filterOptionFactory->create();
+                $attributeResultOption->setLabel($availableOption)
+                    ->setValue($availableOption);
+                $options[] = $attributeResultOption;
             }
         } else {
             foreach ($attribute->getOptions() as $option) {
@@ -292,12 +321,14 @@ class Filter
                     continue;
                 }
 
-                $attributeResult['options'][] = [
-                    'label' => $option->getLabel(),
-                    'value' => $option->getValue()
-                ];
+                /** @var FilterOptionInterface $attributeResultOption */
+                $attributeResultOption = $this->filterOptionFactory->create();
+                $attributeResultOption->setLabel($option->getLabel())
+                    ->setValue($option->getValue());
+                $options[] = $attributeResultOption;
             }
         }
+        $attributeResult->setOptions($options);
 
         return $attributeResult;
     }
@@ -435,18 +466,18 @@ class Filter
     /**
      * Find each option availability status
      *
-     * @param array $options list of filter options
+     * @param FilterOptionInterface[] $options list of filter options
      * @param array $optionValuesProducts list of products with values
      * @param array $usedProducts list of product ids used as a basis for filter
      * @return array
      */
     protected function setOptionAvailability($options, $optionValuesProducts, $usedProducts)
     {
-        foreach ($options as $optId => $option) {
-            $value = $option['value'];
+        foreach ($options as $option) { /** @var FilterOptionInterface $option */
+            $value = $option->getValue();
             $optionProducts = isset($optionValuesProducts[$value]) ? $optionValuesProducts[$value] : [];
             $active = !empty($optionProducts) ? !empty(array_intersect($usedProducts, $optionProducts)) : false;
-            $options[$optId]['active'] = $active;
+            $option->setActive($active);
         }
 
         return $options;
