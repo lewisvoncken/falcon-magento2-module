@@ -19,7 +19,7 @@ class SearchResults extends \Magento\Framework\Api\SearchResults implements Prod
     /**
      * {@inheritdoc}
      */
-    public function setFilters(array $items)
+    public function setFilters($items)
     {
         return $this->setData(self::KEY_FILTERS, $items);
     }
