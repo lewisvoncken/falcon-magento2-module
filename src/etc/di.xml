@@ -66,6 +66,18 @@
     </virtualType>
 
     <!-- PLUGINS -->
+    <type name="Magento\CatalogUrlRewrite\Model\Product\AnchorUrlRewriteGenerator">
+        <plugin name="hatimeriaReagentoAnchorUrlRewriteGeneratorPlugin" type="Hatimeria\Reagento\Plugin\CatalogUrlRewrite\Model\Product\AnchorUrlRewriteGenerator" />
+    </type>
+    <type name="Magento\CatalogUrlRewrite\Model\Product\CategoriesUrlRewriteGenerator">
+        <plugin name="hatimeriaReagentoCategoriesUrlRewriteGeneratorPlugin" type="Hatimeria\Reagento\Plugin\CatalogUrlRewrite\Model\Product\CategoriesUrlRewriteGenerator" />
+    </type>
+    <type name="Magento\CatalogUrlRewrite\Model\Product\CurrentUrlRewritesRegenerator">
+        <plugin name="hatimeriaReagentoCurrentUrlRewritesRegeneratorPlugin" type="Hatimeria\Reagento\Plugin\CatalogUrlRewrite\Model\Product\CurrentUrlRewritesRegenerator" />
+    </type>
+    <type name="Magento\CatalogUrlRewrite\Observer\UrlRewriteHandler">
+        <plugin name="hatimeriaReagentoUrlRewriteHandlerPlugin" type="Hatimeria\Reagento\Plugin\CatalogUrlRewrite\Observer\UrlRewriteHandler" />
+    </type>
     <type name="Magento\Sales\Api\OrderManagementInterface">
         <plugin name="hatimeriaReagentoOrderManagementPlugin" type="Hatimeria\Reagento\Plugin\Sales\Api\OrderManagement" />
     </type>

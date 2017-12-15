@@ -40,6 +40,11 @@
                     <label>Disable Product Links in Product List Api Endpoint</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
+                <field id="disable_product_category_rewrites" translate="label comment" type="select" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Disable Product Links with Category</label>
+                    <comment>Disable generating url rewrites with category in path for products.</comment>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
             </group>
         </section>
         <section id="hatimeria" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="0" showInStore="0">
