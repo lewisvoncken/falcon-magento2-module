@@ -265,6 +265,7 @@ class ProductRepository extends \Magento\Catalog\Model\ProductRepository impleme
         if (!$searchCriteria->getPageSize()) {
             $searchCriteria->setPageSize($this->getDefaultPageSize());
         }
+        $collection->addPriceData();
         $collection->setCurPage($searchCriteria->getCurrentPage());
         $collection->setPageSize($searchCriteria->getPageSize());
     }

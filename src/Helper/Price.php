@@ -12,10 +12,10 @@ class Price extends AbstractHelper
     /** @var TaxCalculationInterface */
     protected $taxCalculation;
 
-    /** @var array  */
+    /** @var array */
     protected $rates = [];
 
-    /** @var array  */
+    /** @var array */
     protected $priceConfig = [];
 
     /**
@@ -26,8 +26,7 @@ class Price extends AbstractHelper
     public function __construct(
         Context $context,
         TaxCalculationInterface $taxCalculation
-    )
-    {
+    ) {
         parent::__construct($context);
         $this->taxCalculation = $taxCalculation;
     }
@@ -36,34 +35,52 @@ class Price extends AbstractHelper
      * Calculate display price for product
      *
      * @param MagentoProduct $product
-     * @return int|null
+     * @return array
      */
     public function calculateCatalogDisplayPrice(MagentoProduct $product)
     {
         $productRateId = $product->getData('tax_class_id');
-        if ($productRateId) {
+        if ($productRateId !== null) {
+
             // First get base price (=price excluding tax)
             $rate = $this->getRate($productRateId);
 
-            // Product price in catalog is including tax.
-            $basePriceInclTax = $this->getConfig('tax/calculation/price_includes_tax', $product->getStoreId()) === 1;
-
-            if ($basePriceInclTax) {
-                $priceExcludingTax = $product->getPrice() / (1 + ($rate / 100));
-            } else {
-                // Product price in catalog is excluding tax.
-                $priceExcludingTax = $product->getPrice();
-            }
-
-            $priceIncludingTax = round($priceExcludingTax + ($priceExcludingTax * ($rate / 100)), 2);
-
-            // 2 - display prices including tax
-            $catalogPriceInclTax = $this->getConfig('tax/display/type', $product->getStoreId()) === 2;
-
-            return $catalogPriceInclTax ? $priceIncludingTax : $priceExcludingTax;
+            return [
+                'calculated_price' => (float)$this->getDisplayPrice($product->getPrice(), $product->getStoreId(), $rate),
+                'min_price' => (float)$this->getDisplayPrice($product->getMinimalPrice(), $product->getStoreId(), $rate),
+                'max_price' => (float)$this->getDisplayPrice($product->getMaxPrice(), $product->getStoreId(), $rate)
+            ];
         }
 
         return null;
+    }
+
+    /**
+     * Get display price value
+     *
+     * @param float $price
+     * @param int $storeId
+     * @param mixed $rate
+     * @return float|int
+     */
+    protected function getDisplayPrice($price, $storeId, $rate)
+    {
+        // Product price in catalog is including tax.
+        $basePriceInclTax = $this->getConfig('tax/calculation/price_includes_tax', $storeId) === 1;
+
+        if ($basePriceInclTax) {
+            $priceExcludingTax = $price / (1 + ($rate / 100));
+        } else {
+            // Product price in catalog is excluding tax.
+            $priceExcludingTax = $price;
+        }
+
+        $priceIncludingTax = round($priceExcludingTax + ($priceExcludingTax * ($rate / 100)), 2);
+
+        // 2 - display prices including tax
+        $catalogPriceInclTax = $this->getConfig('tax/display/type', $storeId) === 2;
+
+        return $catalogPriceInclTax ? $priceIncludingTax : $priceExcludingTax;
     }
 
     /**

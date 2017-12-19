@@ -42,7 +42,9 @@ Extension attributes:
       "thumbnail_resized_url": "string",
       "thumbnail_url": "string",
       "media_gallery_sizes": "Hatimeria\Reagento\Api\Data\GalleryMediaEntrySizeInterface[]",
-      "catalog_display_price": "string"
+      "catalog_display_price": "float",
+      "min_price": "float",
+      "max_price": "float",
       "breadcrumbs": "Hatimeria\Reagento\Api\Data\BreadcrumbInterface[]"
     }
     ```
