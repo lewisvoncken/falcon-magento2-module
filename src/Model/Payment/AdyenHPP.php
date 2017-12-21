@@ -11,7 +11,6 @@ use Magento\Framework\Translate\Inline\StateInterface;
 use Magento\Framework\Mail\Template\TransportBuilder;
 use Magento\Store\Model\StoreManagerInterface;
 use Adyen\Payment\Helper\Data as AdyenHelper;
-use Adyen\Payment\Gateway\Command\PayByMailCommand;
 
 /**
  * Class Payment
@@ -229,7 +228,7 @@ class AdyenHPP implements AdyenLinkInterface
         }
 
         $formFields['sessionValidity'] = date("c", strtotime("+". $sessionValidity. " days"));
-        $formFields['shopperReference']  = (!empty($customerId)) ? $customerId : PayByMailCommand::GUEST_ID . $realOrderId;
+        $formFields['shopperReference']  = (!empty($customerId)) ? $customerId : "guest_" . $realOrderId . "_" . $order->getStoreId();;
 
         // Sort the array by key using SORT_STRING order
         ksort($formFields, SORT_STRING);

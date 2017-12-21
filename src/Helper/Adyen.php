@@ -136,7 +136,6 @@ class Adyen extends AbstractHelper
                 $shopperEmail = $order->getCustomerEmail();
                 $customerId = $order->getCustomerId();
                 $shopperIP = $order->getRemoteIp();
-                $browserInfo = $_SERVER['HTTP_USER_AGENT'];
                 $deliveryDays = $this->adyenHelper->getAdyenHppConfigData('delivery_days');
                 $shopperLocale = trim($this->adyenHelper->getAdyenHppConfigData('shopper_locale'));
                 $shopperLocale = (!empty($shopperLocale)) ? $shopperLocale : $this->resolver->getLocale();
@@ -176,7 +175,6 @@ class Adyen extends AbstractHelper
                 $formFields['shopperLocale'] = $shopperLocale;
                 $formFields['countryCode'] = $countryCode;
                 $formFields['shopperIP'] = $shopperIP;
-                $formFields['browserInfo'] = $browserInfo;
                 $formFields['sessionValidity'] = date(
                     DATE_ATOM,
                     mktime(date("H") + 1, date("i"), date("s"), date("m"), date("j"), date("Y"))
@@ -192,10 +190,8 @@ class Adyen extends AbstractHelper
                     $formFields['shopperReference'] = $uniqueReference;
                 }
 
-                //blocked methods
                 $formFields['blockedMethods'] = "";
                 $formFields['resURL'] = $baseUrl . 'adyen/process/result';
-                $hmacKey = $this->adyenHelper->getHmac();
 
                 if ($brandCode) {
                     $formFields['brandCode'] = $brandCode;
@@ -245,6 +241,7 @@ class Adyen extends AbstractHelper
                 $signData = implode(":", array_map([$this, 'escapeString'],
                     array_merge(array_keys($formFields), array_values($formFields))));
 
+                $hmacKey = $this->adyenHelper->getHmac();
                 $merchantSig = base64_encode(hash_hmac('sha256', $signData, pack("H*", $hmacKey), true));
 
                 $formFields['merchantSig'] = $merchantSig;

@@ -296,6 +296,20 @@ class AdyenRedirect extends AbstractExtensibleModel implements AdyenRedirectInte
     }
 
     /**
+     * @param string $value
+     * @return AdyenRedirectInterface
+     */
+    public function setRecurringContract($value)
+    {
+        return $this->setData(self::RECURRING_CONTRACT, $value);
+    }
+
+    public function getRecurringContract()
+    {
+        return $this->_getData(self::RECURRING_CONTRACT);
+    }
+
+    /**
      * @param string $param
      * @return AdyenRedirectInterface
      */

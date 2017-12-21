@@ -7,12 +7,12 @@ use Magento\Framework\Model\AbstractExtensibleModel;
 class AdyenRedirectShopper extends AbstractExtensibleModel implements AdyenRedirectShopperInterface
 {
     /**
-     * @param string $param
+     * @param string $value
      * @return \Hatimeria\Reagento\Api\Data\AdyenRedirectShopperInterface
      */
-    public function setFirstName($param)
+    public function setFirstName($value)
     {
-        return $this->setData(self::FIRST_NAME, $param);
+        return $this->setData(self::FIRST_NAME, $value);
     }
 
     /**
@@ -24,12 +24,12 @@ class AdyenRedirectShopper extends AbstractExtensibleModel implements AdyenRedir
     }
 
     /**
-     * @param string $param
+     * @param string $value
      * @return \Hatimeria\Reagento\Api\Data\AdyenRedirectShopperInterface
      */
-    public function setGender($param)
+    public function setGender($value)
     {
-        return $this->setData(self::GENDER, $param);
+        return $this->setData(self::GENDER, $value);
     }
 
     /**
@@ -41,12 +41,12 @@ class AdyenRedirectShopper extends AbstractExtensibleModel implements AdyenRedir
     }
 
     /**
-     * @param string $param
+     * @param string $value
      * @return \Hatimeria\Reagento\Api\Data\AdyenRedirectShopperInterface
      */
-    public function setInfix($param)
+    public function setInfix($value)
     {
-        return $this->setData(self::INFIX, $param);
+        return $this->setData(self::INFIX, $value);
     }
 
     /**
@@ -61,9 +61,9 @@ class AdyenRedirectShopper extends AbstractExtensibleModel implements AdyenRedir
      * @param string $_getData (self::self::INFIXp;aram
      * @return \Hatimeria\Reagento\Api\Data\AdyenRedirectShopperInterface
      */
-    public function setLastName($param)
+    public function setLastName($value)
     {
-        return $this->setData(self::LAST_NAME, $param);
+        return $this->setData(self::LAST_NAME, $value);
     }
 
     /**
@@ -75,12 +75,12 @@ class AdyenRedirectShopper extends AbstractExtensibleModel implements AdyenRedir
     }
 
     /**
-     * @param string $param
+     * @param string $value
      * @return \Hatimeria\Reagento\Api\Data\AdyenRedirectShopperInterface
      */
-    public function setTelephoneNumber($param)
+    public function setTelephoneNumber($value)
     {
-        return $this->setData(self::TELEPHONE_NUMBER, $param);
+        return $this->setData(self::TELEPHONE_NUMBER, $value);
     }
 
     /**
@@ -92,16 +92,16 @@ class AdyenRedirectShopper extends AbstractExtensibleModel implements AdyenRedir
     }
 
     /**
-     * @param string $param
+     * @param integer $value
      * @return \Hatimeria\Reagento\Api\Data\AdyenRedirectShopperInterface
      */
-    public function setDateOfBirthDayOfMonth($param)
+    public function setDateOfBirthDayOfMonth($value)
     {
-        return $this->setData(self::DATE_OF_BIRTH_DAY_OF_MONTH, $param);
+        return $this->setData(self::DATE_OF_BIRTH_DAY_OF_MONTH, $value);
     }
 
     /**
-     * @return string
+     * @return integer
      */
     public function getDateOfBirthDayOfMonth()
     {
@@ -109,16 +109,16 @@ class AdyenRedirectShopper extends AbstractExtensibleModel implements AdyenRedir
     }
 
     /**
-     * @param string$param
+     * @param integer $value
      * @return \Hatimeria\Reagento\Api\Data\AdyenRedirectShopperInterface
      */
-    public function setDateOfBirthMonth($param)
+    public function setDateOfBirthMonth($value)
     {
-        return $this->setData(self::DATE_OF_BIRTH_MONTH, $param);
+        return $this->setData(self::DATE_OF_BIRTH_MONTH, $value);
     }
 
     /**
-     * @return string
+     * @return integer
      */
     public function getDateOfBirthMonth()
     {
@@ -126,16 +126,16 @@ class AdyenRedirectShopper extends AbstractExtensibleModel implements AdyenRedir
     }
 
     /**
-     * @param string$param
+     * @param integer $value
      * @return \Hatimeria\Reagento\Api\Data\AdyenRedirectShopperInterface
      */
-    public function setDateOfBirthYear($param)
+    public function setDateOfBirthYear($value)
     {
-        return $this->setData(self::DATE_OF_BIRTH_YEAR, $param);
+        return $this->setData(self::DATE_OF_BIRTH_YEAR, $value);
     }
 
     /**
-     * @return string
+     * @return integer
      */
     public function getDateOfBirthYear()
     {

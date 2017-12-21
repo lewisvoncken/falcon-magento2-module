@@ -158,7 +158,7 @@ class QuoteManagement
         $adyen->setBlockedMethods($fields['blockedMethods']);
         $adyen->setBrandCode(isset($fields['brandCode']) ? $fields['brandCode'] : null);
         $adyen->setCountryCode(isset($fields['countryCode']) ? $fields['countryCode'] : null);
-        $adyen->setCurrencyCode(isset($fields['countryCode']) ? $fields['countryCode'] : null);
+        $adyen->setCurrencyCode(isset($fields['currencyCode']) ? $fields['currencyCode'] : null);
         $adyen->setDeliveryAddress($this->getAddress($fields, 'deliveryAddress'));
         $adyen->setDfValue(isset($fields['dfValue']) ? $fields['dfValue'] : null);
         $adyen->setIssuerId(isset($fields['issuerId']) ? $fields['issuerId'] : null);
@@ -171,7 +171,7 @@ class QuoteManagement
         $adyen->setShipBeforeDate(isset($fields['shipBeforeDate']) ? $fields['shipBeforeDate'] : null);
         $adyen->setShopper($this->getShopper($fields));
         $adyen->setShopperEmail(isset($fields['shopperEmail']) ? $fields['shopperEmail'] : null);
-        $adyen->setShopperIP(isset($fields['shopperIP']) ? $fields['shopperIP'] : null);
+        $adyen->setShopperIp(isset($fields['shopperIP']) ? $fields['shopperIP'] : '');
         $adyen->setShopperLocale(isset($fields['shopperLocale']) ? $fields['shopperLocale'] : null);
         $adyen->setShopperReference(isset($fields['shopperReference']) ? $fields['shopperReference'] : null);
         $adyen->setSkinCode(isset($fields['skinCode']) ? $fields['skinCode'] : null);

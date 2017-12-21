@@ -15,12 +15,12 @@ class AdyenRedirectOpenInvoiceItem extends AbstractExtensibleModel implements Ad
     }
 
     /**
-     * @param string $param
+     * @param string $value
      * @return \Hatimeria\Reagento\Api\Data\AdyenRedirectOpenInvoiceItemInterface
      */
-    public function setCurrencyCode($param)
+    public function setCurrencyCode($value)
     {
-        return $this->setData(self::CURRENCY_CODE, $param);
+        return $this->setData(self::CURRENCY_CODE, $value);
     }
 
     /**
@@ -32,16 +32,16 @@ class AdyenRedirectOpenInvoiceItem extends AbstractExtensibleModel implements Ad
     }
 
     /**
-     * @param string $param
+     * @param string $value
      * @return \Hatimeria\Reagento\Api\Data\AdyenRedirectOpenInvoiceItemInterface
      */
-    public function setDescription($param)
+    public function setDescription($value)
     {
-        return $this->setData(self::DESCRIPTION, $param);
+        return $this->setData(self::DESCRIPTION, $value);
     }
 
     /**
-     * @return string
+     * @return integer
      */
     public function getItemAmount()
     {
@@ -49,16 +49,16 @@ class AdyenRedirectOpenInvoiceItem extends AbstractExtensibleModel implements Ad
     }
 
     /**
-     * @param string $param
+     * @param integer $value
      * @return \Hatimeria\Reagento\Api\Data\AdyenRedirectOpenInvoiceItemInterface
      */
-    public function setItemAmount($param)
+    public function setItemAmount($value)
     {
-        return $this->setData(self::ITEM_AMOUNT, $param);
+        return $this->setData(self::ITEM_AMOUNT, $value);
     }
 
     /**
-     * @return string
+     * @return integer
      */
     public function getItemVatAmount()
     {
@@ -66,12 +66,12 @@ class AdyenRedirectOpenInvoiceItem extends AbstractExtensibleModel implements Ad
     }
 
     /**
-     * @param string $param
+     * @param integer $value
      * @return \Hatimeria\Reagento\Api\Data\AdyenRedirectOpenInvoiceItemInterface
      */
-    public function setItemVatAmount($param)
+    public function setItemVatAmount($value)
     {
-        return $this->setData(self::ITEM_VAT_AMOUNT, $param);
+        return $this->setData(self::ITEM_VAT_AMOUNT, $value);
     }
 
     /**
@@ -83,16 +83,16 @@ class AdyenRedirectOpenInvoiceItem extends AbstractExtensibleModel implements Ad
     }
 
     /**
-     * @param string $param
+     * @param string $value
      * @return \Hatimeria\Reagento\Api\Data\AdyenRedirectOpenInvoiceItemInterface
      */
-    public function setItemVatPercentage($param)
+    public function setItemVatPercentage($value)
     {
-        return $this->setData(self::ITEM_VAT_PERCENTAGE, $param);
+        return $this->setData(self::ITEM_VAT_PERCENTAGE, $value);
     }
 
     /**
-     * @return string
+     * @return integer
      */
     public function getNumberOfItems()
     {
@@ -100,12 +100,12 @@ class AdyenRedirectOpenInvoiceItem extends AbstractExtensibleModel implements Ad
     }
 
     /**
-     * @param string $param
+     * @param integer $value
      * @return \Hatimeria\Reagento\Api\Data\AdyenRedirectOpenInvoiceItemInterface
      */
-    public function setNumberOfItems($param)
+    public function setNumberOfItems($value)
     {
-        return $this->setData(self::NUMBER_OF_ITEMS, $param);
+        return $this->setData(self::NUMBER_OF_ITEMS, $value);
     }
 
     /**
@@ -117,11 +117,11 @@ class AdyenRedirectOpenInvoiceItem extends AbstractExtensibleModel implements Ad
     }
 
     /**
-     * @param string $param
+     * @param string $value
      * @return \Hatimeria\Reagento\Api\Data\AdyenRedirectOpenInvoiceItemInterface
      */
-    public function setVatCategory($param)
+    public function setVatCategory($value)
     {
-        return $this->setData(self::VAT_CATEGORY, $param);
+        return $this->setData(self::VAT_CATEGORY, $value);
     }
 }

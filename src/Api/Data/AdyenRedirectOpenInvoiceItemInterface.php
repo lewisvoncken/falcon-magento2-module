@@ -17,10 +17,10 @@ interface AdyenRedirectOpenInvoiceItemInterface
     public function getCurrencyCode();
 
     /**
-     * @param string $param
+     * @param string $value
      * @return \Hatimeria\Reagento\Api\Data\AdyenRedirectOpenInvoiceItemInterface
      */
-    public function setCurrencyCode($param);
+    public function setCurrencyCode($value);
 
     /**
      * @return string | null
@@ -28,32 +28,32 @@ interface AdyenRedirectOpenInvoiceItemInterface
     public function getDescription();
 
     /**
-     * @param string $param
+     * @param string $value
      * @return \Hatimeria\Reagento\Api\Data\AdyenRedirectOpenInvoiceItemInterface
      */
-    public function setDescription($param);
+    public function setDescription($value);
 
     /**
-     * @return string | null
+     * @return integer | null
      */
     public function getItemAmount();
 
     /**
-     * @param string $param
+     * @param integer $value
      * @return \Hatimeria\Reagento\Api\Data\AdyenRedirectOpenInvoiceItemInterface
      */
-    public function setItemAmount($param);
+    public function setItemAmount($value);
 
     /**
-     * @return string | null
+     * @return integer | null
      */
     public function getItemVatAmount();
 
     /**
-     * @param string $param
+     * @param integer $value
      * @return \Hatimeria\Reagento\Api\Data\AdyenRedirectOpenInvoiceItemInterface
      */
-    public function setItemVatAmount($param);
+    public function setItemVatAmount($value);
 
     /**
      * @return string | null
@@ -61,21 +61,21 @@ interface AdyenRedirectOpenInvoiceItemInterface
     public function getItemVatPercentage();
 
     /**
-     * @param string $param
+     * @param string $value
      * @return \Hatimeria\Reagento\Api\Data\AdyenRedirectOpenInvoiceItemInterface
      */
-    public function setItemVatPercentage($param);
+    public function setItemVatPercentage($value);
 
     /**
-     * @return string | null
+     * @return integer | null
      */
     public function getNumberOfItems();
 
     /**
-     * @param string $param
+     * @param integer $value
      * @return \Hatimeria\Reagento\Api\Data\AdyenRedirectOpenInvoiceItemInterface
      */
-    public function setNumberOfItems($param);
+    public function setNumberOfItems($value);
 
     /**
      * @return string | null
@@ -83,8 +83,8 @@ interface AdyenRedirectOpenInvoiceItemInterface
     public function getVatCategory();
 
     /**
-     * @param string $param
+     * @param string $value
      * @return \Hatimeria\Reagento\Api\Data\AdyenRedirectOpenInvoiceItemInterface
      */
-    public function setVatCategory($param);
+    public function setVatCategory($value);
 }

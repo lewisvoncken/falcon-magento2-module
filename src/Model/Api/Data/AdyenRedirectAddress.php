@@ -7,12 +7,12 @@ use Magento\Framework\Model\AbstractExtensibleModel;
 class AdyenRedirectAddress extends AbstractExtensibleModel implements AdyenRedirectAddressInterface
 {
     /**
-     * @param string $data
+     * @param string $value
      * @return \Hatimeria\Reagento\Api\Data\AdyenRedirectAddressInterface
      */
-    public function setCity($data)
+    public function setCity($value)
     {
-        return $this->setData(self::CITY, $data);
+        return $this->setData(self::CITY, $value);
     }
 
     /**
@@ -24,12 +24,12 @@ class AdyenRedirectAddress extends AbstractExtensibleModel implements AdyenRedir
     }
 
     /**
-     * @param string $data
+     * @param string $value
      * @return \Hatimeria\Reagento\Api\Data\AdyenRedirectAddressInterface
      */
-    public function setCountry($data)
+    public function setCountry($value)
     {
-        return $this->setData(self::COUNTRY, $data);
+        return $this->setData(self::COUNTRY, $value);
     }
 
     /**
@@ -41,12 +41,12 @@ class AdyenRedirectAddress extends AbstractExtensibleModel implements AdyenRedir
     }
 
     /**
-     * @param string $data
+     * @param string $value
      * @return \Hatimeria\Reagento\Api\Data\AdyenRedirectAddressInterface
      */
-    public function setHouseNumberOrName($data)
+    public function setHouseNumberOrName($value)
     {
-        return $this->setData(self::HOUSE_NUMBER_OR_NAME, $data);
+        return $this->setData(self::HOUSE_NUMBER_OR_NAME, $value);
     }
 
     /**
@@ -58,12 +58,12 @@ class AdyenRedirectAddress extends AbstractExtensibleModel implements AdyenRedir
     }
 
     /**
-     * @param string $data
+     * @param string $value
      * @return \Hatimeria\Reagento\Api\Data\AdyenRedirectAddressInterface
      */
-    public function setPostalCode($data)
+    public function setPostalCode($value)
     {
-        return $this->setData(self::POSTAL_CODE, $data);
+        return $this->setData(self::POSTAL_CODE, $value);
     }
 
     /**
@@ -75,12 +75,12 @@ class AdyenRedirectAddress extends AbstractExtensibleModel implements AdyenRedir
     }
 
     /**
-     * @param string $data
+     * @param string $value
      * @return \Hatimeria\Reagento\Api\Data\AdyenRedirectAddressInterface
      */
-    public function setStateOrProvince($data)
+    public function setStateOrProvince($value)
     {
-        return $this->setData(self::STATE_OR_PROVINCE, $data);
+        return $this->setData(self::STATE_OR_PROVINCE, $value);
     }
 
     /**
@@ -92,12 +92,12 @@ class AdyenRedirectAddress extends AbstractExtensibleModel implements AdyenRedir
     }
 
     /**
-     * @param string $data
+     * @param string $value
      * @return \Hatimeria\Reagento\Api\Data\AdyenRedirectAddressInterface
      */
-    public function setStreet($data)
+    public function setStreet($value)
     {
-        return $this->setData(self::STREET, $data);
+        return $this->setData(self::STREET, $value);
     }
 
     /**

@@ -15,16 +15,16 @@ class AdyenRedirectOpenInvoice extends AbstractExtensibleModel implements AdyenR
     }
 
     /**
-     * @param \Hatimeria\Reagento\Api\Data\AdyenRedirectOpenInvoiceItemInterface[] $param
+     * @param \Hatimeria\Reagento\Api\Data\AdyenRedirectOpenInvoiceItemInterface[] $value
      * @return \Hatimeria\Reagento\Api\Data\AdyenRedirectOpenInvoiceInterface
      */
-    public function setItems($param)
+    public function setItems($value)
     {
-        return $this->setData(self::ITEMS, $param);
+        return $this->setData(self::ITEMS, $value);
     }
 
     /**
-     * @return string
+     * @return integer
      */
     public function getNumberOfLines()
     {
@@ -32,12 +32,12 @@ class AdyenRedirectOpenInvoice extends AbstractExtensibleModel implements AdyenR
     }
 
     /**
-     * @param $param
+     * @param integer $value
      * @return \Hatimeria\Reagento\Api\Data\AdyenRedirectOpenInvoiceInterface
      */
-    public function setNumberOfLines($param)
+    public function setNumberOfLines($value)
     {
-        return $this->setData(self::NUMBER_OF_LINES, $param);
+        return $this->setData(self::NUMBER_OF_LINES, $value);
     }
 
     /**
@@ -49,11 +49,11 @@ class AdyenRedirectOpenInvoice extends AbstractExtensibleModel implements AdyenR
     }
 
     /**
-     * @param $param
+     * @param $value
      * @return \Hatimeria\Reagento\Api\Data\AdyenRedirectOpenInvoiceInterface
      */
-    public function setRefundDescription($param)
+    public function setRefundDescription($value)
     {
-        return $this->setData(self::REFUND_DESCRIPTION, $param);
+        return $this->setData(self::REFUND_DESCRIPTION, $value);
     }
 }

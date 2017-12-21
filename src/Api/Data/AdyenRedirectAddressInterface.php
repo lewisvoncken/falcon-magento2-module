@@ -12,10 +12,10 @@ interface AdyenRedirectAddressInterface
     const STREET = 'street';
 
     /**
-     * @param string $data
+     * @param string $value
      * @return \Hatimeria\Reagento\Api\Data\AdyenRedirectAddressInterface
      */
-    public function setCity($data);
+    public function setCity($value);
 
     /**
      * @return string | null
@@ -23,10 +23,10 @@ interface AdyenRedirectAddressInterface
     public function getCity();
 
     /**
-     * @param string $data
+     * @param string $value
      * @return \Hatimeria\Reagento\Api\Data\AdyenRedirectAddressInterface
      */
-    public function setCountry($data);
+    public function setCountry($value);
 
     /**
      * @return string | null
@@ -34,10 +34,10 @@ interface AdyenRedirectAddressInterface
     public function getCountry();
 
     /**
-     * @param string $data
+     * @param string $value
      * @return \Hatimeria\Reagento\Api\Data\AdyenRedirectAddressInterface
      */
-    public function setHouseNumberOrName($data);
+    public function setHouseNumberOrName($value);
 
     /**
      * @return string | null
@@ -45,10 +45,10 @@ interface AdyenRedirectAddressInterface
     public function getHouseNumberOrName();
 
     /**
-     * @param string $data
+     * @param string $value
      * @return \Hatimeria\Reagento\Api\Data\AdyenRedirectAddressInterface
      */
-    public function setPostalCode($data);
+    public function setPostalCode($value);
 
     /**
      * @return string | null
@@ -56,10 +56,10 @@ interface AdyenRedirectAddressInterface
     public function getPostalCode();
 
     /**
-     * @param string $data
+     * @param string $value
      * @return \Hatimeria\Reagento\Api\Data\AdyenRedirectAddressInterface
      */
-    public function setStateOrProvince($data);
+    public function setStateOrProvince($value);
 
     /**
      * @return string | null
@@ -67,10 +67,10 @@ interface AdyenRedirectAddressInterface
     public function getStateOrProvince();
 
     /**
-     * @param string $data
+     * @param string $value
      * @return \Hatimeria\Reagento\Api\Data\AdyenRedirectAddressInterface
      */
-    public function setStreet($data);
+    public function setStreet($value);
 
     /**
      * @return string | null

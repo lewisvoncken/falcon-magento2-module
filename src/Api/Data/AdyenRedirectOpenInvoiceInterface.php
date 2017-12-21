@@ -14,21 +14,21 @@ interface AdyenRedirectOpenInvoiceInterface
     public function getItems();
 
     /**
-     * @param \Hatimeria\Reagento\Api\Data\AdyenRedirectOpenInvoiceItemInterface[] $param
+     * @param \Hatimeria\Reagento\Api\Data\AdyenRedirectOpenInvoiceItemInterface[] $value
      * @return \Hatimeria\Reagento\Api\Data\AdyenRedirectOpenInvoiceInterface
      */
-    public function setItems($param);
+    public function setItems($value);
 
     /**
-     * @return string | null
+     * @return integer | null
      */
     public function getNumberOfLines();
 
     /**
-     * @param $param
+     * @param integer $value
      * @return \Hatimeria\Reagento\Api\Data\AdyenRedirectOpenInvoiceInterface
      */
-    public function setNumberOfLines($param);
+    public function setNumberOfLines($value);
 
     /**
      * @return string | null
@@ -36,8 +36,8 @@ interface AdyenRedirectOpenInvoiceInterface
     public function getRefundDescription();
 
     /**
-     * @param $param
+     * @param string $value
      * @return \Hatimeria\Reagento\Api\Data\AdyenRedirectOpenInvoiceInterface
      */
-    public function setRefundDescription($param);
+    public function setRefundDescription($value);
 }

@@ -21,6 +21,7 @@ interface AdyenRedirectInterface
     const MERCHANT_REFERENCE = 'merchant_reference';
     const OPEN_INVOICE_DATA = 'open_invoice_data';
     const PAYMENT_AMOUNT = 'payment_amount';
+    const RECURRING_CONTRACT = 'recurring_contract';
     const RES_URL = 'res_url';
     const SESSION_VALIDITY = 'session_validity';
     const SHIP_BEFORE_DATE = 'ship_before_date';
@@ -33,10 +34,10 @@ interface AdyenRedirectInterface
     const MERCHANT_SIG = 'merchant_sig';
 
     /**
-     * @param $param
+     * @param $value
      * @return \Hatimeria\Reagento\Api\Data\AdyenRedirectInterface
      */
-    public function setIssuerUrl($param);
+    public function setIssuerUrl($value);
 
     /**
      * @return string | null
@@ -44,10 +45,10 @@ interface AdyenRedirectInterface
     public function getIssuerUrl();
 
     /**
-     * @param $param
+     * @param $value
      * @return \Hatimeria\Reagento\Api\Data\AdyenRedirectInterface
      */
-    public function setMd($param);
+    public function setMd($value);
 
     /**
      * @return string | null
@@ -55,10 +56,10 @@ interface AdyenRedirectInterface
     public function getMd();
 
     /**
-     * @param $param
+     * @param $value
      * @return \Hatimeria\Reagento\Api\Data\AdyenRedirectInterface
      */
-    public function setPaRequest($param);
+    public function setPaRequest($value);
 
     /**
      * @return string | null
@@ -66,10 +67,10 @@ interface AdyenRedirectInterface
     public function getPaRequest();
 
     /**
-     * @param $param
+     * @param $value
      * @return \Hatimeria\Reagento\Api\Data\AdyenRedirectInterface
      */
-    public function setTermUrl($param);
+    public function setTermUrl($value);
 
     /**
      * @return string | null
@@ -77,10 +78,10 @@ interface AdyenRedirectInterface
     public function getTermUrl();
 
     /**
-     * @param string $param
+     * @param string $value
      * @return \Hatimeria\Reagento\Api\Data\AdyenRedirectInterface
      */
-    public function setHppUrl($param);
+    public function setHppUrl($value);
 
     /**
      * @return string | null
@@ -99,10 +100,10 @@ interface AdyenRedirectInterface
     public function getBillingAddress();
 
     /**
-     * @param string $param
+     * @param string $value
      * @return \Hatimeria\Reagento\Api\Data\AdyenRedirectInterface
      */
-    public function setBlockedMethods($param);
+    public function setBlockedMethods($value);
 
     /**
      * @return string | null
@@ -110,10 +111,10 @@ interface AdyenRedirectInterface
     public function getBlockedMethods();
 
     /**
-     * @param string $param
+     * @param string $value
      * @return \Hatimeria\Reagento\Api\Data\AdyenRedirectInterface
      */
-    public function setBrandCode($param);
+    public function setBrandCode($value);
 
     /**
      * @return string | null
@@ -121,10 +122,10 @@ interface AdyenRedirectInterface
     public function getBrandCode();
 
     /**
-     * @param string $param
+     * @param string $value
      * @return \Hatimeria\Reagento\Api\Data\AdyenRedirectInterface
      */
-    public function setCountryCode($param);
+    public function setCountryCode($value);
 
     /**
      * @return string | null
@@ -132,10 +133,10 @@ interface AdyenRedirectInterface
     public function getCountryCode();
 
     /**
-     * @param string $param
+     * @param string $value
      * @return \Hatimeria\Reagento\Api\Data\AdyenRedirectInterface
      */
-    public function setCurrencyCode($param);
+    public function setCurrencyCode($value);
 
     /**
      * @return string | null
@@ -143,10 +144,10 @@ interface AdyenRedirectInterface
     public function getCurrencyCode();
 
     /**
-     * @param \Hatimeria\Reagento\Api\Data\AdyenRedirectAddressInterface $param
+     * @param \Hatimeria\Reagento\Api\Data\AdyenRedirectAddressInterface $value
      * @return \Hatimeria\Reagento\Api\Data\AdyenRedirectInterface
      */
-    public function setDeliveryAddress($param);
+    public function setDeliveryAddress($value);
 
     /**
      * @return \Hatimeria\Reagento\Api\Data\AdyenRedirectAddressInterface
@@ -154,10 +155,10 @@ interface AdyenRedirectInterface
     public function getDeliveryAddress();
 
     /**
-     * @param string $param
+     * @param string $value
      * @return \Hatimeria\Reagento\Api\Data\AdyenRedirectInterface
      */
-    public function setDfValue($param);
+    public function setDfValue($value);
 
     /**
      * @return string | null
@@ -165,10 +166,10 @@ interface AdyenRedirectInterface
     public function getDfValue();
 
     /**
-     * @param string $param
+     * @param string $value
      * @return \Hatimeria\Reagento\Api\Data\AdyenRedirectInterface
      */
-    public function setIssuerId($param);
+    public function setIssuerId($value);
 
     /**
      * @return string | null
@@ -176,10 +177,10 @@ interface AdyenRedirectInterface
     public function getIssuerId();
 
     /**
-     * @param string $param
+     * @param string $value
      * @return \Hatimeria\Reagento\Api\Data\AdyenRedirectInterface
      */
-    public function setMerchantAccount($param);
+    public function setMerchantAccount($value);
 
     /**
      * @return string | null
@@ -187,10 +188,10 @@ interface AdyenRedirectInterface
     public function getMerchantAccount();
 
     /**
-     * @param string $param
+     * @param string $value
      * @return \Hatimeria\Reagento\Api\Data\AdyenRedirectInterface
      */
-    public function setMerchantReference($param);
+    public function setMerchantReference($value);
 
     /**
      * @return string | null
@@ -198,10 +199,10 @@ interface AdyenRedirectInterface
     public function getMerchantReference();
 
     /**
-     * @param \Hatimeria\Reagento\Api\Data\AdyenRedirectOpenInvoiceInterface $param
+     * @param \Hatimeria\Reagento\Api\Data\AdyenRedirectOpenInvoiceInterface $value
      * @return \Hatimeria\Reagento\Api\Data\AdyenRedirectInterface
      */
-    public function setOpenInvoiceData($param);
+    public function setOpenInvoiceData($value);
 
     /**
      * @return \Hatimeria\Reagento\Api\Data\AdyenRedirectOpenInvoiceInterface
@@ -209,10 +210,10 @@ interface AdyenRedirectInterface
     public function getOpenInvoiceData();
 
     /**
-     * @param string $param
+     * @param string $value
      * @return \Hatimeria\Reagento\Api\Data\AdyenRedirectInterface
      */
-    public function setPaymentAmount($param);
+    public function setPaymentAmount($value);
 
     /**
      * @return string | null
@@ -220,10 +221,21 @@ interface AdyenRedirectInterface
     public function getPaymentAmount();
 
     /**
-     * @param string $param
+     * @param string $value
      * @return \Hatimeria\Reagento\Api\Data\AdyenRedirectInterface
      */
-    public function setResUrl($param);
+    public function setRecurringContract($value);
+
+    /**
+     * @return string | null
+     */
+    public function getRecurringContract();   
+
+    /**
+     * @param string $value
+     * @return \Hatimeria\Reagento\Api\Data\AdyenRedirectInterface
+     */
+    public function setResUrl($value);
 
     /**
      * @return string | null
@@ -231,10 +243,10 @@ interface AdyenRedirectInterface
     public function getResUrl();
 
     /**
-     * @param string $param
+     * @param string $value
      * @return \Hatimeria\Reagento\Api\Data\AdyenRedirectInterface
      */
-    public function setSessionValidity($param);
+    public function setSessionValidity($value);
 
     /**
      * @return string | null
@@ -242,10 +254,10 @@ interface AdyenRedirectInterface
     public function getSessionValidity();
 
     /**
-     * @param string $param
+     * @param string $value
      * @return \Hatimeria\Reagento\Api\Data\AdyenRedirectInterface
      */
-    public function setShipBeforeDate($param);
+    public function setShipBeforeDate($value);
 
     /**
      * @return string | null
@@ -253,10 +265,10 @@ interface AdyenRedirectInterface
     public function getShipBeforeDate();
 
     /**
-     * @param \Hatimeria\Reagento\Api\Data\AdyenRedirectShopperInterface $param
+     * @param \Hatimeria\Reagento\Api\Data\AdyenRedirectShopperInterface $value
      * @return \Hatimeria\Reagento\Api\Data\AdyenRedirectInterface
      */
-    public function setShopper($param);
+    public function setShopper($value);
 
     /**
      * @return \Hatimeria\Reagento\Api\Data\AdyenRedirectShopperInterface
@@ -264,10 +276,10 @@ interface AdyenRedirectInterface
     public function getShopper();
 
     /**
-     * @param string $param
+     * @param string $value
      * @return \Hatimeria\Reagento\Api\Data\AdyenRedirectInterface
      */
-    public function setShopperEmail($param);
+    public function setShopperEmail($value);
 
     /**
      * @return string | null
@@ -275,10 +287,10 @@ interface AdyenRedirectInterface
     public function getShopperEmail();
 
     /**
-     * @param string $param
+     * @param string $value
      * @return \Hatimeria\Reagento\Api\Data\AdyenRedirectInterface
      */
-    public function setShopperIp($param);
+    public function setShopperIp($value);
 
     /**
      * @return string | null
@@ -286,10 +298,10 @@ interface AdyenRedirectInterface
     public function getShopperIp();
 
     /**
-     * @param string $param
+     * @param string $value
      * @return \Hatimeria\Reagento\Api\Data\AdyenRedirectInterface
      */
-    public function setShopperLocale($param);
+    public function setShopperLocale($value);
 
     /**
      * @return string | null
@@ -297,10 +309,10 @@ interface AdyenRedirectInterface
     public function getShopperLocale();
 
     /**
-     * @param string $param
+     * @param string $value
      * @return \Hatimeria\Reagento\Api\Data\AdyenRedirectInterface
      */
-    public function setShopperReference($param);
+    public function setShopperReference($value);
 
     /**
      * @return string | null
@@ -308,10 +320,10 @@ interface AdyenRedirectInterface
     public function getShopperReference();
 
     /**
-     * @param string $param
+     * @param string $value
      * @return \Hatimeria\Reagento\Api\Data\AdyenRedirectInterface
      */
-    public function setSkinCode($param);
+    public function setSkinCode($value);
 
     /**
      * @return string | null
@@ -319,10 +331,10 @@ interface AdyenRedirectInterface
     public function getSkinCode();
 
     /**
-     * @param string $param
+     * @param string $value
      * @return \Hatimeria\Reagento\Api\Data\AdyenRedirectInterface
      */
-    public function setMerchantSig($param);
+    public function setMerchantSig($value);
 
     /**
      * @return string | null

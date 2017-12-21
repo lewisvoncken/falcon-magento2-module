@@ -14,10 +14,10 @@ interface AdyenRedirectShopperInterface
     const DATE_OF_BIRTH_YEAR = 'date_of_birth_year';
 
     /**
-     * @param string $param
+     * @param string $value
      * @return \Hatimeria\Reagento\Api\Data\AdyenRedirectShopperInterface
      */
-    public function setFirstName($param);
+    public function setFirstName($value);
 
     /**
      * @return string | null
@@ -25,10 +25,10 @@ interface AdyenRedirectShopperInterface
     public function getFirstName();
 
     /**
-     * @param string $param
+     * @param string $value
      * @return \Hatimeria\Reagento\Api\Data\AdyenRedirectShopperInterface
      */
-    public function setGender($param);
+    public function setGender($value);
 
     /**
      * @return string | null
@@ -36,10 +36,10 @@ interface AdyenRedirectShopperInterface
     public function getGender();
 
     /**
-     * @param string $param
+     * @param string $value
      * @return \Hatimeria\Reagento\Api\Data\AdyenRedirectShopperInterface
      */
-    public function setInfix($param);
+    public function setInfix($value);
 
     /**
      * @return string | null
@@ -47,10 +47,10 @@ interface AdyenRedirectShopperInterface
     public function getInfix();
 
     /**
-     * @param string $param
+     * @param string $value
      * @return \Hatimeria\Reagento\Api\Data\AdyenRedirectShopperInterface
      */
-    public function setLastName($param);
+    public function setLastName($value);
 
     /**
      * @return string | null
@@ -58,10 +58,10 @@ interface AdyenRedirectShopperInterface
     public function getLastName();
 
     /**
-     * @param string $param
+     * @param string $value
      * @return \Hatimeria\Reagento\Api\Data\AdyenRedirectShopperInterface
      */
-    public function setTelephoneNumber($param);
+    public function setTelephoneNumber($value);
 
     /**
      * @return string | null
@@ -69,35 +69,35 @@ interface AdyenRedirectShopperInterface
     public function getTelephoneNumber();
 
     /**
-     * @param string$param
+     * @param integer $value
      * @return \Hatimeria\Reagento\Api\Data\AdyenRedirectShopperInterface
      */
-    public function setDateOfBirthDayOfMonth($param);
+    public function setDateOfBirthDayOfMonth($value);
 
     /**
-     * @return string | null
+     * @return integer | null
      */
     public function getDateOfBirthDayOfMonth();
 
     /**
-     * @param string$param
+     * @param integer $value
      * @return \Hatimeria\Reagento\Api\Data\AdyenRedirectShopperInterface
      */
-    public function setDateOfBirthMonth($param);
+    public function setDateOfBirthMonth($value);
 
     /**
-     * @return string | null
+     * @return integer | null
      */
     public function getDateOfBirthMonth();
 
     /**
-     * @param string$param
+     * @param integer $value
      * @return \Hatimeria\Reagento\Api\Data\AdyenRedirectShopperInterface
      */
-    public function setDateOfBirthYear($param);
+    public function setDateOfBirthYear($value);
 
     /**
-     * @return string | null
+     * @return integer | null
      */
     public function getDateOfBirthYear();
 }
