@@ -183,7 +183,6 @@ class Validate3d extends AdyenValidate3d
                 if ($quote->getId()) {
                     $quote->setIsActive(1)->setReservedOrderId(null);
                     $quote->save();
-                    $this->_eventManager->dispatch('restore_quote', ['order' => $order, 'quote' => $quote]);
 
                     return true;
                 }
