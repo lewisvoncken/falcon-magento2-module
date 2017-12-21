@@ -153,6 +153,7 @@ class QuoteManagement
     {
         $fields = $this->adyenHelper->getRedirectHppFields($order, $payment);
 
+        $adyen->setHppUrl($this->adyenHelper->getHppUrl($order, $payment));
         $adyen->setBillingAddress($this->getAddress($fields, 'billingAddress'));
         $adyen->setBlockedMethods($fields['blockedMethods']);
         $adyen->setBrandCode(isset($fields['brandCode']) ? $fields['brandCode'] : null);

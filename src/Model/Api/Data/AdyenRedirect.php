@@ -6,10 +6,9 @@ use Magento\Framework\Model\AbstractExtensibleModel;
 
 class AdyenRedirect extends AbstractExtensibleModel implements AdyenRedirectInterface
 {
-
     /**
      * @param $param
-     * @return \Hatimeria\Reagento\Api\Data\AdyenRedirectInterface
+     * @return AdyenRedirectInterface
      */
     public function setIssuerUrl($param)
     {
@@ -26,7 +25,7 @@ class AdyenRedirect extends AbstractExtensibleModel implements AdyenRedirectInte
 
     /**
      * @param $param
-     * @return \Hatimeria\Reagento\Api\Data\AdyenRedirectInterface
+     * @return AdyenRedirectInterface
      */
     public function setMd($param)
     {
@@ -43,7 +42,7 @@ class AdyenRedirect extends AbstractExtensibleModel implements AdyenRedirectInte
 
     /**
      * @param $param
-     * @return \Hatimeria\Reagento\Api\Data\AdyenRedirectInterface
+     * @return AdyenRedirectInterface
      */
     public function setPaRequest($param)
     {
@@ -60,7 +59,7 @@ class AdyenRedirect extends AbstractExtensibleModel implements AdyenRedirectInte
 
     /**
      * @param $param
-     * @return \Hatimeria\Reagento\Api\Data\AdyenRedirectInterface
+     * @return AdyenRedirectInterface
      */
     public function setTermUrl($param)
     {
@@ -76,8 +75,25 @@ class AdyenRedirect extends AbstractExtensibleModel implements AdyenRedirectInte
     }
 
     /**
+     * @param string $param
+     * @return AdyenRedirectInterface
+     */
+    public function setHppUrl($param)
+    {
+        return $this->setData(self::HPP_URL, $param);
+    }
+
+    /**
+     * @return string | null
+     */
+    public function getHppUrl()
+    {
+        return $this->getData(self::HPP_URL);
+    }
+
+    /**
      * @param \Hatimeria\Reagento\Api\Data\AdyenRedirectAddressInterface $address
-     * @return \Hatimeria\Reagento\Api\Data\AdyenRedirectInterface
+     * @return AdyenRedirectInterface
      */
     public function setBillingAddress($address)
     {
@@ -94,7 +110,7 @@ class AdyenRedirect extends AbstractExtensibleModel implements AdyenRedirectInte
 
     /**
      * @param string $param
-     * @return \Hatimeria\Reagento\Api\Data\AdyenRedirectInterface
+     * @return AdyenRedirectInterface
      */
     public function setBlockedMethods($param)
     {
@@ -111,7 +127,7 @@ class AdyenRedirect extends AbstractExtensibleModel implements AdyenRedirectInte
 
     /**
      * @param string $param
-     * @return \Hatimeria\Reagento\Api\Data\AdyenRedirectInterface
+     * @return AdyenRedirectInterface
      */
     public function setBrandCode($param)
     {
@@ -128,7 +144,7 @@ class AdyenRedirect extends AbstractExtensibleModel implements AdyenRedirectInte
 
     /**
      * @param string $param
-     * @return \Hatimeria\Reagento\Api\Data\AdyenRedirectInterface
+     * @return AdyenRedirectInterface
      */
     public function setCountryCode($param)
     {
@@ -145,7 +161,7 @@ class AdyenRedirect extends AbstractExtensibleModel implements AdyenRedirectInte
 
     /**
      * @param string $param
-     * @return \Hatimeria\Reagento\Api\Data\AdyenRedirectInterface
+     * @return AdyenRedirectInterface
      */
     public function setCurrencyCode($param)
     {
@@ -162,7 +178,7 @@ class AdyenRedirect extends AbstractExtensibleModel implements AdyenRedirectInte
 
     /**
      * @param \Hatimeria\Reagento\Api\Data\AdyenRedirectAddressInterface $param
-     * @return \Hatimeria\Reagento\Api\Data\AdyenRedirectInterface
+     * @return AdyenRedirectInterface
      */
     public function setDeliveryAddress($param)
     {
@@ -179,7 +195,7 @@ class AdyenRedirect extends AbstractExtensibleModel implements AdyenRedirectInte
 
     /**
      * @param string $param
-     * @return \Hatimeria\Reagento\Api\Data\AdyenRedirectInterface
+     * @return AdyenRedirectInterface
      */
     public function setDfValue($param)
     {
@@ -196,7 +212,7 @@ class AdyenRedirect extends AbstractExtensibleModel implements AdyenRedirectInte
 
     /**
      * @param string $param
-     * @return \Hatimeria\Reagento\Api\Data\AdyenRedirectInterface
+     * @return AdyenRedirectInterface
      */
     public function setIssuerId($param)
     {
@@ -213,7 +229,7 @@ class AdyenRedirect extends AbstractExtensibleModel implements AdyenRedirectInte
 
     /**
      * @param string $param
-     * @return \Hatimeria\Reagento\Api\Data\AdyenRedirectInterface
+     * @return AdyenRedirectInterface
      */
     public function setMerchantAccount($param)
     {
@@ -230,7 +246,7 @@ class AdyenRedirect extends AbstractExtensibleModel implements AdyenRedirectInte
 
     /**
      * @param string $param
-     * @return \Hatimeria\Reagento\Api\Data\AdyenRedirectInterface
+     * @return AdyenRedirectInterface
      */
     public function setMerchantReference($param)
     {
@@ -247,7 +263,7 @@ class AdyenRedirect extends AbstractExtensibleModel implements AdyenRedirectInte
 
     /**
      * @param \Hatimeria\Reagento\Api\Data\AdyenRedirectOpenInvoiceInterface $param
-     * @return \Hatimeria\Reagento\Api\Data\AdyenRedirectInterface
+     * @return AdyenRedirectInterface
      */
     public function setOpenInvoiceData($param)
     {
@@ -264,7 +280,7 @@ class AdyenRedirect extends AbstractExtensibleModel implements AdyenRedirectInte
 
     /**
      * @param string $param
-     * @return \Hatimeria\Reagento\Api\Data\AdyenRedirectInterface
+     * @return AdyenRedirectInterface
      */
     public function setPaymentAmount($param)
     {
@@ -281,7 +297,7 @@ class AdyenRedirect extends AbstractExtensibleModel implements AdyenRedirectInte
 
     /**
      * @param string $param
-     * @return \Hatimeria\Reagento\Api\Data\AdyenRedirectInterface
+     * @return AdyenRedirectInterface
      */
     public function setResUrl($param)
     {
@@ -298,7 +314,7 @@ class AdyenRedirect extends AbstractExtensibleModel implements AdyenRedirectInte
 
     /**
      * @param string $param
-     * @return \Hatimeria\Reagento\Api\Data\AdyenRedirectInterface
+     * @return AdyenRedirectInterface
      */
     public function setSessionValidity($param)
     {
@@ -315,7 +331,7 @@ class AdyenRedirect extends AbstractExtensibleModel implements AdyenRedirectInte
 
     /**
      * @param string $param
-     * @return \Hatimeria\Reagento\Api\Data\AdyenRedirectInterface
+     * @return AdyenRedirectInterface
      */
     public function setShipBeforeDate($param)
     {
@@ -332,7 +348,7 @@ class AdyenRedirect extends AbstractExtensibleModel implements AdyenRedirectInte
 
     /**
      * @param \Hatimeria\Reagento\Api\Data\AdyenRedirectShopperInterface $param
-     * @return \Hatimeria\Reagento\Api\Data\AdyenRedirectInterface
+     * @return AdyenRedirectInterface
      */
     public function setShopper($param)
     {
@@ -349,7 +365,7 @@ class AdyenRedirect extends AbstractExtensibleModel implements AdyenRedirectInte
 
     /**
      * @param string $param
-     * @return \Hatimeria\Reagento\Api\Data\AdyenRedirectInterface
+     * @return AdyenRedirectInterface
      */
     public function setShopperEmail($param)
     {
@@ -366,7 +382,7 @@ class AdyenRedirect extends AbstractExtensibleModel implements AdyenRedirectInte
 
     /**
      * @param string $param
-     * @return \Hatimeria\Reagento\Api\Data\AdyenRedirectInterface
+     * @return AdyenRedirectInterface
      */
     public function setShopperIp($param)
     {
@@ -383,7 +399,7 @@ class AdyenRedirect extends AbstractExtensibleModel implements AdyenRedirectInte
 
     /**
      * @param string $param
-     * @return \Hatimeria\Reagento\Api\Data\AdyenRedirectInterface
+     * @return AdyenRedirectInterface
      */
     public function setShopperLocale($param)
     {
@@ -400,7 +416,7 @@ class AdyenRedirect extends AbstractExtensibleModel implements AdyenRedirectInte
 
     /**
      * @param string $param
-     * @return \Hatimeria\Reagento\Api\Data\AdyenRedirectInterface
+     * @return AdyenRedirectInterface
      */
     public function setShopperReference($param)
     {
@@ -417,7 +433,7 @@ class AdyenRedirect extends AbstractExtensibleModel implements AdyenRedirectInte
 
     /**
      * @param string $param
-     * @return \Hatimeria\Reagento\Api\Data\AdyenRedirectInterface
+     * @return AdyenRedirectInterface
      */
     public function setSkinCode($param)
     {
@@ -434,7 +450,7 @@ class AdyenRedirect extends AbstractExtensibleModel implements AdyenRedirectInte
 
     /**
      * @param string $param
-     * @return \Hatimeria\Reagento\Api\Data\AdyenRedirectInterface
+     * @return AdyenRedirectInterface
      */
     public function setMerchantSig($param)
     {

@@ -8,6 +8,7 @@ interface AdyenRedirectInterface
     const MD = 'md';
     const PA_REQUEST = 'pa_request';
     const TERM_URL = 'term_url';
+    const HPP_URL = 'hpp_url';
     const BILLING_ADDRESS = 'billing_address';
     const BLOCKED_METHODS = 'blocked_methods';
     const BRAND_CODE = 'brand_code';
@@ -74,6 +75,17 @@ interface AdyenRedirectInterface
      * @return string | null
      */
     public function getTermUrl();
+
+    /**
+     * @param string $param
+     * @return \Hatimeria\Reagento\Api\Data\AdyenRedirectInterface
+     */
+    public function setHppUrl($param);
+
+    /**
+     * @return string | null
+     */
+    public function getHppUrl();
 
     /**
      * @param \Hatimeria\Reagento\Api\Data\AdyenRedirectAddressInterface $address

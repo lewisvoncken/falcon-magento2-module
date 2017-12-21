@@ -61,6 +61,65 @@ class Adyen extends AbstractHelper
     /**
      * @param OrderInterface|Order $order
      * @param OrderPaymentInterface|Order\Payment $payment
+     * @return string
+     */
+    public function getHppUrl(OrderInterface $order, OrderPaymentInterface $payment)
+    {
+        $url = "";
+        if (!$payment) {
+            return $url;
+        }
+
+        try {
+            $paymentRoutine = $this->adyenHelper->getAdyenHppConfigData('payment_routine');
+            $paymentMethodSelectionOnAdyen = $this->adyenHelper->getAdyenHppConfigDataFlag('payment_selection_on_adyen');
+            switch ($this->adyenHelper->isDemoMode()) {
+                case true:
+                    if ($paymentRoutine == 'single' && $paymentMethodSelectionOnAdyen) {
+                        $url = 'https://test.adyen.com/hpp/pay.shtml';
+                    } else {
+
+                        if ($paymentMethodSelectionOnAdyen) {
+                            $url = 'https://test.adyen.com/hpp/select.shtml';
+                        } else {
+                            if ($this->adyenHelper->isPaymentMethodOpenInvoiceMethod(
+                                $order->getPayment()->getAdditionalInformation('brand_code')
+                            )) {
+                                $url = "https://test.adyen.com/hpp/skipDetails.shtml";
+                            } else {
+                                $url = "https://test.adyen.com/hpp/details.shtml";
+                            }
+                        }
+                    }
+                    break;
+                default:
+                    if ($paymentRoutine == 'single' && $paymentMethodSelectionOnAdyen) {
+                        $url = 'https://live.adyen.com/hpp/pay.shtml';
+                    } else {
+                        if ($paymentMethodSelectionOnAdyen) {
+                            $url = 'https://live.adyen.com/hpp/select.shtml';
+                        } else {
+                            if ($this->adyenHelper->isPaymentMethodOpenInvoiceMethod(
+                                $order->getPayment()->getAdditionalInformation('brand_code')
+                            )) {
+                                $url = "https://live.adyen.com/hpp/skipDetails.shtml";
+                            } else {
+                                $url = "https://live.adyen.com/hpp/details.shtml";
+                            }
+                        }
+                    }
+                    break;
+            }
+        } catch (\Exception $e) {
+            $this->_logger->critical($e);
+        }
+
+        return $url;
+    }
+
+    /**
+     * @param OrderInterface|Order $order
+     * @param OrderPaymentInterface|Order\Payment $payment
      * @return array
      */
     public function getRedirectHppFields(OrderInterface $order, OrderPaymentInterface $payment)
@@ -69,20 +128,20 @@ class Adyen extends AbstractHelper
         try {
             if ($payment) {
 
-                $realOrderId       = $order->getRealOrderId();
+                $realOrderId = $order->getRealOrderId();
                 $orderCurrencyCode = $order->getOrderCurrencyCode();
-                $skinCode          = trim($this->adyenHelper->getAdyenHppConfigData('skin_code'));
-                $amount            = $this->adyenHelper->formatAmount($order->getGrandTotal(), $orderCurrencyCode);
-                $merchantAccount   = trim($this->adyenHelper->getAdyenAbstractConfigData('merchant_account'));
-                $shopperEmail      = $order->getCustomerEmail();
-                $customerId        = $order->getCustomerId();
-                $shopperIP         = $order->getRemoteIp();
-                $browserInfo       = $_SERVER['HTTP_USER_AGENT'];
-                $deliveryDays      = $this->adyenHelper->getAdyenHppConfigData('delivery_days');
-                $shopperLocale     = trim($this->adyenHelper->getAdyenHppConfigData('shopper_locale'));
-                $shopperLocale     = (!empty($shopperLocale)) ? $shopperLocale : $this->resolver->getLocale();
-                $countryCode       = trim($this->adyenHelper->getAdyenHppConfigData('country_code'));
-                $countryCode       = (!empty($countryCode)) ? $countryCode : false;
+                $skinCode = trim($this->adyenHelper->getAdyenHppConfigData('skin_code'));
+                $amount = $this->adyenHelper->formatAmount($order->getGrandTotal(), $orderCurrencyCode);
+                $merchantAccount = trim($this->adyenHelper->getAdyenAbstractConfigData('merchant_account'));
+                $shopperEmail = $order->getCustomerEmail();
+                $customerId = $order->getCustomerId();
+                $shopperIP = $order->getRemoteIp();
+                $browserInfo = $_SERVER['HTTP_USER_AGENT'];
+                $deliveryDays = $this->adyenHelper->getAdyenHppConfigData('delivery_days');
+                $shopperLocale = trim($this->adyenHelper->getAdyenHppConfigData('shopper_locale'));
+                $shopperLocale = (!empty($shopperLocale)) ? $shopperLocale : $this->resolver->getLocale();
+                $countryCode = trim($this->adyenHelper->getAdyenHppConfigData('country_code'));
+                $countryCode = (!empty($countryCode)) ? $countryCode : false;
 
                 $recurringType = trim($this->adyenHelper->getAdyenAbstractConfigData('recurring_type'));
                 $brandCode = $payment->getAdditionalInformation(AdyenHppDataAssignObserver::BRAND_CODE);
@@ -105,11 +164,11 @@ class Adyen extends AbstractHelper
 
                 $formFields = [];
 
-                $formFields['merchantAccount']   = $merchantAccount;
+                $formFields['merchantAccount'] = $merchantAccount;
                 $formFields['merchantReference'] = $realOrderId;
-                $formFields['paymentAmount']     = (int)$amount;
-                $formFields['currencyCode']      = $orderCurrencyCode;
-                $formFields['shipBeforeDate']    = date(
+                $formFields['paymentAmount'] = (int)$amount;
+                $formFields['currencyCode'] = $orderCurrencyCode;
+                $formFields['shipBeforeDate'] = date(
                     "Y-m-d",
                     mktime(date("H"), date("i"), date("s"), date("m"), date("j") + $deliveryDays, date("Y"))
                 );
@@ -122,15 +181,15 @@ class Adyen extends AbstractHelper
                     DATE_ATOM,
                     mktime(date("H") + 1, date("i"), date("s"), date("m"), date("j"), date("Y"))
                 );
-                $formFields['shopperEmail']      = $shopperEmail;
+                $formFields['shopperEmail'] = $shopperEmail;
 
                 if ($customerId > 0) {
                     $formFields['recurringContract'] = $recurringType;
-                    $formFields['shopperReference']  = $customerId;
+                    $formFields['shopperReference'] = $customerId;
                 } else {
                     // required for openinvoice payment methods use unique id
-                    $uniqueReference = "guest_" . $realOrderId .  "_" . $order->getStoreId();
-                    $formFields['shopperReference']  = $uniqueReference;
+                    $uniqueReference = "guest_" . $realOrderId . "_" . $order->getStoreId();
+                    $formFields['shopperReference'] = $uniqueReference;
                 }
 
                 //blocked methods
@@ -139,11 +198,11 @@ class Adyen extends AbstractHelper
                 $hmacKey = $this->adyenHelper->getHmac();
 
                 if ($brandCode) {
-                    $formFields['brandCode']     = $brandCode;
+                    $formFields['brandCode'] = $brandCode;
                 }
 
                 if ($issuerId) {
-                    $formFields['issuerId']      = $issuerId;
+                    $formFields['issuerId'] = $issuerId;
                 }
 
                 $formFields = $this->setBillingAddressData($order, $formFields);
@@ -161,14 +220,14 @@ class Adyen extends AbstractHelper
                 // For klarna acceptPrivacyPolicy to skip HPP page
                 if ($brandCode == "klarna") {
                     //  // needed for DE and AT
-                    $formFields['klarna.acceptPrivacyPolicy']   = 'true';
+                    $formFields['klarna.acceptPrivacyPolicy'] = 'true';
                 }
 
                 // OpenInvoice don't allow to edit billing and delivery items
 
                 if ($this->adyenHelper->isPaymentMethodOpenInvoiceMethod($brandCode)) {
                     // don't allow editable shipping/delivery address
-                    $formFields['billingAddressType']  = "1";
+                    $formFields['billingAddressType'] = "1";
                     $formFields['deliveryAddressType'] = "1";
 
                     // make setting to make this optional
@@ -188,10 +247,10 @@ class Adyen extends AbstractHelper
 
                 $merchantSig = base64_encode(hash_hmac('sha256', $signData, pack("H*", $hmacKey), true));
 
-                $formFields['merchantSig']      = $merchantSig;
+                $formFields['merchantSig'] = $merchantSig;
             }
 
-        } catch(Exception $e) {
+        } catch (\Exception $e) {
             // do nothing for now
         }
         return $formFields;
@@ -199,7 +258,7 @@ class Adyen extends AbstractHelper
 
     /**
      * @param OrderInterface|Order $order
-     * @param array$formFields
+     * @param array $formFields
      * @return array
      */
     protected function setBillingAddressData(OrderInterface $order, $formFields)
@@ -226,7 +285,7 @@ class Adyen extends AbstractHelper
      * Set Shipping Address data
      *
      * @param OrderInterface|Order $order
-     * @param array$formFields
+     * @param array $formFields
      * @return array
      */
     protected function setShippingAddressData(OrderInterface $order, $formFields)
@@ -305,7 +364,7 @@ class Adyen extends AbstractHelper
                     $this->adyenHelper->formatAmount(
                         $item->getPriceInclTax(),
                         $currency
-                    ) -  $this->adyenHelper->formatAmount(
+                    ) - $this->adyenHelper->formatAmount(
                         $item->getPrice(),
                         $currency
                     ) : $this->adyenHelper->formatAmount($item->getTaxAmount(), $currency);
@@ -314,7 +373,7 @@ class Adyen extends AbstractHelper
             // Calculate vat percentage
             $itemVatPercentage = $this->adyenHelper->getMinorUnitTaxPercent($item->getTaxPercent());
 
-            $numberOfItems = (int) $item->getQtyOrdered();
+            $numberOfItems = (int)$item->getQtyOrdered();
 
             $formFields = $this->setOpenInvoiceLineData(
                 $order,
@@ -378,7 +437,7 @@ class Adyen extends AbstractHelper
                 $itemVatAmount, $itemVatPercentage, $numberOfItems);
         }
 
-        $formFields['openinvoicedata.refundDescription'] = "Refund / Correction for ".$formFields['merchantReference'];
+        $formFields['openinvoicedata.refundDescription'] = "Refund / Correction for " . $formFields['merchantReference'];
         $formFields['openinvoicedata.numberOfLines'] = $count;
 
         return $formFields;
@@ -410,7 +469,7 @@ class Adyen extends AbstractHelper
         $itemVatPercentage,
         $numberOfItems
     ) {
-        $linename = "line".$count;
+        $linename = "line" . $count;
         $formFields['openinvoicedata.' . $linename . '.currencyCode'] = $currencyCode;
         $formFields['openinvoicedata.' . $linename . '.description'] = $description;
         $formFields['openinvoicedata.' . $linename . '.itemAmount'] = $itemAmount;
