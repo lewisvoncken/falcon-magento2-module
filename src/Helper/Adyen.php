@@ -18,6 +18,13 @@ use Magento\Tax\Model\Calculation as TaxCalculation;
 
 class Adyen extends AbstractHelper
 {
+    const ENDPOINT_PAY = 'pay';
+    const ENDPOINT_SELECT = 'select';
+    const ENDPOINT_SKIP_DETAILS = 'skipDetails';
+    const ENDPOINT_DETAILS = 'details';
+
+    const EMPTY_FIELD = 'NA';
+
     /** @var StoreManagerInterface */
     protected $storeManager;
 
@@ -73,48 +80,24 @@ class Adyen extends AbstractHelper
         try {
             $paymentRoutine = $this->adyenHelper->getAdyenHppConfigData('payment_routine');
             $paymentMethodSelectionOnAdyen = $this->adyenHelper->getAdyenHppConfigDataFlag('payment_selection_on_adyen');
-            switch ($this->adyenHelper->isDemoMode()) {
-                case true:
-                    if ($paymentRoutine == 'single' && $paymentMethodSelectionOnAdyen) {
-                        $url = 'https://test.adyen.com/hpp/pay.shtml';
-                    } else {
+            $subdomain = $this->adyenHelper->isDemoMode() ? 'test' : 'live';
+            $brandCode = $order->getPayment()->getAdditionalInformation('brand_code');
+            $url = "https://{$subdomain}.adyen.com/hpp/";
 
-                        if ($paymentMethodSelectionOnAdyen) {
-                            $url = 'https://test.adyen.com/hpp/select.shtml';
-                        } else {
-                            if ($this->adyenHelper->isPaymentMethodOpenInvoiceMethod(
-                                $order->getPayment()->getAdditionalInformation('brand_code')
-                            )) {
-                                $url = "https://test.adyen.com/hpp/skipDetails.shtml";
-                            } else {
-                                $url = "https://test.adyen.com/hpp/details.shtml";
-                            }
-                        }
-                    }
-                    break;
-                default:
-                    if ($paymentRoutine == 'single' && $paymentMethodSelectionOnAdyen) {
-                        $url = 'https://live.adyen.com/hpp/pay.shtml';
-                    } else {
-                        if ($paymentMethodSelectionOnAdyen) {
-                            $url = 'https://live.adyen.com/hpp/select.shtml';
-                        } else {
-                            if ($this->adyenHelper->isPaymentMethodOpenInvoiceMethod(
-                                $order->getPayment()->getAdditionalInformation('brand_code')
-                            )) {
-                                $url = "https://live.adyen.com/hpp/skipDetails.shtml";
-                            } else {
-                                $url = "https://live.adyen.com/hpp/details.shtml";
-                            }
-                        }
-                    }
-                    break;
+            if ($paymentRoutine == 'single' && $paymentMethodSelectionOnAdyen) {
+                $endpoint = self::ENDPOINT_PAY;
+            } elseif ($paymentMethodSelectionOnAdyen) {
+                $endpoint = self::ENDPOINT_SELECT;
+            } elseif ($this->adyenHelper->isPaymentMethodOpenInvoiceMethod($brandCode)) {
+                $endpoint = self::ENDPOINT_SKIP_DETAILS;
+            } else {
+                $endpoint = self::ENDPOINT_DETAILS;
             }
         } catch (\Exception $e) {
             $this->_logger->critical($e);
         }
 
-        return $url;
+        return $url . $endpoint . '.html';
     }
 
     /**
@@ -137,8 +120,7 @@ class Adyen extends AbstractHelper
                 $customerId = $order->getCustomerId();
                 $shopperIP = $order->getRemoteIp();
                 $deliveryDays = $this->adyenHelper->getAdyenHppConfigData('delivery_days');
-                $shopperLocale = trim($this->adyenHelper->getAdyenHppConfigData('shopper_locale'));
-                $shopperLocale = (!empty($shopperLocale)) ? $shopperLocale : $this->resolver->getLocale();
+                $shopperLocale = trim($this->adyenHelper->getAdyenHppConfigData('shopper_locale')) ?: $this->resolver->getLocale();
                 $countryCode = trim($this->adyenHelper->getAdyenHppConfigData('country_code'));
                 $countryCode = (!empty($countryCode)) ? $countryCode : false;
 
@@ -315,29 +297,10 @@ class Adyen extends AbstractHelper
             $formFields[$prefix . '.houseNumberOrName'] = "NA";
         }
 
-        if (trim($address->getCity()) == "") {
-            $formFields[$prefix . '.city'] = "NA";
-        } else {
-            $formFields[$prefix . '.city'] = trim($address->getCity());
-        }
-
-        if (trim($address->getPostcode()) == "") {
-            $formFields[$prefix . '.postalCode'] = "NA";
-        } else {
-            $formFields[$prefix . '.postalCode'] = trim($address->getPostcode());
-        }
-
-        if (trim($address->getRegionCode()) == "") {
-            $formFields[$prefix . '.stateOrProvince'] = "NA";
-        } else {
-            $formFields[$prefix . '.stateOrProvince'] = trim($address->getRegionCode());
-        }
-
-        if (trim($address->getCountryId()) == "") {
-            $formFields[$prefix . '.country'] = "NA";
-        } else {
-            $formFields[$prefix . '.country'] = trim($address->getCountryId());
-        }
+        $formFields[$prefix . '.city'] = trim($address->getCity()) ?: self::EMPTY_FIELD;
+        $formFields[$prefix . '.postalCode'] = trim($address->getPostcode()) ?: self::EMPTY_FIELD;
+        $formFields[$prefix . '.stateOrProvince'] = trim($address->getRegionCode()) ?: self::EMPTY_FIELD;
+        $formFields[$prefix . '.country'] = trim($address->getCountryId()) ?: self::EMPTY_FIELD;
 
         return $formFields;
     }
@@ -352,6 +315,27 @@ class Adyen extends AbstractHelper
         $count = 0;
         $currency = $order->getOrderCurrencyCode();
 
+        $formFields = $this->setOpenInvoiceItems($order, $formFields, $currency, $count);
+        $formFields = $this->setOpenInvoiceDiscount($order, $formFields, $currency, $count);
+        $formFields = $this->setOpenInvoiceShipping($order, $formFields, $currency, $count);
+
+        $formFields['openinvoicedata.refundDescription'] = "Refund / Correction for " . $formFields['merchantReference'];
+        $formFields['openinvoicedata.numberOfLines'] = $count;
+
+        return $formFields;
+    }
+
+    /**
+     * Set open invoice data with order items
+     *
+     * @param OrderInterface $order
+     * @param array $formFields
+     * @param string $currency
+     * @param int $count
+     * @return array
+     */
+    protected function setOpenInvoiceItems(OrderInterface $order, $formFields, $currency, &$count)
+    {
         foreach ($order->getAllVisibleItems() as $item) {
             ++$count;
             $description = str_replace("\n", '', trim($item->getName()));
@@ -385,8 +369,20 @@ class Adyen extends AbstractHelper
             );
         }
 
+        return $formFields;
+    }
 
-        // Discount cost
+    /**
+     * Set open invoice data with discount
+     *
+     * @param OrderInterface $order
+     * @param array $formFields
+     * @param string $currency
+     * @param int $count
+     * @return array
+     */
+    public function setOpenInvoiceDiscount(OrderInterface $order, $formFields, $currency, &$count)
+    {
         if ($order->getDiscountAmount() > 0 || $order->getDiscountAmount() < 0) {
             ++$count;
             $description = __('Total Discount');
@@ -408,6 +404,20 @@ class Adyen extends AbstractHelper
             );
         }
 
+        return $formFields;
+    }
+
+    /**
+     * Set open invoice data with shipping
+     *
+     * @param OrderInterface $order
+     * @param array $formFields
+     * @param string $currency
+     * @param int $count
+     * @return array
+     */
+    public function setOpenInvoiceShipping(OrderInterface $order, $formFields, $currency, &$count)
+    {
         // Shipping cost
         if ($order->getShippingAmount() > 0 || $order->getShippingTaxAmount() > 0) {
             ++$count;
@@ -433,9 +443,6 @@ class Adyen extends AbstractHelper
             $formFields = $this->setOpenInvoiceLineData($order, $formFields, $count, $currency, $description, $itemAmount,
                 $itemVatAmount, $itemVatPercentage, $numberOfItems);
         }
-
-        $formFields['openinvoicedata.refundDescription'] = "Refund / Correction for " . $formFields['merchantReference'];
-        $formFields['openinvoicedata.numberOfLines'] = $count;
 
         return $formFields;
     }

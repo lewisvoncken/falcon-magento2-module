@@ -155,27 +155,31 @@ class QuoteManagement
 
         $adyen->setHppUrl($this->adyenHelper->getHppUrl($order, $payment));
         $adyen->setBillingAddress($this->getAddress($fields, 'billingAddress'));
-        $adyen->setBlockedMethods($fields['blockedMethods']);
-        $adyen->setBrandCode(isset($fields['brandCode']) ? $fields['brandCode'] : null);
-        $adyen->setCountryCode(isset($fields['countryCode']) ? $fields['countryCode'] : null);
-        $adyen->setCurrencyCode(isset($fields['currencyCode']) ? $fields['currencyCode'] : null);
         $adyen->setDeliveryAddress($this->getAddress($fields, 'deliveryAddress'));
-        $adyen->setDfValue(isset($fields['dfValue']) ? $fields['dfValue'] : null);
-        $adyen->setIssuerId(isset($fields['issuerId']) ? $fields['issuerId'] : null);
-        $adyen->setMerchantAccount(isset($fields['merchantAccount']) ? $fields['merchantAccount'] : null);
-        $adyen->setMerchantReference(isset($fields['merchantReference']) ? $fields['merchantReference'] : null);
         $adyen->setOpenInvoiceData($this->getOpenInvoice($fields));
-        $adyen->setPaymentAmount(isset($fields['paymentAmount']) ? $fields['paymentAmount'] : null);
-        $adyen->setResUrl(isset($fields['resURL']) ? $fields['resURL'] : null);
-        $adyen->setSessionValidity(isset($fields['sessionValidity']) ? $fields['sessionValidity'] : null);
-        $adyen->setShipBeforeDate(isset($fields['shipBeforeDate']) ? $fields['shipBeforeDate'] : null);
         $adyen->setShopper($this->getShopper($fields));
-        $adyen->setShopperEmail(isset($fields['shopperEmail']) ? $fields['shopperEmail'] : null);
+        $adyen->setBlockedMethods($fields['blockedMethods']);
+        $adyen->setResUrl(isset($fields['resURL']) ? $fields['resURL'] : null);
         $adyen->setShopperIp(isset($fields['shopperIP']) ? $fields['shopperIP'] : '');
-        $adyen->setShopperLocale(isset($fields['shopperLocale']) ? $fields['shopperLocale'] : null);
-        $adyen->setShopperReference(isset($fields['shopperReference']) ? $fields['shopperReference'] : null);
-        $adyen->setSkinCode(isset($fields['skinCode']) ? $fields['skinCode'] : null);
-        $adyen->setMerchantSig(isset($fields['merchantSig']) ? $fields['merchantSig'] : null);
+
+        $fieldsToCopy = [
+            'brandCode',
+            'countryCode',
+            'currencyCode',
+            'dfValue',
+            'issuerId',
+            'merchantAccount',
+            'merchantReference',
+            'paymentAmount',
+            'sessionValidity',
+            'shipBeforeDate',
+            'shopperEmail',
+            'shopperLocale',
+            'shopperReference',
+            'skinCode',
+            'merchantSig'
+        ];
+        $this->populateObjectFromArray($adyen, $fields, $fieldsToCopy);
     }
 
     /**
@@ -186,13 +190,16 @@ class QuoteManagement
     {
         /** @var AdyenRedirectShopperInterface $shopper */
         $shopper = $this->adyenRedirectShopperFactory->create();
-        $shopper->setFirstName(isset($fields['shopper.firstName']) ? $fields['shopper.firstName'] : null);
-        $shopper->setLastName(isset($fields['shopper.lastName']) ? $fields['shopper.lastName'] : null);
-        $shopper->setGender(isset($fields['shopper.gender']) ? $fields['shopper.gender'] : null);
-        $shopper->setTelephoneNumber(isset($fields['shopper.telephoneNumber']) ? $fields['shopper.telephoneNumber'] : null);
-        $shopper->setDateOfBirthDayOfMonth(isset($fields['shopper.dateOfBirthDayOfMonth']) ? $fields['shopper.dateOfBirthDayOfMonth'] : null);
-        $shopper->setDateOfBirthMonth(isset($fields['shopper.dateOfBirthMonth']) ? $fields['shopper.dateOfBirthMonth'] : null);
-        $shopper->setDateOfBirthYear(isset($fields['shopper.dateOfBirthYear']) ? $fields['shopper.dateOfBirthYear'] : null);
+        $fieldsToCopy = [
+            'firstName',
+            'lastName',
+            'gender',
+            'telephoneNumber',
+            'dateOfBirthDayOfMonth',
+            'dateOfBirthMonth',
+            'dateOfBirthYear'
+        ];
+        $this->populateObjectFromArray($shopper, $fields, $fieldsToCopy, 'shopper.');
 
         return $shopper;
     }
@@ -206,13 +213,15 @@ class QuoteManagement
     {
         /** @var AdyenRedirectAddressInterface $billing */
         $address = $this->adyenRedirectAddressFactory->create();
-        $address->setCity(isset($fields[$prefix . '.city']) ? $fields[$prefix . '.city'] : null);
-        $address->setCountry(isset($fields[$prefix . '.country']) ? $fields[$prefix . '.country'] : null);
-        $address->setStreet(isset($fields[$prefix . '.street']) ? $fields[$prefix . '.street'] : null);
-        $address->setPostalCode(isset($fields[$prefix . '.postalCode']) ? $fields[$prefix . '.postalCode'] : null);
-        $address->setHouseNumberOrName(isset($fields[$prefix . '.houseNumberOrName']) ? $fields[$prefix . '.houseNumberOrName'] : null);
-        $address->setStateOrProvince(isset($fields[$prefix . '.stateOrProvince']) ? $fields[$prefix . '.stateOrProvince'] : null);
-
+        $fieldsToCopy = [
+            'city',
+            'country',
+            'street',
+            'postalCode',
+            'houseNumberOrName',
+            'stateOrProvince'
+        ];
+        $this->populateObjectFromArray($address, $fields, $fieldsToCopy, $prefix);
         return $address;
     }
 
@@ -229,13 +238,17 @@ class QuoteManagement
             $itemPrefix = 'openinvoicedata.line' . $i . '.';
             /** @var AdyenRedirectOpenInvoiceItemInterface $openInvoiceItem */
             $openInvoiceItem = $this->adyenRedirectOpenInvoiceItemFactory->create();
-            $openInvoiceItem->setCurrencyCode(isset($fields[$itemPrefix.'currencyCode']) ? $fields[$itemPrefix.'currencyCode'] : null);
-            $openInvoiceItem->setDescription(isset($fields[$itemPrefix.'description']) ? $fields[$itemPrefix.'description'] : null);
-            $openInvoiceItem->setItemAmount(isset($fields[$itemPrefix.'itemAmount']) ? $fields[$itemPrefix.'itemAmount'] : null);
-            $openInvoiceItem->setItemVatAmount(isset($fields[$itemPrefix.'itemVatAmount']) ? $fields[$itemPrefix.'itemVatAmount'] : null);
-            $openInvoiceItem->setItemVatPercentage(isset($fields[$itemPrefix.'itemVatPercentage']) ? $fields[$itemPrefix.'itemVatPercentage'] : null);
-            $openInvoiceItem->setNumberOfItems(isset($fields[$itemPrefix.'numberOfItems']) ? $fields[$itemPrefix.'numberOfItems'] : null);
-            $openInvoiceItem->setVatCategory(isset($fields[$itemPrefix.'vatCategory']) ? $fields[$itemPrefix.'vatCategory'] : null);
+
+            $fieldsToCopy = [
+                'currencyCode',
+                'description',
+                'itemAmount',
+                'itemVatAmount',
+                'itemVatPercentage',
+                'numberOfItems',
+                'vatCategory'
+            ];
+            $this->populateObjectFromArray($openInvoiceItem, $fields, $fieldsToCopy, $itemPrefix);
             $items[] = $openInvoiceItem;
         }
         $openInvoice->setItems($items);
@@ -243,5 +256,21 @@ class QuoteManagement
         $openInvoice->setRefundDescription(isset($fields['openinvoicedata.refundDescription']) ? $fields['openinvoicedata.refundDescription'] : null);
 
         return $openInvoice;
+    }
+
+    /**
+     * @param $object
+     * @param array $data
+     * @param array $keys
+     * @param string $prefix
+     */
+    protected function populateObjectFromArray($object, array $data, array $keys = null, $prefix = '') {
+        $keys = $keys ?: array_keys($data);
+
+        foreach ($keys as $key) {
+            $method = 'set' . ucwords($key);
+            $value = isset($data[$prefix . $key]) ? $data[$prefix . $key] : null;
+            $object->$method($value);
+        }
     }
 }
