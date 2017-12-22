@@ -26,7 +26,6 @@
     <preference for="Hatimeria\Reagento\Api\HomeCategoriesInterface" type="Hatimeria\Reagento\Model\CategoryRepository" />
     <preference for="Hatimeria\Reagento\Api\InfoInterface" type="Hatimeria\Reagento\Model\Info" />
     <preference for="Hatimeria\Reagento\Api\MenuRepositoryInterface" type="Hatimeria\Reagento\Model\MenuRepository" />
-    <preference for="Hatimeria\Reagento\Api\Payment\AdyenLinkInterface" type="Hatimeria\Reagento\Model\Payment\AdyenHPP" />
     <preference for="Hatimeria\Reagento\Api\Payment\Data\PaypalDataInterface" type="Hatimeria\Reagento\Model\Payment\PaypalData" />
     <preference for="Hatimeria\Reagento\Api\Payment\PaypalInterface" type="Hatimeria\Reagento\Model\Payment\Paypal" />
     <preference for="Hatimeria\Reagento\Api\ProductRepositoryInterface" type="Hatimeria\Reagento\Model\ProductRepository" />
