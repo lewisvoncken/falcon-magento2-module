@@ -60,18 +60,6 @@
             <resource ref="anonymous" />
         </resources>
     </route>
-    <route url="/V1/guest-payment/:cartId/:orderId/adyen-link" method="GET">
-        <service class="Hatimeria\Reagento\Api\Payment\AdyenLinkInterface" method="getGuestOrderPaymentLink"/>
-        <resources>
-            <resource ref="anonymous" />
-        </resources>
-    </route>
-    <route url="/V1/customer-payment/:customerId/:orderId/adyen-link" method="GET">
-        <service class="Hatimeria\Reagento\Api\Payment\AdyenLinkInterface" method="getCustomerOrderPaymentLink"/>
-        <resources>
-            <resource ref="anonymous" />
-        </resources>
-    </route>
 
     <route url="/V1/guest-carts/:cartId/reagento-order" method="PUT">
         <service class="\Hatimeria\Reagento\Api\HatimeriaGuestCartManagementInterface" method="placeOrder"/>
