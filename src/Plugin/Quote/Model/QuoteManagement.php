@@ -23,14 +23,10 @@ use Magento\Sales\Api\OrderRepositoryInterface;
 
 class QuoteManagement
 {
-    /**
-     * @var OrderRepositoryInterface
-     */
+    /** @var OrderRepositoryInterface */
     protected $orderRepository;
 
-    /**
-     * @var MagentoUrlInterface
-     */
+    /** @var MagentoUrlInterface */
     protected $urlBuilder;
 
     /** @var AdyenRedirectInterfaceFactory */
@@ -154,8 +150,8 @@ class QuoteManagement
         $fields = $this->adyenHelper->getRedirectHppFields($order, $payment);
 
         $adyen->setHppUrl($this->adyenHelper->getHppUrl($order, $payment));
-        $adyen->setBillingAddress($this->getAddress($fields, 'billingAddress'));
-        $adyen->setDeliveryAddress($this->getAddress($fields, 'deliveryAddress'));
+        $adyen->setBillingAddress($this->getAddress($fields, 'billingAddress.'));
+        $adyen->setDeliveryAddress($this->getAddress($fields, 'deliveryAddress.'));
         $adyen->setOpenInvoiceData($this->getOpenInvoice($fields));
         $adyen->setShopper($this->getShopper($fields));
         $adyen->setBlockedMethods($fields['blockedMethods']);

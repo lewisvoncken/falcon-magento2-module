@@ -97,7 +97,7 @@ class Adyen extends AbstractHelper
             $this->_logger->critical($e);
         }
 
-        return $url . $endpoint . '.html';
+        return $url . $endpoint . '.shtml';
     }
 
     /**
@@ -127,7 +127,7 @@ class Adyen extends AbstractHelper
                 $recurringType = trim($this->adyenHelper->getAdyenAbstractConfigData('recurring_type'));
                 $brandCode = $payment->getAdditionalInformation(AdyenHppDataAssignObserver::BRAND_CODE);
                 $baseUrl = $this->storeManager->getStore($order->getStoreId())->getBaseUrl(UrlInterface::URL_TYPE_LINK);
-                $issuerId = $payment->getAdditionalInformation("issuer_id");
+                $issuerId = $payment->getAdditionalInformation('issuer_id');
                 $dob = $order->getCustomerDob();
 
                 // Paypal does not allow ONECLICK,RECURRING only RECURRING
