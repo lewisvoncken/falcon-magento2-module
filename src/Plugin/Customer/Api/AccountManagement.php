@@ -2,14 +2,11 @@
 
 namespace Hatimeria\Reagento\Plugin\Customer\Api;
 
+use Hatimeria\Reagento\Model\Cart\MergeManagement;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Quote\Api\CartRepositoryInterface;
-use Magento\Quote\Model\Quote;
-use Magento\Quote\Model\QuoteIdMask;
-use Magento\Quote\Model\QuoteIdMaskFactory;
 use Psr\Log\LoggerInterface;
 
 class AccountManagement
@@ -17,31 +14,28 @@ class AccountManagement
     /** @var CustomerRepositoryInterface */
     private $customerRepository;
 
-    /** @var QuoteIdMaskFactory */
-    private $quoteIdMaskFactory;
-
-    /** @var CartRepositoryInterface */
-    private $cartRepository;
+    /** @var MergeManagement */
+    private $cartMergeManagement;
 
     /** @var LoggerInterface */
     private $logger;
 
+
     /**
      * AccountManagement constructor.
      * @param CustomerRepositoryInterface $customerRepository
-     * @param CartRepositoryInterface $cartRepository
+     * @param MergeManagement $cartMergeManagement
+     * @param LoggerInterface $logger
      */
     public function __construct(
         CustomerRepositoryInterface $customerRepository,
-        QuoteIdMaskFactory $quoteIdMaskFactory,
-        CartRepositoryInterface $cartRepository,
+        MergeManagement $cartMergeManagement,
         LoggerInterface $logger
     )
     {
         $this->customerRepository = $customerRepository;
-        $this->cartRepository = $cartRepository;
         $this->logger = $logger;
-        $this->quoteIdMaskFactory = $quoteIdMaskFactory;
+        $this->cartMergeManagement = $cartMergeManagement;
     }
 
     /**
@@ -66,14 +60,7 @@ class AccountManagement
         $customer = $proceed($customer, $hash, $redirectUrl);
         if ($quoteId) {
             try {
-                /** @var QuoteIdMask $quoteIdMask */
-                $quoteIdMask = $this->quoteIdMaskFactory->create();
-                $quoteIdMask->load($quoteId, 'masked_id');
-                /** @var Quote $guestQuote */
-                $guestQuote = $this->cartRepository->getActive($quoteIdMask->getQuoteId());
-                $guestQuote->assignCustomer($customer);
-                $guestQuote->setCheckoutMethod(null);
-                $this->cartRepository->save($guestQuote);
+                $this->cartMergeManagement->convertGuestCart($quoteId, $customer);
             } catch (\Exception $e) {
                 $this->logger->critical($e);
             }

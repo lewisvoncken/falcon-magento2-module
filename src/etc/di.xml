@@ -4,6 +4,7 @@
     <!-- INTERFACE PREFERENCES FOR DI -->
     <preference for="Hatimeria\Reagento\Api\CategoryBreadcrumbsInterface" type="Hatimeria\Reagento\Model\CategoryBreadcrumbs" />
     <preference for="Hatimeria\Reagento\Api\CategoryManagementInterface" type="Hatimeria\Reagento\Model\CategoryManagement" />
+    <preference for="Hatimeria\Reagento\Api\CustomerTokenServiceInterface" type="Hatimeria\Reagento\Model\CustomerTokenService" />
     <preference for="Hatimeria\Reagento\Api\ContactFormInterface" type="Hatimeria\Reagento\Model\ContactForm" />
     <preference for="Hatimeria\Reagento\Api\Data\AdyenConfigInterface" type="Hatimeria\Reagento\Model\Api\Data\AdyenConfig" />
     <preference for="Hatimeria\Reagento\Api\Data\AdyenRedirectInterface" type="Hatimeria\Reagento\Model\Api\Data\AdyenRedirect" />
