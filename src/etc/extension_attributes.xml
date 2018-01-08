@@ -13,13 +13,16 @@
         <attribute code="max_price" type="float" />
         <attribute code="breadcrumbs" type="Hatimeria\Reagento\Api\Data\BreadcrumbInterface[]" />
     </extension_attributes>
+    <extension_attributes for="Magento\Catalog\Api\Data\CategoryInterface">
+        <attribute code="breadcrumbs" type="Hatimeria\Reagento\Api\Data\BreadcrumbInterface[]"/>
+    </extension_attributes>
+    <extension_attributes for="Magento\Customer\Api\Data\CustomerInterface">
+        <attribute code="guest_quote_id" type="string" />
+    </extension_attributes>
     <extension_attributes for="Magento\Quote\Api\Data\TotalsItemInterface">
         <attribute code="thumbnail_url" type="string" />
         <attribute code="url_key" type="string" />
         <attribute code="available_qty" type="string" />
-    </extension_attributes>
-    <extension_attributes for="Magento\Catalog\Api\Data\CategoryInterface">
-        <attribute code="breadcrumbs" type="Hatimeria\Reagento\Api\Data\BreadcrumbInterface[]"/>
     </extension_attributes>
     <extension_attributes for="Magento\Store\Api\Data\StoreConfigInterface">
         <attribute code="optional_post_codes" type="mixed" />
