@@ -7,7 +7,7 @@ use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\Api\Search\FilterGroup;
 use Magento\Framework\Api\SearchCriteria;
 use Magento\Framework\Api\SortOrder;
-use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\AuthorizationException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Sales\Api\Data\OrderExtensionFactory;
 use Magento\Sales\Api\Data\OrderExtensionInterface;
@@ -60,10 +60,12 @@ class OrderManagement implements HatimeriaOrderManagementInterface
     /**
      * @param $orderId
      * @return OrderInterface
+     * @throws AuthorizationException
      * @throws NoSuchEntityException
      */
     public function getItem($orderId)
     {
+        $this->checkCustomerContext();
         $order = $this->orderRepository->get($orderId);
         if(!$order->getId() || $order->getCustomerId() !== $this->getCustomerId()) {
             throw new NoSuchEntityException(__('Unable to find order %orderId', ['orderId' => $orderId]));
@@ -77,9 +79,11 @@ class OrderManagement implements HatimeriaOrderManagementInterface
      *
      * @param SearchCriteria|null $searchCriteria
      * @return OrderSearchResultInterface
+     * @throws AuthorizationException
      */
     public function getCustomerOrders(SearchCriteria $searchCriteria = null)
     {
+        $this->checkCustomerContext();
         /** @var \Magento\Sales\Api\Data\OrderSearchResultInterface $searchResult */
         $searchResult = $this->searchResultFactory->create();
         $searchResult->addFieldToFilter('customer_id', ['eq' => $this->getCustomerId()]);
@@ -109,6 +113,11 @@ class OrderManagement implements HatimeriaOrderManagementInterface
         return $searchResult;
     }
 
+    /**
+     * Get user id from context
+     *
+     * @return int|null
+     */
     protected function getCustomerId()
     {
         return $this->userContext->getUserId();
@@ -120,7 +129,6 @@ class OrderManagement implements HatimeriaOrderManagementInterface
      * @param FilterGroup $filterGroup
      * @param OrderSearchResultInterface $searchResult
      * @return void
-     * @throws InputException
      */
     protected function addFilterGroupToCollection(
         FilterGroup $filterGroup,
@@ -157,5 +165,20 @@ class OrderManagement implements HatimeriaOrderManagementInterface
         $shippingAssignments->setOrderId($order->getEntityId());
         $extensionAttributes->setShippingAssignments($shippingAssignments->create());
         $order->setExtensionAttributes($extensionAttributes);
+    }
+
+    /**
+     * Check if current user context is for logged in customer
+     *
+     * @return bool
+     * @throws AuthorizationException
+     */
+    private function checkCustomerContext()
+    {
+        if ($this->userContext->getUserType() !== UserContextInterface::USER_TYPE_CUSTOMER) {
+            throw new AuthorizationException(__('This method is available only for customer tokens'));
+        }
+
+        return true;
     }
 }
