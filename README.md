@@ -5,6 +5,7 @@
 Custom API endpoints provided by this module:
 
 - `[GET] /rest/V1/adyen/config` - get adyen public config data (cc enabled, card types, CSE public key, etc.)
+- `[GET] /rest/V1/attributes/filters` - get list of attributes used in catalog filters 
 - `[GET] /rest/V1/categories/:categoryId/breadcrumbs` - get category breadcrumbs to the root category
 - `[GET] /rest/V1/categories/homepage` - get categories marked as "Show on homepage" (max - 6)
 - `[GET] /rest/V1/categories` (**overridden**) - get category tree with `url_path` data
