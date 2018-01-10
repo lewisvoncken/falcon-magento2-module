@@ -173,6 +173,9 @@ class Filter
                     continue;
                     break;
             }
+            if (!isset($select)) {
+                continue;
+            }
             $filtersOptions[$attribute->getAttributeCode()] = $connection->fetchPairs($select);
         }
 
