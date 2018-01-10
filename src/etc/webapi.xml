@@ -30,6 +30,12 @@
             <resource ref="Magento_Catalog::categories" />
         </resources>
     </route>
+    <route url="/V1/attributes/filters" method="GET">
+        <service class="Hatimeria\Reagento\Api\Catalog\AttributeManagementInterface" method="getCategoryFilters"/>
+        <resources>
+            <resource ref="Magento_Catalog::catalog" />
+        </resources>
+    </route>
     <route url="/V1/categories" method="GET">
         <service class="Hatimeria\Reagento\Api\CategoryManagementInterface" method="getTree" />
         <resources>
@@ -56,18 +62,6 @@
     </route>
     <route url="/V1/order-info/:quoteId" method="GET">
         <service class="Hatimeria\Reagento\Api\QuoteMaskInterface" method="getItem" />
-        <resources>
-            <resource ref="anonymous" />
-        </resources>
-    </route>
-    <route url="/V1/guest-payment/:cartId/:orderId/adyen-link" method="GET">
-        <service class="Hatimeria\Reagento\Api\Payment\AdyenLinkInterface" method="getGuestOrderPaymentLink"/>
-        <resources>
-            <resource ref="anonymous" />
-        </resources>
-    </route>
-    <route url="/V1/customer-payment/:customerId/:orderId/adyen-link" method="GET">
-        <service class="Hatimeria\Reagento\Api\Payment\AdyenLinkInterface" method="getCustomerOrderPaymentLink"/>
         <resources>
             <resource ref="anonymous" />
         </resources>

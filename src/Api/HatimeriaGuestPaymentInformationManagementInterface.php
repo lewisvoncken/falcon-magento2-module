@@ -18,7 +18,7 @@ interface HatimeriaGuestPaymentInformationManagementInterface extends GuestPayme
      * @param \Magento\Quote\Api\Data\PaymentInterface $paymentMethod
      * @param \Magento\Quote\Api\Data\AddressInterface|null $billingAddress
      * @throws \Magento\Framework\Exception\CouldNotSaveException
-     * @return \Hatimeria\Reagento\Api\Data\OrderResponseInterface | int
+     * @return int | \Hatimeria\Reagento\Api\Data\OrderResponseInterface
      */
     public function savePaymentInformationAndPlaceOrder(
         $cartId,

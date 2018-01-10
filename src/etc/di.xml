@@ -2,12 +2,17 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
 
     <!-- INTERFACE PREFERENCES FOR DI -->
+    <preference for="Hatimeria\Reagento\Api\Catalog\AttributeManagementInterface" type="Hatimeria\Reagento\Model\Catalog\AttributeManagement" />
     <preference for="Hatimeria\Reagento\Api\CategoryBreadcrumbsInterface" type="Hatimeria\Reagento\Model\CategoryBreadcrumbs" />
     <preference for="Hatimeria\Reagento\Api\CategoryManagementInterface" type="Hatimeria\Reagento\Model\CategoryManagement" />
     <preference for="Hatimeria\Reagento\Api\CustomerTokenServiceInterface" type="Hatimeria\Reagento\Model\CustomerTokenService" />
     <preference for="Hatimeria\Reagento\Api\ContactFormInterface" type="Hatimeria\Reagento\Model\ContactForm" />
     <preference for="Hatimeria\Reagento\Api\Data\AdyenConfigInterface" type="Hatimeria\Reagento\Model\Api\Data\AdyenConfig" />
     <preference for="Hatimeria\Reagento\Api\Data\AdyenRedirectInterface" type="Hatimeria\Reagento\Model\Api\Data\AdyenRedirect" />
+    <preference for="Hatimeria\Reagento\Api\Data\AdyenRedirectAddressInterface" type="Hatimeria\Reagento\Model\Api\Data\AdyenRedirectAddress" />
+    <preference for="Hatimeria\Reagento\Api\Data\AdyenRedirectOpenInvoiceInterface" type="Hatimeria\Reagento\Model\Api\Data\AdyenRedirectOpenInvoice" />
+    <preference for="Hatimeria\Reagento\Api\Data\AdyenRedirectOpenInvoiceItemInterface" type="Hatimeria\Reagento\Model\Api\Data\AdyenRedirectOpenInvoiceItem" />
+    <preference for="Hatimeria\Reagento\Api\Data\AdyenRedirectShopperInterface" type="Hatimeria\Reagento\Model\Api\Data\AdyenRedirectShopper" />
     <preference for="Hatimeria\Reagento\Api\Data\BreadcrumbInterface" type="Hatimeria\Reagento\Model\Api\Data\Breadcrumb" />
     <preference for="Hatimeria\Reagento\Api\Data\CategorySearchResultsInterface" type="Magento\Framework\Api\SearchResults" />
     <preference for="Hatimeria\Reagento\Api\Data\CategoryTreeInterface" type="Hatimeria\Reagento\Model\Category" />
@@ -25,7 +30,6 @@
     <preference for="Hatimeria\Reagento\Api\HomeCategoriesInterface" type="Hatimeria\Reagento\Model\CategoryRepository" />
     <preference for="Hatimeria\Reagento\Api\InfoInterface" type="Hatimeria\Reagento\Model\Info" />
     <preference for="Hatimeria\Reagento\Api\MenuRepositoryInterface" type="Hatimeria\Reagento\Model\MenuRepository" />
-    <preference for="Hatimeria\Reagento\Api\Payment\AdyenLinkInterface" type="Hatimeria\Reagento\Model\Payment\AdyenHPP" />
     <preference for="Hatimeria\Reagento\Api\Payment\Data\PaypalDataInterface" type="Hatimeria\Reagento\Model\Payment\PaypalData" />
     <preference for="Hatimeria\Reagento\Api\Payment\PaypalInterface" type="Hatimeria\Reagento\Model\Payment\Paypal" />
     <preference for="Hatimeria\Reagento\Api\ProductRepositoryInterface" type="Hatimeria\Reagento\Model\ProductRepository" />
