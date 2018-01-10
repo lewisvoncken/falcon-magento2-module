@@ -6,11 +6,14 @@ use Hatimeria\Reagento\Api\Data\FilterInterface;
 use Hatimeria\Reagento\Api\Data\FilterInterfaceFactory;
 use Hatimeria\Reagento\Api\Data\FilterOptionInterface;
 use Hatimeria\Reagento\Api\Data\FilterOptionInterfaceFactory;
+use Hatimeria\Reagento\Helper\Category;
 use Magento\Catalog\Model\Product;
 use Magento\Eav\Api\AttributeRepositoryInterface;
 use Magento\Eav\Api\Data\AttributeInterface;
 use Magento\Eav\Api\Data\AttributeOptionInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Store\Model\ScopeInterface;
 
 class AttributeManagement implements AttributeManagementInterface
 {
@@ -26,6 +29,9 @@ class AttributeManagement implements AttributeManagementInterface
     /** @var FilterOptionInterfaceFactory */
     private $filterOptionFactory;
 
+    /** @var ScopeConfigInterface */
+    private $scopeConfig;
+
     /**
      * AttributeManagement constructor.
      * @param AttributeRepositoryInterface $attributeRepository
@@ -37,12 +43,14 @@ class AttributeManagement implements AttributeManagementInterface
         AttributeRepositoryInterface $attributeRepository,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         FilterInterfaceFactory $filterFactory,
-        FilterOptionInterfaceFactory $filterOptionFactory
+        FilterOptionInterfaceFactory $filterOptionFactory,
+        ScopeConfigInterface $scopeConfig
     ) {
         $this->attributeRepository = $attributeRepository;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->filterFactory = $filterFactory;
         $this->filterOptionFactory = $filterOptionFactory;
+        $this->scopeConfig = $scopeConfig;
     }
 
     public function getCategoryFilters()
@@ -51,6 +59,9 @@ class AttributeManagement implements AttributeManagementInterface
         $attributes = $this->attributeRepository->getList(Product::ENTITY, $search->create());
 
         $result = [];
+        if ($this->scopeConfig->getValue(Category::SHOW_CATEGORY_FILTER_PATH, ScopeInterface::SCOPE_STORES)) {
+            $result[] = $this->getCategoryFilter();
+        }
         foreach($attributes->getItems() as $item) { /** @var AttributeInterface $item */
             $filter = $this->filterFactory->create();
             $options = $item->usesSource() ? $item->getSource()->getAllOptions(false) : null;
@@ -85,5 +96,19 @@ class AttributeManagement implements AttributeManagementInterface
         }
 
         return $filterOptions;
+    }
+
+    /**
+     * Prepare category filter
+     *
+     * @return FilterInterface
+     */
+    protected function getCategoryFilter()
+    {
+        $filter = $this->filterFactory->create();
+        $filter->setLabel(__('Category'))
+            ->setCode('category_id');
+
+        return $filter;
     }
 }
