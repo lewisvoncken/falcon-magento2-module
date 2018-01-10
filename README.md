@@ -24,6 +24,7 @@ Custom API endpoints provided by this module:
 - `[POST] /rest/V1/carts/mine/payment-information` (**overridden**) - modifies the docblock of function return type (may be int or OrderResponse object)
 - `[POST] /rest/V1/contact` - send a contact email
 - `[POST] /rest/V1/guest-carts/:cartId/payment-information` (**overridden**) - modifies the docblock of function return type (may be int or OrderResponse object)
+- `[POST] /rest/V1/integration/customer/token` (**overridden**) - adding guestQuoteId param to merge current guest quote with logged in customer
 - `[PUT] /rest/V1/carts/mine/reagento-order` - place order with Adyen credit card as a logged in customer - getting an object as a response
 - `[PUT] /rest/V1/guest-carts/:cartId/reagento-order` - place order with Adyen credit card - getting an object as a response
 - `[GET] /rest/V1/menu` - get menu tree
@@ -49,18 +50,24 @@ Extension attributes:
       "breadcrumbs": "Hatimeria\Reagento\Api\Data\BreadcrumbInterface[]"
     }
     ```
+- `Magento\Catalog\Api\Data\CategoryInterface`:
+    ```json
+    {
+      "breadcrumbs": "Hatimeria\Reagento\Api\Data\BreadcrumbInterface[]"
+    }
+    ```
+- `Magento\Customer\Api\Data\CustomerInterface`:
+    ```json
+    {
+      "guest_quote_id": "string"
+    }
+    ```
 - `Magento\Quote\Api\Data\TotalsItemInterface`:
     ```json
     {
       "thumbnail_url": "string",
       "url_key": "string",
       "available_qty": "string"
-    }
-    ```
-- `Magento\Catalog\Api\Data\CategoryInterface`:
-    ```json
-    {
-      "breadcrumbs": "Hatimeria\Reagento\Api\Data\BreadcrumbInterface[]"
     }
     ```
 - `Magento\Store\Api\Data\StoreConfigInterface`:
