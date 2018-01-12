@@ -80,7 +80,6 @@ class ResultPlugin
             );
         }
         if ($url) {
-            $url = str_replace('rebul.test', 'localhost:3000', $url);
             $result->setRedirect($url);
         }
 
