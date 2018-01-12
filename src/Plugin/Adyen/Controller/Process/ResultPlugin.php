@@ -76,8 +76,7 @@ class ResultPlugin
                     'quote_id' => $quoteId,
                     'adyen_redirect' => 1,
                     'uenc' => base64_encode($message->getText())
-                ]
-                ]
+                ]]
             );
         }
         if ($url) {
