@@ -101,19 +101,25 @@ class QuoteManagement
 
         /** @var AdyenRedirectInterface $adyen */
         $adyen = $this->adyenRedirectFactory->create();
+        $addAdyenResponse = false;
         if ($paymentAdditionalInfo) {
             if (
                 $payment->getMethod() == 'adyen_cc'
                 && isset($paymentAdditionalInfo['3dActive'])
                 && true === $paymentAdditionalInfo['3dActive']
             ) {
+                $addAdyenResponse = true;
                 $this->getAdyenCcRedirectData($adyen, $paymentAdditionalInfo);
             } elseif ($payment->getMethod() == 'adyen_hpp') {
+                $addAdyenResponse = true;
                 $this->getAdyenHppRedirectData($adyen, $order, $payment);
             }
         }
-        $obj->setAdyen($adyen);
+        if ($addAdyenResponse) {
+            $obj->setAdyen($adyen);
+        }
         $obj->setOrderId($orderId);
+        $obj->setOrderRealId($order->getIncrementId());
 
         return $obj;
     }
