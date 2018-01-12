@@ -46,7 +46,7 @@ class OrderResponse extends AbstractExtensibleModel implements OrderResponseInte
      */
     public function setOrderRealId($incrementId)
     {
-        return $this->setData(self::ORDER_REAL_ID, $ord$incrementIderId);
+        return $this->setData(self::ORDER_REAL_ID, $incrementId);
     }
 
     /**
