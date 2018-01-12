@@ -71,6 +71,9 @@
     </virtualType>
 
     <!-- PLUGINS -->
+    <type name="Adyen\Payment\Controller\Process\Result">
+        <plugin name="hatimeriaReagentoAdyenProcessResult" type="Hatimeria\Reagento\Plugin\Adyen\Controller\Process\ResultPlugin" />
+    </type>
     <type name="Magento\CatalogUrlRewrite\Model\Product\AnchorUrlRewriteGenerator">
         <plugin name="hatimeriaReagentoAnchorUrlRewriteGeneratorPlugin" type="Hatimeria\Reagento\Plugin\CatalogUrlRewrite\Model\Product\AnchorUrlRewriteGenerator" />
     </type>

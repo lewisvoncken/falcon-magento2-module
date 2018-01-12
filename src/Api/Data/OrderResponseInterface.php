@@ -6,6 +6,7 @@ interface OrderResponseInterface
 {
     const ADYEN_REDIRECT = 'adyen';
     const ORDER_ID = 'order_id';
+    const ORDER_REAL_ID = 'order_real_id';
 
     /**
      * @param \Hatimeria\Reagento\Api\Data\AdyenRedirectInterface $adyenRedirect
@@ -28,4 +29,15 @@ interface OrderResponseInterface
      * @return string
      */
     public function getOrderId();
+
+    /**
+     * @param string $incrementId
+     * @return \Hatimeria\Reagento\Api\Data\OrderResponseInterface
+     */
+    public function setOrderRealId($incrementId);
+
+    /**
+     * @return string
+     */
+    public function getOrderRealId();
 }

@@ -39,4 +39,21 @@ class OrderResponse extends AbstractExtensibleModel implements OrderResponseInte
     {
         return $this->_getData(self::ORDER_ID);
     }
+
+    /**
+     * @param string $incrementId
+     * @return \Hatimeria\Reagento\Api\Data\OrderResponseInterface
+     */
+    public function setOrderRealId($incrementId)
+    {
+        return $this->setData(self::ORDER_REAL_ID, $incrementId);
+    }
+
+    /**
+     * @return string
+     */
+    public function getOrderRealId()
+    {
+        return $this->_getData(self::ORDER_REAL_ID);
+    }
 }
