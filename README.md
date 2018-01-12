@@ -5,6 +5,7 @@
 Custom API endpoints provided by this module:
 
 - `[GET] /rest/V1/adyen/config` - get adyen public config data (cc enabled, card types, CSE public key, etc.)
+- `[GET] /rest/V1/attributes/filters` - get list of attributes used in catalog filters 
 - `[GET] /rest/V1/categories/:categoryId/breadcrumbs` - get category breadcrumbs to the root category
 - `[GET] /rest/V1/categories/homepage` - get categories marked as "Show on homepage" (max - 6)
 - `[GET] /rest/V1/categories` (**overridden**) - get category tree with `url_path` data
@@ -23,6 +24,7 @@ Custom API endpoints provided by this module:
 - `[POST] /rest/V1/carts/mine/payment-information` (**overridden**) - modifies the docblock of function return type (may be int or OrderResponse object)
 - `[POST] /rest/V1/contact` - send a contact email
 - `[POST] /rest/V1/guest-carts/:cartId/payment-information` (**overridden**) - modifies the docblock of function return type (may be int or OrderResponse object)
+- `[POST] /rest/V1/integration/customer/token` (**overridden**) - adding guestQuoteId param to merge current guest quote with logged in customer
 - `[PUT] /rest/V1/carts/mine/reagento-order` - place order with Adyen credit card as a logged in customer - getting an object as a response
 - `[PUT] /rest/V1/guest-carts/:cartId/reagento-order` - place order with Adyen credit card - getting an object as a response
 - `[GET] /rest/V1/menu` - get menu tree
@@ -48,18 +50,24 @@ Extension attributes:
       "breadcrumbs": "Hatimeria\Reagento\Api\Data\BreadcrumbInterface[]"
     }
     ```
+- `Magento\Catalog\Api\Data\CategoryInterface`:
+    ```json
+    {
+      "breadcrumbs": "Hatimeria\Reagento\Api\Data\BreadcrumbInterface[]"
+    }
+    ```
+- `Magento\Customer\Api\Data\CustomerInterface`:
+    ```json
+    {
+      "guest_quote_id": "string"
+    }
+    ```
 - `Magento\Quote\Api\Data\TotalsItemInterface`:
     ```json
     {
       "thumbnail_url": "string",
       "url_key": "string",
       "available_qty": "string"
-    }
-    ```
-- `Magento\Catalog\Api\Data\CategoryInterface`:
-    ```json
-    {
-      "breadcrumbs": "Hatimeria\Reagento\Api\Data\BreadcrumbInterface[]"
     }
     ```
 - `Magento\Store\Api\Data\StoreConfigInterface`:

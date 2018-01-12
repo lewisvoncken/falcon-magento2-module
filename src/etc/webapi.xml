@@ -30,6 +30,12 @@
             <resource ref="Magento_Catalog::categories" />
         </resources>
     </route>
+    <route url="/V1/attributes/filters" method="GET">
+        <service class="Hatimeria\Reagento\Api\Catalog\AttributeManagementInterface" method="getCategoryFilters"/>
+        <resources>
+            <resource ref="Magento_Catalog::catalog" />
+        </resources>
+    </route>
     <route url="/V1/categories" method="GET">
         <service class="Hatimeria\Reagento\Api\CategoryManagementInterface" method="getTree" />
         <resources>
@@ -123,6 +129,13 @@
 
     <route url="/V1/customers/password/reset" method="PUT">
         <service class="Magento\Customer\Api\AccountManagementInterface" method="resetPassword"/>
+        <resources>
+            <resource ref="anonymous"/>
+        </resources>
+    </route>
+
+    <route url="/V1/integration/customer/token" method="POST">
+        <service class="Hatimeria\Reagento\Api\CustomerTokenServiceInterface" method="createCustomerAccessToken"/>
         <resources>
             <resource ref="anonymous"/>
         </resources>
