@@ -34,7 +34,7 @@ The following list documents which modules are either not supported by reagento 
     * `Magento_Swagger`
     * `Shopial_Facebook`
     
-The following modules requier rises error when disableing with requirements check. We have not noticed and problems with those modules disabled.
+The following modules require rises error when disabling with requirements check. We have not noticed and problems with those modules disabled.
 
 - Not supported modules:
     * `Magento_CatalogSearch`
