@@ -68,6 +68,8 @@ class Breadcrumb extends AbstractHelper
     }
 
     /**
+     * Add breadcrumb data to category
+     *
      * @param Category $category
      * @param CategoryCollection|null $collection
      * @throws \Magento\Framework\Exception\NoSuchEntityException
@@ -99,10 +101,10 @@ class Breadcrumb extends AbstractHelper
                 continue;
             }
 
-            $result[] = $this->createBreadcrumb($parentCategory);
+            $result[] = $this->createBreadcrumb($this->prepareCategoryBreadcrumbData($parentCategory));
         }
 
-        $result[] = $this->createBreadcrumb($category);
+        $result[] = $this->createBreadcrumb($this->prepareCategoryBreadcrumbData($category));
 
         $extensionAttributes = $category->getExtensionAttributes();
         if($extensionAttributes === null) {
@@ -157,6 +159,7 @@ class Breadcrumb extends AbstractHelper
         try {
             $category = $this->categoryRepository->get($categoryId);
         } catch (\Exception $e) {
+            $this->_logger->critical($e);
             return $breadcrumbs;
         }
 
@@ -166,7 +169,6 @@ class Breadcrumb extends AbstractHelper
         }
 
         $categoryCrumb = end($breadcrumbs);
-        reset($categories);
         foreach($breadcrumbs as $id => $crumb) { /** @var BreadcrumbInterface $crumb */
             if ($crumb->getId() === $categoryId) {
                 if ($useSubcategoryFilter) {
@@ -197,5 +199,21 @@ class Breadcrumb extends AbstractHelper
         }
 
         return $breadcrumbs;
+    }
+
+    /**
+     * Prepare category data for breadcrumbs
+     *
+     * @param Category $category
+     * @return array
+     */
+    protected function prepareCategoryBreadcrumbData(Category $category)
+    {
+        return [
+            'id' => $category->getId(),
+            'name' => $category->getName(),
+            'url_path' => $category->getUrlPath(),
+            'url_key' => $category->getUrlKey()
+        ];
     }
 }

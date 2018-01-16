@@ -14,7 +14,6 @@ use Magento\Eav\Model\Config;
 use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\App\Helper\Context as AppContext;
 use Magento\Framework\ObjectManagerInterface;
-use Magento\Store\Model\StoreManagerInterface;
 
 
 /**
@@ -40,12 +39,6 @@ class Product extends AbstractHelper
     /** @var \Magento\Eav\Model\Config */
     protected $eavConfig;
 
-    /** @var StoreManagerInterface */
-    protected $storeManager;
-
-    /** @var Breadcrumb */
-    protected $breadcrumbHelper;
-
     /**
      * @param AppContext $context
      * @param ProductExtensionFactory $productExtensionFactory
@@ -54,8 +47,6 @@ class Product extends AbstractHelper
      * @param ObjectManagerInterface $objectManager
      * @param Price $priceHelper
      * @param \Magento\Eav\Model\Config $eavConfig
-     * @param StoreManagerInterface $storeManager
-     * @param Breadcrumb $breadcrumbHelper
      */
     public function __construct(
         AppContext $context,
@@ -64,9 +55,7 @@ class Product extends AbstractHelper
         GalleryReadHandler $galleryReadHandler,
         ObjectManagerInterface $objectManager,
         Price $priceHelper,
-        Config $eavConfig,
-        StoreManagerInterface $storeManager,
-        Breadcrumb $breadcrumbHelper
+        Config $eavConfig
     ) {
         parent::__construct($context);
         $this->productExtensionFactory = $productExtensionFactory;
@@ -75,8 +64,6 @@ class Product extends AbstractHelper
         $this->galleryReadHandler = $galleryReadHandler;
         $this->priceHelper = $priceHelper;
         $this->eavConfig = $eavConfig;
-        $this->storeManager = $storeManager;
-        $this->breadcrumbHelper = $breadcrumbHelper;
     }
 
     /**
@@ -269,25 +256,6 @@ class Product extends AbstractHelper
         $productExtension->setMinPrice($displayPrice['min_price']);
         $productExtension->setMaxPrice($displayPrice['max_price']);
         $product->setExtensionAttributes($productExtension);
-    }
-
-    /**
-     * Add additional data to product
-     *
-     * @param MagentoProduct|ProductInterface $product
-     * @throws \Magento\Framework\Exception\LocalizedException
-     */
-    public function addAdditionalInformation($product)
-    {
-        $this->ensurePriceForConfigurableProduct($product);
-        $this->ensureOptionsForConfigurableProduct($product);
-
-        $this->addProductImageAttribute($product);
-        $this->addProductImageAttribute($product, 'product_list_image', 'thumbnail_url');
-        $this->addMediaGallerySizes($product);
-        $this->breadcrumbHelper->addProductBreadcrumbsData($product, $this->getFilterableAttributes());
-
-        $this->calculateCatalogDisplayPrice($product);
     }
 
     /**

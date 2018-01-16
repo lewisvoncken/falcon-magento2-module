@@ -74,7 +74,6 @@ class Url implements UrlInterface
             switch ($urlModel->getEntityType()) {
                 case 'product':
                     $entity = $this->productRepository->getById($urlModel->getEntityId());
-                    $this->reagentoProductHelper->addAdditionalInformation($entity);
                     $this->reagentoHelper->addResponseTagsByObject($entity);
                     $urlData->setProduct($entity);
                     break;

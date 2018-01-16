@@ -2,15 +2,15 @@
 
 namespace Hatimeria\Reagento\Helper;
 
-use Hatimeria\Reagento\Api\Data\BreadcrumbInterface;
-use Hatimeria\Reagento\Api\Data\BreadcrumbInterfaceFactory;
 use Magento\Catalog\Api\CategoryRepositoryInterface;
-use Magento\Catalog\Api\Data\CategoryInterface;
 use Magento\Catalog\Model\Category as MagentoCategory;
-use Magento\Catalog\Model\Category\Collection as MagentoCategoryCollection;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\App\Helper\Context as AppContext;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Image\AdapterFactory;
+use Magento\Framework\View\ConfigInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
 class Category extends AbstractHelper
 {
@@ -31,25 +31,21 @@ class Category extends AbstractHelper
     /** @var CategoryRepositoryInterface */
     protected $categoryRepository;
 
-    /** @var \Magento\Catalog\Api\Data\CategoryExtensionFactory */
-    protected $extensionFactory;
-
     /**
+     * Category constructor.
      * @param AppContext $context
-     * @param \Magento\Framework\Image\AdapterFactory $imageFactory
-     * @param \Magento\Catalog\Api\Data\CategoryExtensionFactory $extensionFactory
-     * @param \Magento\Framework\Filesystem $filesystem
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\View\ConfigInterface $viewConfig
+     * @param AdapterFactory $imageFactory
+     * @param Filesystem $filesystem
+     * @param StoreManagerInterface $storeManager
+     * @param ConfigInterface $viewConfig
      * @param CategoryRepositoryInterface $categoryRepository
      */
     public function __construct(
         AppContext $context,
-        \Magento\Framework\Image\AdapterFactory $imageFactory,
-        \Magento\Catalog\Api\Data\CategoryExtensionFactory $extensionFactory,
-        \Magento\Framework\Filesystem $filesystem,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\View\ConfigInterface $viewConfig,
+        AdapterFactory $imageFactory,
+        Filesystem $filesystem,
+        StoreManagerInterface $storeManager,
+        ConfigInterface $viewConfig,
         CategoryRepositoryInterface $categoryRepository
     ) {
         parent::__construct($context);
@@ -58,7 +54,6 @@ class Category extends AbstractHelper
         $this->filesystem = $filesystem;
         $this->imageFactory = $imageFactory;
         $this->categoryRepository = $categoryRepository;
-        $this->extensionFactory = $extensionFactory;
     }
 
     /**
