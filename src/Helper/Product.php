@@ -2,12 +2,9 @@
 
 namespace Hatimeria\Reagento\Helper;
 
-use Hatimeria\Reagento\Api\Data\BreadcrumbInterface;
-use Hatimeria\Reagento\Api\Data\BreadcrumbInterfaceFactory;
 use Hatimeria\Reagento\Api\Data\GalleryMediaEntrySizeInterface;
 use Hatimeria\Reagento\Helper\Media as MediaHelper;
 use Hatimeria\Reagento\Model\Config\Source\BreadcrumbsAttribute;
-use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Api\Data\ProductExtension;
 use Magento\Catalog\Api\Data\ProductExtensionFactory;
 use Magento\Catalog\Api\Data\ProductInterface;
@@ -17,7 +14,6 @@ use Magento\Eav\Model\Config;
 use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\App\Helper\Context as AppContext;
 use Magento\Framework\ObjectManagerInterface;
-use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
 
@@ -47,11 +43,8 @@ class Product extends AbstractHelper
     /** @var StoreManagerInterface */
     protected $storeManager;
 
-    /** @var CategoryRepositoryInterface */
-    protected $categoryRepository;
-
-    /** @var BreadcrumbInterfaceFactory */
-    protected $breadcrumbFactory;
+    /** @var Breadcrumb */
+    protected $breadcrumbHelper;
 
     /**
      * @param AppContext $context
@@ -62,8 +55,7 @@ class Product extends AbstractHelper
      * @param Price $priceHelper
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param StoreManagerInterface $storeManager
-     * @param CategoryRepositoryInterface $categoryRepository
-     * @param BreadcrumbInterfaceFactory $breadcrumbFactory
+     * @param Breadcrumb $breadcrumbHelper
      */
     public function __construct(
         AppContext $context,
@@ -74,8 +66,7 @@ class Product extends AbstractHelper
         Price $priceHelper,
         Config $eavConfig,
         StoreManagerInterface $storeManager,
-        CategoryRepositoryInterface $categoryRepository,
-        BreadcrumbInterfaceFactory $breadcrumbFactory
+        Breadcrumb $breadcrumbHelper
     ) {
         parent::__construct($context);
         $this->productExtensionFactory = $productExtensionFactory;
@@ -85,8 +76,7 @@ class Product extends AbstractHelper
         $this->priceHelper = $priceHelper;
         $this->eavConfig = $eavConfig;
         $this->storeManager = $storeManager;
-        $this->categoryRepository = $categoryRepository;
-        $this->breadcrumbFactory = $breadcrumbFactory;
+        $this->breadcrumbHelper = $breadcrumbHelper;
     }
 
     /**
@@ -282,90 +272,10 @@ class Product extends AbstractHelper
     }
 
     /**
-     * Add breadcrumb data to product
-     *
-     * @param MagentoProduct|ProductInterface $product
-     * @param string[] $filters
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
-     */
-    public function addBreadcrumbsData(ProductInterface $product, $filters = [])
-    {
-        $useSubcategoryFilter = $this->scopeConfig->getValue(
-            Category::SHOW_CATEGORY_FILTER_PATH,
-            ScopeInterface::SCOPE_STORE,
-            $this->storeManager->getStore()->getId()
-        );
-        $categories = $product->getCategoryIds();
-        $categoryId = array_shift($categories);
-        /** @var Category $category */
-        $category = $this->categoryRepository->get($categoryId);
-        $categoryExtensionAttributes = $category->getExtensionAttributes();
-        if ($categoryExtensionAttributes) {
-            $breadcrumbs = $categoryExtensionAttributes->getBreadcrumbs();
-        } else {
-            $breadcrumbs = [];
-        }
-
-        $categoryCrumb = end($breadcrumbs);
-        reset($categories);
-        foreach($breadcrumbs as $id => $crumb) { /** @var BreadcrumbInterface $crumb */
-            if ($crumb->getId() === $categoryId) {
-                if ($useSubcategoryFilter) {
-                    //change subcategory url to use subcategory filter instead of link to subcategory page
-                    $prev = ($id > 0 ? $id : 1) - 1;
-                    $parentCategory = $breadcrumbs[$prev];
-                    $crumb->setUrlPath($parentCategory->getUrlPath());
-                    $crumb->setUrlQuery(['filters' => ['in_category' => $categoryId]]);
-                }
-                $categoryCrumb = $crumb;
-                break;
-            }
-        }
-
-        foreach($filters as $attribute) {
-            if ($product->hasData($attribute)) {
-                $attributeValue = $product->getData($attribute);
-                $attributeLabel = $product->getAttributeText($attribute);
-                if (is_array($attributeLabel)) {
-                    $attributeLabel = implode(', ', $attributeLabel);
-                }
-                $categoryCrumbFilters = $useSubcategoryFilter ? $categoryCrumb->getUrlQuery()['filters'] : [];
-                $attributeCrumb['name'] = $attributeLabel;
-                $attributeCrumb['url_path'] = $categoryCrumb->getUrlPath();
-                $attributeCrumb['url_query']['filters'] = $categoryCrumbFilters + [$attribute => $attributeValue];
-                $breadcrumbs[] = $this->createBreadcrumb($attributeCrumb);
-            }
-        }
-
-        $breadcrumbs[] = $this->createBreadcrumb([
-            'name' => $product->getName()
-        ]);
-
-        $productExtension = $this->getProductExtensionAttributes($product);
-        $productExtension->setBreadcrumbs($breadcrumbs);
-        $product->setExtensionAttributes($productExtension);
-    }
-
-
-    /**
-     * @param mixed $data
-     * @return BreadcrumbInterface
-     */
-    protected function createBreadcrumb($data)
-    {
-        /** @var BreadcrumbInterface $breadcrumb */
-        $breadcrumb = $this->breadcrumbFactory->create();
-        $breadcrumb->loadFromData($data);
-
-        return $breadcrumb;
-    }
-
-    /**
      * Add additional data to product
      *
      * @param MagentoProduct|ProductInterface $product
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function addAdditionalInformation($product)
     {
@@ -375,7 +285,7 @@ class Product extends AbstractHelper
         $this->addProductImageAttribute($product);
         $this->addProductImageAttribute($product, 'product_list_image', 'thumbnail_url');
         $this->addMediaGallerySizes($product);
-        $this->addBreadcrumbsData($product, $this->getFilterableAttributes());
+        $this->breadcrumbHelper->addProductBreadcrumbsData($product, $this->getFilterableAttributes());
 
         $this->calculateCatalogDisplayPrice($product);
     }
@@ -385,7 +295,7 @@ class Product extends AbstractHelper
      *
      * @return array
      */
-    protected function getFilterableAttributes()
+    public function getFilterableAttributes()
     {
         $attributes = [];
         if ($config = $this->scopeConfig->getValue(BreadcrumbsAttribute::BREADCRUMBS_ATTRIBUTES_CONFIG_PATH)) {

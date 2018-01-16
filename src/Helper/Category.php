@@ -34,11 +34,6 @@ class Category extends AbstractHelper
     /** @var \Magento\Catalog\Api\Data\CategoryExtensionFactory */
     protected $extensionFactory;
 
-    /** @var BreadcrumbInterfaceFactory */
-    protected $breadcrumbFactory;
-
-    protected $loadedCategories = [];
-
     /**
      * @param AppContext $context
      * @param \Magento\Framework\Image\AdapterFactory $imageFactory
@@ -47,7 +42,6 @@ class Category extends AbstractHelper
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\View\ConfigInterface $viewConfig
      * @param CategoryRepositoryInterface $categoryRepository
-     * @param BreadcrumbInterfaceFactory $breadcrumbFactory
      */
     public function __construct(
         AppContext $context,
@@ -56,8 +50,7 @@ class Category extends AbstractHelper
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\View\ConfigInterface $viewConfig,
-        CategoryRepositoryInterface $categoryRepository,
-        BreadcrumbInterfaceFactory $breadcrumbFactory
+        CategoryRepositoryInterface $categoryRepository
     ) {
         parent::__construct($context);
         $this->viewConfig = $viewConfig;
@@ -66,12 +59,12 @@ class Category extends AbstractHelper
         $this->imageFactory = $imageFactory;
         $this->categoryRepository = $categoryRepository;
         $this->extensionFactory = $extensionFactory;
-        $this->breadcrumbFactory = $breadcrumbFactory;
     }
 
     /**
      * @param MagentoCategory $category
      * @param string $size
+     * @throws \Exception
      */
     public function addImageAttribute($category, $size = 'category_page_grid')
     {
@@ -85,6 +78,7 @@ class Category extends AbstractHelper
      * @param string $attribute Attribute name for convertion
      * @param string $size
      * @param string $imagePath
+     * @throws \Exception
      */
     public function convertImageAttributeToUrl($category, $attribute = 'image',  $size = 'category_page_grid', $imagePath = 'catalog/category/')
     {
@@ -123,69 +117,5 @@ class Category extends AbstractHelper
             . $categorySubPath . $resizedImagePath;
 
         $category->setData($attribute, $url);
-    }
-
-    /**
-     * @param MagentoCategory $category
-     * @param MagentoCategoryCollection $collection
-     */
-    public function addBreadcrumbsData($category, $collection = null)
-    {
-        $pathInStore = $category->getPathInStore();
-        if(empty($pathInStore)) {
-            return;
-        }
-
-        $result = [];
-
-        $pathIds = array_reverse(explode(',', $pathInStore));
-        array_pop($pathIds); // remove the current category from parent path ids
-
-        foreach ($pathIds as $id) {
-            if($collection) {
-                $parentCategory = $collection->getItemById($id);
-            } else if(array_key_exists($id, $this->loadedCategories)) {
-                $parentCategory = $this->loadedCategories[$id];
-            } else {
-                $parentCategory = $this->categoryRepository->get($id);
-                $this->loadedCategories[$id] = $parentCategory;
-            }
-
-            // todo: category may not be found - investigate why!
-            if(!$parentCategory) {
-                continue;
-            }
-
-            $result[] = $this->createBreadcrumb($parentCategory);
-        }
-
-        $result[] = $this->createBreadcrumb($category);
-
-        $extensionAttributes = $category->getExtensionAttributes();
-        if($extensionAttributes === null) {
-            $extensionAttributes = $this->extensionFactory->create();
-        }
-
-        $extensionAttributes->setData('breadcrumbs', $result);
-        $category->setExtensionAttributes($extensionAttributes);
-    }
-
-    /**
-     * @param CategoryInterface $category
-     * @return BreadcrumbInterface
-     */
-    protected function createBreadcrumb($category)
-    {
-        /** @var BreadcrumbInterface $breadcrumb */
-        $breadcrumb = $this->breadcrumbFactory->create();
-        $data = [
-            'id' => $category->getId(),
-            'name' => $category->getName(),
-            'url_path' => $category->getUrlPath(),
-            'url_key' => $category->getUrlKey()
-        ];
-        $breadcrumb->loadFromData($data);
-
-        return $breadcrumb;
     }
 }
