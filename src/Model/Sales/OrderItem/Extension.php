@@ -2,8 +2,9 @@
 namespace Hatimeria\Reagento\Model\Sales\OrderItem;
 
 use Magento\Catalog\Api\Data\ProductExtensionInterface;
+use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Directory\Model\Currency;
 use Magento\Framework\Api\ExtensionAttributesFactory;
-use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Sales\Api\Data\OrderItemExtensionInterface;
 use Magento\Sales\Api\Data\OrderItemInterface;
 use Magento\Sales\Model\Order\Item;
@@ -13,15 +14,10 @@ class Extension
     /** @var ExtensionAttributesFactory */
     protected $extensionAttributesFactory;
 
-    /** @var PriceCurrencyInterface */
-    protected $priceCurrency;
-
     public function __construct(
-        ExtensionAttributesFactory $extensionAttributesFactory,
-        PriceCurrencyInterface $priceCurrency
+        ExtensionAttributesFactory $extensionAttributesFactory
     ) {
         $this->extensionAttributesFactory = $extensionAttributesFactory;
-        $this->priceCurrency = $priceCurrency;
     }
 
     /**
@@ -31,15 +27,21 @@ class Extension
      */
     public function addAttributes(OrderItemInterface $item)
     {
+        /** @var ProductInterface $product */
         $product = $item->getProduct();
+        /** @var Currency $currency */
+        $currency = $item->getOrder()->getOrderCurrency();
         /** @var ProductExtensionInterface $productAttributes */
         $productAttributes = $product->getExtensionAttributes();
+
         $extensionAttributes = $this->getOrderItemExtensionAttribute($item);
         $extensionAttributes->setThumbnailUrl($productAttributes->getThumbnailUrl());
         $extensionAttributes->setUrlKey($product->getUrlKey());
         $extensionAttributes->setLink($product->getProductUrl());
-        $extensionAttributes->setDisplayPrice($this->priceCurrency->format($productAttributes->getCatalogDisplayPrice(), false));
-        $extensionAttributes->setRowTotalInclTax($this->priceCurrency->format($item->getRowTotalInclTax(), false));
+        $extensionAttributes->setDisplayPrice($productAttributes->getCatalogDisplayPrice());
+        $extensionAttributes->setRowTotalInclTax($item->getRowTotalInclTax());
+        $extensionAttributes->setCurrency($currency->getCurrencySymbol() ?: $currency->getCode());
+
         $item->setExtensionAttributes($extensionAttributes);
     }
 

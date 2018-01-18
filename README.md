@@ -65,19 +65,20 @@ Extension attributes:
 - `Magento\Sales\Api\Data\OrderInterface`:
     ```json
     {
-      "masked_id": "string",
       "currency": "string",
+      "masked_id": "string",
       "shipping_address": "Magento\Sales\Api\Data\OrderAddressInterface"
     }
     ```
 - `Magento\Sales\Api\Data\OrderItemInterface`:
     ```json
     {
-      "thumbnail_url": "string",
-      "url_key": "string",
-      "link": "string",
+      "currency": "string",
       "display_price": "string",
-      "row_total_incl_tax": "string"
+      "link": "string",
+      "row_total_incl_tax": "string",
+      "thumbnail_url": "string",
+      "url_key": "string"
     }
     ```
 - `Magento\Store\Api\Data\StoreConfigInterface`:

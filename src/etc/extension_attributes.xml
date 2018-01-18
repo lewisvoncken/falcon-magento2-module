@@ -33,6 +33,7 @@
         <attribute code="thumbnail_url" type="string" />
         <attribute code="url_key" type="string" />
         <attribute code="link" type="string" />
+        <attribute code="currency" type="string" />
         <attribute code="display_price" type="string" />
         <attribute code="row_total_incl_tax" type="string" />
     </extension_attributes>
