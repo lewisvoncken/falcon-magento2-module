@@ -26,6 +26,8 @@
     </extension_attributes>
     <extension_attributes for="Magento\Sales\Api\Data\OrderInterface">
         <attribute code="masked_id" type="string" />
+        <attribute code="currency" type="string" />
+        <attribute code="shipping_address" type="Magento\Sales\Api\Data\OrderAddressInterface" />
     </extension_attributes>
     <extension_attributes for="Magento\Sales\Api\Data\OrderItemInterface">
         <attribute code="thumbnail_url" type="string" />

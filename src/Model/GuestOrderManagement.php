@@ -3,6 +3,7 @@
 namespace Hatimeria\Reagento\Model;
 
 use Hatimeria\Reagento\Api\HatimeriaGuestOrderManagementInterface;
+use Hatimeria\Reagento\Model\Sales\Order\Extension as OrderExtension;
 use Hatimeria\Reagento\Model\Sales\OrderItem\Extension as OrderItemExtension;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Sales\Api\Data\OrderInterface;
@@ -21,20 +22,26 @@ class GuestOrderManagement implements HatimeriaGuestOrderManagementInterface
     /** @var OrderItemExtension */
     private $orderItemExtension;
 
+    /** @var OrderExtension */
+    private $orderExtension;
+
     /**
      * GuestOrderManagement constructor.
      * @param OrderRepositoryInterface $orderRepository
+     * @param OrderExtension $orderExtension
      * @param OrderItemExtension $orderItemExtension
      * @param OrderIdMaskFactory $orderIdMaskFactory
      */
     public function __construct(
         OrderRepositoryInterface $orderRepository,
+        OrderExtension $orderExtension,
         OrderItemExtension $orderItemExtension,
         OrderIdMaskFactory $orderIdMaskFactory
     ) {
         $this->orderRepository = $orderRepository;
         $this->orderIdMaskFactory = $orderIdMaskFactory;
         $this->orderItemExtension = $orderItemExtension;
+        $this->orderExtension = $orderExtension;
     }
 
     /**
@@ -51,6 +58,7 @@ class GuestOrderManagement implements HatimeriaGuestOrderManagementInterface
         }
 
         $order = $this->orderRepository->get($realOrderId);
+        $this->orderExtension->addAttributes($order);
         $this->addOrderItemExtensionAttributes($order);
         if(!$order->getId() || $order->getCustomerId()) {
             throw new NoSuchEntityException(__('Unable to find order %maskedOrderId', ['maskedOrderId' => $orderId]));

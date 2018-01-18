@@ -65,7 +65,9 @@ Extension attributes:
 - `Magento\Sales\Api\Data\OrderInterface`:
     ```json
     {
-      "masked_id": "string"
+      "masked_id": "string",
+      "currency": "string",
+      "shipping_address": "Magento\Sales\Api\Data\OrderAddressInterface"
     }
     ```
 - `Magento\Sales\Api\Data\OrderItemInterface`:

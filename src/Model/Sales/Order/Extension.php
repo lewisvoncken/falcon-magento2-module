@@ -2,7 +2,9 @@
 namespace Hatimeria\Reagento\Model\Sales\Order;
 
 use Magento\Framework\Api\ExtensionAttributesFactory;
+use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Sales\Api\Data\OrderInterface;
+use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\ShippingAssignmentBuilder;
 
 class Extension
@@ -13,27 +15,40 @@ class Extension
     /** @var ShippingAssignmentBuilder */
     protected $shippingAssignmentBuilder;
 
+    /** @var PriceCurrencyInterface */
+    protected $priceCurrency;
+
     /**
      * Extension constructor.
      * @param ExtensionAttributesFactory $extensionAttributesFactory
      * @param ShippingAssignmentBuilder $shippingAssignmentBuilder
+     * @param PriceCurrencyInterface $priceCurrency
      */
     public function __construct(
         ExtensionAttributesFactory $extensionAttributesFactory,
-        ShippingAssignmentBuilder $shippingAssignmentBuilder
+        ShippingAssignmentBuilder $shippingAssignmentBuilder,
+        PriceCurrencyInterface $priceCurrency
     ) {
         $this->extensionAttributesFactory = $extensionAttributesFactory;
         $this->shippingAssignmentBuilder = $shippingAssignmentBuilder;
+        $this->priceCurrency = $priceCurrency;
     }
 
     /**
      * Add extension attributes to order entity
      *
-     * @param OrderInterface $order
+     * @param Order|OrderInterface $order
      */
     public function addAttributes(OrderInterface $order)
     {
         $extensionAttributes = $this->getOrderExtensionAttribute($order);
+
+        $orderCurrency = $this->priceCurrency->getCurrencySymbol($order->getStoreId(), $order->getOrderCurrencyCode());
+        $extensionAttributes->setCurrency($orderCurrency ?: $order->getOrderCurrencyCode());
+
+        if (!$order->getIsVirtual()) {
+            $extensionAttributes->setShippingAddress($order->getShippingAddress());
+        }
 
         if (!$extensionAttributes->getShippingAssignments()) {
             /** @var ShippingAssignmentBuilder $shippingAssignment */

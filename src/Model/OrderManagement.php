@@ -67,6 +67,7 @@ class OrderManagement implements HatimeriaOrderManagementInterface
     {
         $this->checkCustomerContext();
         $order = $this->orderRepository->get($orderId);
+        $this->addOrderExtensionAttributes($order);
         $this->addOrderItemExtensionAttributes($order);
         if(!$order->getId() || $order->getCustomerId() !== $this->getCustomerId()) {
             throw new NoSuchEntityException(__('Unable to find order %orderId', ['orderId' => $orderId]));
