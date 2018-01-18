@@ -62,12 +62,20 @@ Extension attributes:
       "guest_quote_id": "string"
     }
     ```
-- `Magento\Quote\Api\Data\TotalsItemInterface`:
+- `Magento\Sales\Api\Data\OrderInterface`:
+    ```json
+    {
+      "masked_id": "string"
+    }
+    ```
+- `Magento\Sales\Api\Data\OrderItemInterface`:
     ```json
     {
       "thumbnail_url": "string",
       "url_key": "string",
-      "available_qty": "string"
+      "link": "string",
+      "display_price": "string",
+      "row_total_incl_tax": "string"
     }
     ```
 - `Magento\Store\Api\Data\StoreConfigInterface`:
@@ -82,10 +90,12 @@ Extension attributes:
       "is_active": "int"
     }
     ```
-- `Magento\Sales\Api\Data\OrderInterface`:
+- `Magento\Quote\Api\Data\TotalsItemInterface`:
     ```json
     {
-      "masked_id": "string"
+      "thumbnail_url": "string",
+      "url_key": "string",
+      "available_qty": "string"
     }
     ```
 

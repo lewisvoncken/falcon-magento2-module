@@ -3,19 +3,19 @@
 namespace Hatimeria\Reagento\Model;
 
 use Hatimeria\Reagento\Api\HatimeriaOrderManagementInterface;
+use Hatimeria\Reagento\Model\Sales\Order\Extension as OrderExtension;
+use Hatimeria\Reagento\Model\Sales\OrderItem\Extension as OrderItemExtension;
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\Api\Search\FilterGroup;
 use Magento\Framework\Api\SearchCriteria;
 use Magento\Framework\Api\SortOrder;
 use Magento\Framework\Exception\AuthorizationException;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Sales\Api\Data\OrderExtensionFactory;
-use Magento\Sales\Api\Data\OrderExtensionInterface;
 use Magento\Sales\Api\Data\OrderInterface;
+use Magento\Sales\Api\Data\OrderItemInterface;
 use Magento\Sales\Api\Data\OrderSearchResultInterface;
 use Magento\Sales\Api\Data\OrderSearchResultInterfaceFactory as SearchResultFactory;
 use Magento\Sales\Api\OrderRepositoryInterface;
-use Magento\Sales\Model\Order\ShippingAssignmentBuilder;
 
 class OrderManagement implements HatimeriaOrderManagementInterface
 {
@@ -29,32 +29,32 @@ class OrderManagement implements HatimeriaOrderManagementInterface
     /** @var SearchResultFactory */
     protected $searchResultFactory;
 
-    /** @var OrderExtensionFactory */
-    protected $orderExtensionFactory;
+    /** @var OrderExtension */
+    private $orderExtension;
 
-    /** @var ShippingAssignmentBuilder */
-    protected $shippingAssignmentBuilder;
+    /** @var OrderItemExtension */
+    protected $orderItemExtension;
 
     /**
      * OrderManagement constructor.
      * @param OrderRepositoryInterface $orderRepository
      * @param UserContextInterface $userContext
      * @param SearchResultFactory $searchResultFactory
-     * @param OrderExtensionFactory $orderExtensionFactory
-     * @param ShippingAssignmentBuilder $shippingAssignmentBuilder
+     * @param OrderExtension $orderExtension
+     * @param OrderItemExtension $orderItemExtension
      */
     public function __construct(
         OrderRepositoryInterface $orderRepository,
         UserContextInterface $userContext,
         SearchResultFactory $searchResultFactory,
-        OrderExtensionFactory $orderExtensionFactory,
-        ShippingAssignmentBuilder $shippingAssignmentBuilder
+        OrderExtension $orderExtension,
+        OrderItemExtension $orderItemExtension
     ) {
         $this->orderRepository = $orderRepository;
         $this->userContext = $userContext;
         $this->searchResultFactory = $searchResultFactory;
-        $this->orderExtensionFactory = $orderExtensionFactory;
-        $this->shippingAssignmentBuilder = $shippingAssignmentBuilder;
+        $this->orderItemExtension = $orderItemExtension;
+        $this->orderExtension = $orderExtension;
     }
 
     /**
@@ -67,6 +67,7 @@ class OrderManagement implements HatimeriaOrderManagementInterface
     {
         $this->checkCustomerContext();
         $order = $this->orderRepository->get($orderId);
+        $this->addOrderItemExtensionAttributes($order);
         if(!$order->getId() || $order->getCustomerId() !== $this->getCustomerId()) {
             throw new NoSuchEntityException(__('Unable to find order %orderId', ['orderId' => $orderId]));
         }
@@ -108,7 +109,7 @@ class OrderManagement implements HatimeriaOrderManagementInterface
         $searchResult->setCurPage($searchCriteria->getCurrentPage());
         $searchResult->setPageSize($searchCriteria->getPageSize());
         foreach ($searchResult->getItems() as $order) {
-            $this->setShippingAssignments($order);
+            $this->addOrderExtensionAttributes($order);
         }
         return $searchResult;
     }
@@ -148,23 +149,20 @@ class OrderManagement implements HatimeriaOrderManagementInterface
 
     /**
      * @param OrderInterface $order
-     * @return void
      */
-    private function setShippingAssignments(OrderInterface $order)
+    protected function addOrderExtensionAttributes(OrderInterface $order)
     {
-        /** @var OrderExtensionInterface $extensionAttributes */
-        $extensionAttributes = $order->getExtensionAttributes();
+        $this->orderExtension->addAttributes($order);
+    }
 
-        if ($extensionAttributes === null) {
-            $extensionAttributes = $this->orderExtensionFactory->create();
-        } elseif ($extensionAttributes->getShippingAssignments() !== null) {
-            return;
+    /**
+     * @param OrderInterface $order
+     */
+    protected function addOrderItemExtensionAttributes(OrderInterface $order)
+    {
+        foreach($order->getItems() as $item) { /** @var OrderItemInterface $item */
+            $this->orderItemExtension->addAttributes($item);
         }
-        /** @var ShippingAssignmentBuilder $shippingAssignment */
-        $shippingAssignments = $this->shippingAssignmentBuilder;
-        $shippingAssignments->setOrderId($order->getEntityId());
-        $extensionAttributes->setShippingAssignments($shippingAssignments->create());
-        $order->setExtensionAttributes($extensionAttributes);
     }
 
     /**
