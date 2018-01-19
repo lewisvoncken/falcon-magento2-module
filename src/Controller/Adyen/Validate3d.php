@@ -105,7 +105,8 @@ class Validate3d extends AdyenValidate3d
                         // switched original redirect to json response
                         $this->getResponse()->representJson(
                             $this->jsonHelper->jsonEncode([
-                                'success' => true
+                                'success' => true,
+                                'order_id' => $order->getIncrementId()
                             ])
                         );
                     } else {
@@ -148,7 +149,8 @@ class Validate3d extends AdyenValidate3d
             // switched original redirect to json response
             $this->getResponse()->representJson(
                 $this->jsonHelper->jsonEncode([
-                    'success' => true
+                    'success' => true,
+                    'order_id' => $order->getIncrementId()
                 ])
             );
         }
