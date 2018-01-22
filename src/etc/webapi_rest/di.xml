@@ -58,6 +58,10 @@
         <plugin name="hatimeriaReagentoTotalsItemConverter" type="Hatimeria\Reagento\Plugin\Quote\Model\Cart\Totals\ItemConverter" />
     </type>
 
+    <type name="Magento\Quote\Model\Quote">
+        <plugin name="hatimeriaReagentoQuotePlugin" type="Hatimeria\Reagento\Plugin\Quote\Model\Quote" />
+    </type>
+
     <type name="Magento\Quote\Model\QuoteManagement">
         <plugin name="hatimeriaReagentoQuoteManagement" type="Hatimeria\Reagento\Plugin\Quote\Model\QuoteManagement" />
     </type>
