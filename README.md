@@ -62,12 +62,23 @@ Extension attributes:
       "guest_quote_id": "string"
     }
     ```
-- `Magento\Quote\Api\Data\TotalsItemInterface`:
+- `Magento\Sales\Api\Data\OrderInterface`:
     ```json
     {
+      "currency": "string",
+      "masked_id": "string",
+      "shipping_address": "Magento\Sales\Api\Data\OrderAddressInterface"
+    }
+    ```
+- `Magento\Sales\Api\Data\OrderItemInterface`:
+    ```json
+    {
+      "currency": "string",
+      "display_price": "string",
+      "link": "string",
+      "row_total_incl_tax": "string",
       "thumbnail_url": "string",
-      "url_key": "string",
-      "available_qty": "string"
+      "url_key": "string"
     }
     ```
 - `Magento\Store\Api\Data\StoreConfigInterface`:
@@ -82,10 +93,12 @@ Extension attributes:
       "is_active": "int"
     }
     ```
-- `Magento\Sales\Api\Data\OrderInterface`:
+- `Magento\Quote\Api\Data\TotalsItemInterface`:
     ```json
     {
-      "masked_id": "string"
+      "thumbnail_url": "string",
+      "url_key": "string",
+      "available_qty": "string"
     }
     ```
 
