@@ -22,12 +22,14 @@ Custom API endpoints provided by this module:
 - `[GET] /rest/V1/products` (**overridden**) - get product list with a custom `filters` data in response
 - `[GET] /rest/V1/url/?requestPath=:url` - get info about product, category or cms page by the given URL
 - `[POST] /rest/V1/carts/mine/payment-information` (**overridden**) - modifies the docblock of function return type (may be int or OrderResponse object)
+- `[POST] /rest/V1/customers/me/address` - create new address for customer
 - `[POST] /rest/V1/contact` - send a contact email
 - `[POST] /rest/V1/guest-carts/:cartId/payment-information` (**overridden**) - modifies the docblock of function return type (may be int or OrderResponse object)
 - `[POST] /rest/V1/integration/customer/token` (**overridden**) - adding guestQuoteId param to merge current guest quote with logged in customer
 - `[PUT] /rest/V1/carts/mine/reagento-order` - place order with Adyen credit card as a logged in customer - getting an object as a response
 - `[PUT] /rest/V1/guest-carts/:cartId/reagento-order` - place order with Adyen credit card - getting an object as a response
-- `[GET] /rest/V1/menu` - get menu tree
+- `[PUT] /rest/V1/customers/me/address` - update customer address
+- `[DELETE] /rest/V1/customers/me/address` - remove customer address
 
 Extension attributes:
 
