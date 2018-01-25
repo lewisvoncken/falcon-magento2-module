@@ -170,7 +170,7 @@
             <parameter name="customerId" force="true">%customer_id%</parameter>
         </data>
     </route>
-    <route url="/V1/customers/me/address" method="DELETE">
+    <route url="/V1/customers/me/address/:addressId" method="DELETE">
         <service class="Hatimeria\Reagento\Api\Customer\AddressRepositoryInterface" method="deleteCustomerAddress"/>
         <resources>
             <resource ref="self"/>

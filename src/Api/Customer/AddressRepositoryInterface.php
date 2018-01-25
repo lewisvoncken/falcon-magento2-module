@@ -7,8 +7,8 @@ use Magento\Framework\Api\SearchCriteriaInterface;
 interface AddressRepositoryInterface
 {
     /**
-     * @param SearchCriteriaInterface|null $searchCriteria
-     * @return \Magento\Customer\Api\Data\AddressInterface[]
+     * @param \Magento\Framework\Api\SearchCriteriaInterface|null $searchCriteria
+     * @return \Magento\Customer\Api\Data\AddressSearchResultsInterface
      */
     public function getCustomerAddressList(SearchCriteriaInterface $searchCriteria = null);
 

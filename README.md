@@ -31,7 +31,7 @@ Custom API endpoints provided by this module:
 - `[PUT] /rest/V1/carts/mine/reagento-order` - place order with Adyen credit card as a logged in customer - getting an object as a response
 - `[PUT] /rest/V1/guest-carts/:cartId/reagento-order` - place order with Adyen credit card - getting an object as a response
 - `[PUT] /rest/V1/customers/me/address` - update customer address
-- `[DELETE] /rest/V1/customers/me/address` - remove customer address
+- `[DELETE] /rest/V1/customers/me/address/:addressId` - remove customer address
 
 Extension attributes:
 

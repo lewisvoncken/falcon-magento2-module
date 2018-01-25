@@ -51,7 +51,7 @@ class AddressRepository implements AddressRepositoryInterface
 
     /**
      * @param SearchCriteriaInterface|null $searchCriteria
-     * @return AddressInterface[]
+     * @return AddressSearchResultsInterface
      * @throws AuthorizationException
      * @throws LocalizedException
      */
@@ -71,7 +71,7 @@ class AddressRepository implements AddressRepositoryInterface
         /** @var AddressSearchResultsInterface $searchResult */
         $searchResult = $this->addressRepository->getList($searchCriteriaBuilder->create());
 
-        return $searchResult->getItems();
+        return $searchResult;
     }
 
     /**
