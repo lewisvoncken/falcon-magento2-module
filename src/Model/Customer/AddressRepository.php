@@ -6,8 +6,11 @@ use Hatimeria\Reagento\Api\Customer\AddressRepositoryInterface;
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\Customer\Api\AddressRepositoryInterface as CustomerAddressRepositoryInterface;
 use Magento\Customer\Api\Data\AddressInterface;
+use Magento\Customer\Api\Data\AddressSearchResultsInterface;
 use Magento\Customer\Model\Address;
 use Magento\Customer\Model\AddressRegistry;
+use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Exception\AuthorizationException;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\LocalizedException;
@@ -24,20 +27,68 @@ class AddressRepository implements AddressRepositoryInterface
     /** @var CustomerAddressRepositoryInterface */
     protected $addressRepository;
 
+    /** @var SearchCriteriaBuilder */
+    protected $searchCriteriaBuilder;
+
     /**
      * AddressRepository constructor.
      * @param UserContextInterface $userContext
      * @param AddressRegistry $addressRegistry
      * @param \Magento\Customer\Api\AddressRepositoryInterface $addressRepository
+     * @param SearchCriteriaBuilder $searchCriteriaBuilder
      */
     public function __construct(
         UserContextInterface $userContext,
         AddressRegistry $addressRegistry,
-        CustomerAddressRepositoryInterface $addressRepository
+        CustomerAddressRepositoryInterface $addressRepository,
+        SearchCriteriaBuilder $searchCriteriaBuilder
     ) {
         $this->userContext = $userContext;
         $this->addressRegistry = $addressRegistry;
         $this->addressRepository = $addressRepository;
+        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
+    }
+
+    /**
+     * @param SearchCriteriaInterface|null $searchCriteria
+     * @return AddressInterface[]
+     * @throws AuthorizationException
+     * @throws LocalizedException
+     */
+    public function getCustomerAddressList(SearchCriteriaInterface $searchCriteria = null)
+    {
+        $this->checkCustomerContext();
+
+        $searchCriteriaBuilder = $this->searchCriteriaBuilder;
+        if ($searchCriteria) {
+            $searchCriteriaBuilder->setCurrentPage($searchCriteria->getCurrentPage());
+            $searchCriteriaBuilder->setPageSize($searchCriteria->getPageSize());
+            $searchCriteriaBuilder->setFilterGroups($searchCriteria->getFilterGroups());
+            $searchCriteriaBuilder->setSortOrders($searchCriteria->getSortOrders() ?: []);
+        }
+        $customerId = $this->getCurrentCustomerId();
+        $searchCriteriaBuilder = $this->searchCriteriaBuilder->addFilter('parent_id', $customerId);
+        /** @var AddressSearchResultsInterface $searchResult */
+        $searchResult = $this->addressRepository->getList($searchCriteriaBuilder->create());
+
+        return $searchResult->getItems();
+    }
+
+    /**
+     * @param int $addressId
+     * @return AddressInterface
+     * @throws AuthorizationException
+     * @throws NoSuchEntityException
+     */
+    public function getCustomerAddress($addressId)
+    {
+        $this->checkCustomerContext();
+        $addressModel = $this->addressRegistry->retrieve($addressId);
+        if ($addressModel->getCustomerId() !== $this->getCurrentCustomerId()) {
+            throw new AuthorizationException(__('Customer is not allowed to view this address'));
+        }
+
+        return $addressModel->getDataModel();
     }
 
     /**

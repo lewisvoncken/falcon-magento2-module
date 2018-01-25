@@ -134,6 +134,24 @@
         </resources>
     </route>
 
+    <route url="/V1/customers/me/address/" method="GET">
+        <service class="Hatimeria\Reagento\Api\Customer\AddressRepositoryInterface" method="getCustomerAddressList"/>
+        <resources>
+            <resource ref="self"/>
+        </resources>
+        <data>
+            <parameter name="customerId" force="true">%customer_id%</parameter>
+        </data>
+    </route>
+    <route url="/V1/customers/me/address/:addressId" method="GET">
+        <service class="Hatimeria\Reagento\Api\Customer\AddressRepositoryInterface" method="getCustomerAddress"/>
+        <resources>
+            <resource ref="self"/>
+        </resources>
+        <data>
+            <parameter name="customerId" force="true">%customer_id%</parameter>
+        </data>
+    </route>
     <route url="/V1/customers/me/address" method="POST">
         <service class="Hatimeria\Reagento\Api\Customer\AddressRepositoryInterface" method="createCustomerAddress"/>
         <resources>
