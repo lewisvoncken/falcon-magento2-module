@@ -82,7 +82,8 @@ Extension attributes:
       "link": "string",
       "row_total_incl_tax": "string",
       "thumbnail_url": "string",
-      "url_key": "string"
+      "url_key": "string",
+      "options": "string"
     }
     ```
 - `Magento\Store\Api\Data\StoreConfigInterface`:

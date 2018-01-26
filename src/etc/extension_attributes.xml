@@ -36,6 +36,7 @@
         <attribute code="currency" type="string" />
         <attribute code="display_price" type="string" />
         <attribute code="row_total_incl_tax" type="string" />
+        <attribute code="options" type="string" />
     </extension_attributes>
     <extension_attributes for="Magento\Store\Api\Data\StoreConfigInterface">
         <attribute code="optional_post_codes" type="mixed" />

@@ -31,6 +31,10 @@ class Extension
         $product = $item->getProduct();
         /** @var Currency $currency */
         $currency = $item->getOrder()->getOrderCurrency();
+
+        /** @var array|null $options */
+        $options = $item->getProductOptionByCode('attributes_info');
+
         /** @var ProductExtensionInterface $productAttributes */
         $productAttributes = $product->getExtensionAttributes();
 
@@ -41,6 +45,7 @@ class Extension
         $extensionAttributes->setDisplayPrice($productAttributes->getCatalogDisplayPrice());
         $extensionAttributes->setRowTotalInclTax($item->getRowTotalInclTax());
         $extensionAttributes->setCurrency($currency->getCurrencySymbol() ?: $currency->getCode());
+        $extensionAttributes->setOptions($options ? json_encode($options) : null);
 
         $item->setExtensionAttributes($extensionAttributes);
     }
