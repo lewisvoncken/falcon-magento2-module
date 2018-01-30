@@ -2,22 +2,13 @@
 namespace Hatimeria\Reagento\Api\Data;
 
 
-interface OrderResponseInterface
+use Magento\Framework\Api\ExtensibleDataInterface;
+
+interface OrderResponseInterface extends ExtensibleDataInterface
 {
     const ADYEN_REDIRECT = 'adyen';
     const ORDER_ID = 'order_id';
     const ORDER_REAL_ID = 'order_real_id';
-
-    /**
-     * @param \Hatimeria\Reagento\Api\Data\AdyenRedirectInterface $adyenRedirect
-     * @return \Hatimeria\Reagento\Api\Data\OrderResponseInterface
-     */
-    public function setAdyen(\Hatimeria\Reagento\Api\Data\AdyenRedirectInterface $adyenRedirect);
-
-    /**
-     * @return \Hatimeria\Reagento\Api\Data\AdyenRedirectInterface
-     */
-    public function getAdyen();
 
     /**
      * @param string $orderId
@@ -40,4 +31,21 @@ interface OrderResponseInterface
      * @return string
      */
     public function getOrderRealId();
+
+    /**
+     * Retrieve existing extension attributes object or create a new one.
+     *
+     * @return \Hatimeria\Reagento\Api\Data\OrderResponseExtensionInterface
+     */
+    public function getExtensionAttributes();
+
+    /**
+     * Set an extension attributes object.
+     *
+     * @param \Hatimeria\Reagento\Api\Data\OrderResponseExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(
+        \Hatimeria\Reagento\Api\Data\OrderResponseExtensionInterface $extensionAttributes
+    );
 }
