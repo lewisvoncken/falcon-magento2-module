@@ -20,6 +20,13 @@
                     <comment>Leaving fill empty will use default BASE_URL</comment>
                 </field>
             </group>
+            <group id="general" translate="label" type="text" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Frontend</label>
+                <field id="domain" translate="label comment" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Frontend Domain</label>
+                    <comment>Provide base url for frontend domain. It will be used in some redirects</comment>
+                </field>
+            </group>
             <group id="catalog" translate="label" type="text" sortOrder="200" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Catalog</label>
                 <field id="show_category_filter" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">

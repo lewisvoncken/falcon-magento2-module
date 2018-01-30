@@ -7,12 +7,14 @@ use Magento\Framework\App\Helper\Context;
 use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\Registry;
 use Magento\Store\Model\ScopeInterface;
+use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 
 class Data extends AbstractHelper
 {
     const RESPONSE_TAGS_REGISTRY = 'response_tags';
     const GENERATE_CATEGORY_PRODUCT_URL_PATH = 'reagento/catalog/disable_product_category_rewrites';
+    const FRONTEND_DOMAIN_PATH = 'reagento/frontend/domain';
 
     /**
      * Default response tag sent in X-Cache-Tags header in REST
@@ -68,6 +70,25 @@ class Data extends AbstractHelper
     public function shouldGenerateProductUrls($storeId = null)
     {
         return !$this->getConfigValue(self::GENERATE_CATEGORY_PRODUCT_URL_PATH, ScopeInterface::SCOPE_STORE, $storeId);
+    }
+
+    /**
+     * Replace base url with frontend url
+     *
+     * @param string $url
+     * @param int $storeId
+     * @return string
+     */
+    public function prepareFrontendUrl($url, $storeId = null)
+    {
+        if ($frontendDomain = $this->getConfigValue(self::FRONTEND_DOMAIN_PATH, ScopeInterface::SCOPE_STORE, $storeId)) {
+            $domainPath = $this->getConfigValue(Store::XML_PATH_SECURE_IN_FRONTEND, ScopeInterface::SCOPE_STORE, $storeId) ?
+                Store::XML_PATH_SECURE_BASE_URL : Store::XML_PATH_UNSECURE_BASE_URL;
+            $baseDomain = $this->getConfigValue($domainPath, ScopeInterface::SCOPE_STORE, $storeId);
+            $url = str_replace($baseDomain, $frontendDomain, $url);
+        }
+
+        return $url;
     }
 
     /**
