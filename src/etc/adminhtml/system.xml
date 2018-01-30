@@ -20,7 +20,7 @@
                     <comment>Leaving fill empty will use default BASE_URL</comment>
                 </field>
             </group>
-            <group id="general" translate="label" type="text" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
+            <group id="frontend" translate="label" type="text" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Frontend</label>
                 <field id="domain" translate="label comment" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Frontend Domain</label>
