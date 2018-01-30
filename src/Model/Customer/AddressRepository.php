@@ -72,7 +72,7 @@ class AddressRepository implements AddressRepositoryInterface
         $searchResult = $this->addressRepository->getList($searchCriteriaBuilder->create());
 
         foreach($searchResult->getItems() as $item) {
-            $this->setDefaultAddressFlags($item);
+            $this->ensureDefaultAddressFlags($item);
         }
         return $searchResult;
     }
@@ -91,7 +91,7 @@ class AddressRepository implements AddressRepositoryInterface
             throw new AuthorizationException(__('Customer is not allowed to view this address'));
         }
 
-        return $this->setDefaultAddressFlags($addressModel->getDataModel());
+        return $this->ensureDefaultAddressFlags($addressModel->getDataModel());
     }
 
     /**
@@ -105,7 +105,7 @@ class AddressRepository implements AddressRepositoryInterface
         $this->checkCustomerContext();
         $address->setId(null);
         $address->setCustomerId($this->getCurrentCustomerId());
-        return $this->setDefaultAddressFlags($this->addressRepository->save($address));
+        return $this->ensureDefaultAddressFlags($this->addressRepository->save($address));
     }
 
     /**
@@ -125,7 +125,7 @@ class AddressRepository implements AddressRepositoryInterface
         }
 
         $address->setCustomerId($this->getCurrentCustomerId());
-        return $this->setDefaultAddressFlags($this->addressRepository->save($address));
+        return $this->ensureDefaultAddressFlags($this->addressRepository->save($address));
     }
 
     /**
@@ -176,7 +176,7 @@ class AddressRepository implements AddressRepositoryInterface
      * @param AddressInterface $customerAddress
      * @return AddressInterface
      */
-    protected function setDefaultAddressFlags(AddressInterface $customerAddress)
+    protected function ensureDefaultAddressFlags(AddressInterface $customerAddress)
     {
         if (!$customerAddress->isDefaultBilling()) {
             $customerAddress->setIsDefaultBilling(false);
