@@ -3,6 +3,7 @@
 namespace Hatimeria\Reagento\Controller\Payment\Paypal\Express;
 
 use Exception;
+use Hatimeria\Reagento\Helper\Data;
 use Magento\Quote\Model\Quote;
 use Magento\Store\Model\StoreManager;
 use Psr\Log\LoggerInterface;
@@ -29,35 +30,26 @@ use Magento\Framework\Url as UrlBuilder;
  */
 class ReturnAction extends \Magento\Paypal\Controller\Express\ReturnAction
 {
-    /**
-     * @var QuoteIdMaskFactory
-     */
+    /** @var QuoteIdMaskFactory */
     protected $quoteMaskFactory;
 
-    /**
-     * @var CartRepositoryInterface
-     */
+    /** @var CartRepositoryInterface */
     protected $cartRepository;
 
-    /**
-     * @var ScopeConfigInterface
-     */
+    /** @var ScopeConfigInterface */
     protected $scopeConfig;
 
-    /**
-     * @var LoggerInterface
-     */
+    /** @var LoggerInterface */
     protected $logger;
 
-    /**
-     * @var \Magento\Framework\Url
-     */
+    /** @var \Magento\Framework\Url */
     protected $urlBuilder;
 
-    /**
-     * @var StoreManager
-     */
+    /** @var StoreManager */
     protected $storeManager;
+
+    /** @var Data */
+    protected $reagentoHelper;
 
     /**
      * ReturnAction constructor.
@@ -74,6 +66,8 @@ class ReturnAction extends \Magento\Paypal\Controller\Express\ReturnAction
      * @param ScopeConfigInterface $scopeConfig
      * @param LoggerInterface $logger
      * @param \Magento\Framework\Url $urlBuilder
+     * @param StoreManager $storeManager
+     * @param Data $reagentoHelper
      */
     public function __construct(
         Context $context,
@@ -89,7 +83,8 @@ class ReturnAction extends \Magento\Paypal\Controller\Express\ReturnAction
         ScopeConfigInterface $scopeConfig,
         LoggerInterface $logger,
         UrlBuilder $urlBuilder,
-        StoreManager $storeManager
+        StoreManager $storeManager,
+        Data $reagentoHelper
     ) {
         parent::__construct(
             $context,
@@ -107,6 +102,7 @@ class ReturnAction extends \Magento\Paypal\Controller\Express\ReturnAction
         $this->logger = $logger;
         $this->urlBuilder = $urlBuilder;
         $this->storeManager = $storeManager;
+        $this->reagentoHelper = $reagentoHelper;
     }
 
     /**
@@ -120,7 +116,7 @@ class ReturnAction extends \Magento\Paypal\Controller\Express\ReturnAction
 
     /**
      * @param Quote $quote
-     * @return GetToken
+     * @return ReturnAction
      */
     public function setQuote(Quote $quote)
     {
@@ -129,11 +125,11 @@ class ReturnAction extends \Magento\Paypal\Controller\Express\ReturnAction
         return $this;
     }
 
-
     /**
      * Initialize Quote based on masked Id
      * @param $cartId
      * @return Quote
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     protected function initQuote($cartId)
     {
@@ -184,7 +180,7 @@ class ReturnAction extends \Magento\Paypal\Controller\Express\ReturnAction
                         ScopeConfigInterface::SCOPE_TYPE_DEFAULT
                     );
                     $message = __('Your Order got a number: #%1', $this->_checkout->getOrder()->getIncrementId());
-                    $orderId = $this->_checkout->getOrder()->getId();
+                    $orderId = $this->_checkout->getOrder()->getIncrementId();
                 }
             } else {
                 throw new LocalizedException(__('Review page is not supported!'));
@@ -202,21 +198,21 @@ class ReturnAction extends \Magento\Paypal\Controller\Express\ReturnAction
 
         $urlParams = [
             ActionInterface::PARAM_NAME_URL_ENCODED => base64_encode((string)$message),
-            'oid' => base64_encode($orderId)
+            'order_id' => $orderId,
+            'result_redirect' => 1
         ];
         $urlParams = http_build_query($urlParams);
 
         if (strpos($redirectUrl, 'http') !== false) {
             $sep = (strpos($redirectUrl, '?') === false) ? '?' : '&';
 
-            return $resultRedirect->setUrl(
-                $redirectUrl . $sep . $urlParams
-            );
+            $redirectUrl = $redirectUrl . $sep . $urlParams;
         } else {
-            return $resultRedirect->setUrl($this->urlBuilder->getBaseUrl()
-                . trim($redirectUrl, ' /') . '?' . $urlParams
-                );
+            $redirectUrl = $this->urlBuilder->getBaseUrl() . trim($redirectUrl, ' /') . '?' . $urlParams;
         }
+
+        $redirectUrl = $this->reagentoHelper->prepareFrontendUrl($redirectUrl);
+        return $resultRedirect->setUrl($redirectUrl);
     }
 
     /**
@@ -224,6 +220,8 @@ class ReturnAction extends \Magento\Paypal\Controller\Express\ReturnAction
      * @param $token
      * @param $cartId
      * @param $payerId
+     * @throws LocalizedException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     protected function placeOrder($token, $cartId, $payerId)
     {
