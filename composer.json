@@ -15,8 +15,5 @@
     },
     "scripts": {
         "release": "HatimeriaReagento\\Cmd\\Command::run"
-    },
-    "require": {
-        "adyen/module-payment": "^2.0"
     }
 }
