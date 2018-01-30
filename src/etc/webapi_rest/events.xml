@@ -3,6 +3,9 @@
     <event name="catalog_product_collection_load_after">
         <observer name="hatimeria_reagento_catalog_product_collection_load_after_observer" instance="Hatimeria\Reagento\Observer\Catalog\Product\Collection\AfterLoadObserver" />
     </event>
+    <event name="catalog_product_is_salable_after">
+        <observer name="hatimeria_reagento_catalog_product_saleable_check" instance="Hatimeria\Reagento\Observer\Catalog\Product\CheckWebsiteAvailability"/>
+    </event>
     <event name="cms_page_load_after">
         <observer name="hatimeria_reagento_cms_page_load_after_observer" instance="Hatimeria\Reagento\Observer\Cms\AfterLoadObserver"/>
     </event>
