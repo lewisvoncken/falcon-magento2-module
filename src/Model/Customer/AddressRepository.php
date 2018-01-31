@@ -5,8 +5,8 @@ namespace Hatimeria\Reagento\Model\Customer;
 use Hatimeria\Reagento\Api\Customer\AddressRepositoryInterface;
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\Customer\Api\AddressRepositoryInterface as CustomerAddressRepositoryInterface;
-use Magento\Customer\Api\Data\AddressInterface;
 use Magento\Customer\Api\Data\AddressSearchResultsInterface;
+use Magento\Customer\Api\Data\AddressInterface;
 use Magento\Customer\Model\Address;
 use Magento\Customer\Model\AddressRegistry;
 use Magento\Framework\Api\SearchCriteriaBuilder;
@@ -71,6 +71,9 @@ class AddressRepository implements AddressRepositoryInterface
         /** @var AddressSearchResultsInterface $searchResult */
         $searchResult = $this->addressRepository->getList($searchCriteriaBuilder->create());
 
+        foreach($searchResult->getItems() as $item) {
+            $this->ensureDefaultAddressFlags($item);
+        }
         return $searchResult;
     }
 
@@ -88,7 +91,7 @@ class AddressRepository implements AddressRepositoryInterface
             throw new AuthorizationException(__('Customer is not allowed to view this address'));
         }
 
-        return $addressModel->getDataModel();
+        return $this->ensureDefaultAddressFlags($addressModel->getDataModel());
     }
 
     /**
@@ -102,7 +105,7 @@ class AddressRepository implements AddressRepositoryInterface
         $this->checkCustomerContext();
         $address->setId(null);
         $address->setCustomerId($this->getCurrentCustomerId());
-        return $this->addressRepository->save($address);
+        return $this->ensureDefaultAddressFlags($this->addressRepository->save($address));
     }
 
     /**
@@ -122,7 +125,7 @@ class AddressRepository implements AddressRepositoryInterface
         }
 
         $address->setCustomerId($this->getCurrentCustomerId());
-        return $this->addressRepository->save($address);
+        return $this->ensureDefaultAddressFlags($this->addressRepository->save($address));
     }
 
     /**
@@ -167,5 +170,21 @@ class AddressRepository implements AddressRepositoryInterface
         }
 
         return true;
+    }
+
+    /**
+     * @param AddressInterface $customerAddress
+     * @return AddressInterface
+     */
+    protected function ensureDefaultAddressFlags(AddressInterface $customerAddress)
+    {
+        if (!$customerAddress->isDefaultBilling()) {
+            $customerAddress->setIsDefaultBilling(false);
+        }
+        if (!$customerAddress->isDefaultShipping()) {
+            $customerAddress->setIsDefaultShipping(false);
+        }
+
+        return $customerAddress;
     }
 }
