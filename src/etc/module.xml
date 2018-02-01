@@ -3,6 +3,8 @@
     <module name="Hatimeria_Reagento" setup_version="0.1.61">
         <sequence>
             <module name="Magento_Catalog"/>
+            <module name="Magento_Integration" />
+            <module name="Magento_Checkout" />
         </sequence>
     </module>
 </config>
