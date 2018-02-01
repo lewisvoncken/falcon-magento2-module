@@ -89,7 +89,9 @@ Extension attributes:
 - `Magento\Store\Api\Data\StoreConfigInterface`:
     ```json
     {
-      "optional_post_codes": "mixed"
+      "optional_post_codes": "mixed",
+      "min_password_length": "int",
+      "min_password_char_class": "int"
     }
     ```
 - `Magento\Store\Api\Data\StoreInterface`:
