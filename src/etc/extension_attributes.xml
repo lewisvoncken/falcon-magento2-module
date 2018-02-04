@@ -24,13 +24,26 @@
         <attribute code="url_key" type="string" />
         <attribute code="available_qty" type="string" />
     </extension_attributes>
+    <extension_attributes for="Magento\Sales\Api\Data\OrderInterface">
+        <attribute code="masked_id" type="string" />
+        <attribute code="currency" type="string" />
+        <attribute code="shipping_address" type="Magento\Sales\Api\Data\OrderAddressInterface" />
+    </extension_attributes>
+    <extension_attributes for="Magento\Sales\Api\Data\OrderItemInterface">
+        <attribute code="thumbnail_url" type="string" />
+        <attribute code="url_key" type="string" />
+        <attribute code="link" type="string" />
+        <attribute code="currency" type="string" />
+        <attribute code="display_price" type="string" />
+        <attribute code="row_total_incl_tax" type="string" />
+        <attribute code="options" type="string" />
+    </extension_attributes>
     <extension_attributes for="Magento\Store\Api\Data\StoreConfigInterface">
         <attribute code="optional_post_codes" type="mixed" />
+        <attribute code="min_password_length" type="int" />
+        <attribute code="min_password_char_class" type="int" />
     </extension_attributes>
     <extension_attributes for="Magento\Store\Api\Data\StoreInterface">
         <attribute code="is_active" type="int" />
-    </extension_attributes>
-    <extension_attributes for="Magento\Sales\Api\Data\OrderInterface">
-        <attribute code="masked_id" type="string" />
     </extension_attributes>
 </config>

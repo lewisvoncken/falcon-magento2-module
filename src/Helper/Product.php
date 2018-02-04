@@ -139,6 +139,7 @@ class Product extends AbstractHelper
     {
         if($product->getTypeId() === 'configurable') {
             $product->setPriceCalculation(false);
+            $product->setPrice($product->getFinalPrice());
         }
     }
 

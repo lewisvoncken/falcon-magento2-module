@@ -18,6 +18,12 @@
             <resource ref="anonymous"/>
         </resources>
     </route>
+    <route url="/V1/categories" method="GET">
+        <service class="Hatimeria\Reagento\Api\CategoryManagementInterface" method="getTree" />
+        <resources>
+            <resource ref="Magento_Catalog::categories" />
+        </resources>
+    </route>
     <route url="/V1/categories/homepage" method="GET">
         <service class="Hatimeria\Reagento\Api\HomeCategoriesInterface" method="getHomepageList"/>
         <resources>
@@ -36,22 +42,10 @@
             <resource ref="Magento_Catalog::catalog" />
         </resources>
     </route>
-    <route url="/V1/categories" method="GET">
-        <service class="Hatimeria\Reagento\Api\CategoryManagementInterface" method="getTree" />
-        <resources>
-            <resource ref="Magento_Catalog::categories" />
-        </resources>
-    </route>
     <route url="/V1/products" method="GET">
         <service class="Hatimeria\Reagento\Api\ProductRepositoryInterface" method="getList"/>
         <resources>
             <resource ref="Magento_Catalog::products" />
-        </resources>
-    </route>
-    <route url="/V1/guest-carts/:cartId/paypal-fetch-token" method="GET">
-        <service class="Hatimeria\Reagento\Api\Payment\PaypalInterface" method="getToken"/>
-        <resources>
-            <resource ref="anonymous" />
         </resources>
     </route>
     <route url="/V1/contact" method="POST">
@@ -67,8 +61,8 @@
         </resources>
     </route>
 
-    <route url="/V1/guest-carts/:cartId/reagento-order" method="PUT">
-        <service class="\Hatimeria\Reagento\Api\HatimeriaGuestCartManagementInterface" method="placeOrder"/>
+    <route url="/V1/guest-carts/:cartId/paypal-fetch-token" method="GET">
+        <service class="Hatimeria\Reagento\Api\Payment\PaypalInterface" method="getToken"/>
         <resources>
             <resource ref="anonymous" />
         </resources>
@@ -79,9 +73,15 @@
             <resource ref="anonymous" />
         </resources>
     </route>
+    <route url="/V1/guest-carts/:cartId/reagento-order" method="PUT">
+        <service class="\Hatimeria\Reagento\Api\HatimeriaGuestCartManagementInterface" method="placeOrder"/>
+        <resources>
+            <resource ref="anonymous" />
+        </resources>
+    </route>
 
-    <route url="/V1/carts/mine/reagento-order" method="PUT">
-        <service class="\Hatimeria\Reagento\Api\HatimeriaCartManagementInterface" method="placeOrder"/>
+    <route url="/V1/carts/mine/payment-information" method="POST">
+        <service class="\Hatimeria\Reagento\Api\HatimeriaPaymentInformationManagementInterface" method="savePaymentInformationAndPlaceOrder"/>
         <resources>
             <resource ref="self" />
         </resources>
@@ -89,8 +89,8 @@
             <parameter name="cartId" force="true">%cart_id%</parameter>
         </data>
     </route>
-    <route url="/V1/carts/mine/payment-information" method="POST">
-        <service class="\Hatimeria\Reagento\Api\HatimeriaPaymentInformationManagementInterface" method="savePaymentInformationAndPlaceOrder"/>
+    <route url="/V1/carts/mine/reagento-order" method="PUT">
+        <service class="\Hatimeria\Reagento\Api\HatimeriaCartManagementInterface" method="placeOrder"/>
         <resources>
             <resource ref="self" />
         </resources>
@@ -132,6 +132,52 @@
         <resources>
             <resource ref="anonymous"/>
         </resources>
+    </route>
+
+    <route url="/V1/customers/me/address/" method="GET">
+        <service class="Hatimeria\Reagento\Api\Customer\AddressRepositoryInterface" method="getCustomerAddressList"/>
+        <resources>
+            <resource ref="self"/>
+        </resources>
+        <data>
+            <parameter name="customerId" force="true">%customer_id%</parameter>
+        </data>
+    </route>
+    <route url="/V1/customers/me/address/:addressId" method="GET">
+        <service class="Hatimeria\Reagento\Api\Customer\AddressRepositoryInterface" method="getCustomerAddress"/>
+        <resources>
+            <resource ref="self"/>
+        </resources>
+        <data>
+            <parameter name="customerId" force="true">%customer_id%</parameter>
+        </data>
+    </route>
+    <route url="/V1/customers/me/address" method="POST">
+        <service class="Hatimeria\Reagento\Api\Customer\AddressRepositoryInterface" method="createCustomerAddress"/>
+        <resources>
+            <resource ref="self"/>
+        </resources>
+        <data>
+            <parameter name="customerId" force="true">%customer_id%</parameter>
+        </data>
+    </route>
+    <route url="/V1/customers/me/address" method="PUT">
+        <service class="Hatimeria\Reagento\Api\Customer\AddressRepositoryInterface" method="updateCustomerAddress"/>
+        <resources>
+            <resource ref="self"/>
+        </resources>
+        <data>
+            <parameter name="customerId" force="true">%customer_id%</parameter>
+        </data>
+    </route>
+    <route url="/V1/customers/me/address/:addressId" method="DELETE">
+        <service class="Hatimeria\Reagento\Api\Customer\AddressRepositoryInterface" method="deleteCustomerAddress"/>
+        <resources>
+            <resource ref="self"/>
+        </resources>
+        <data>
+            <parameter name="customerId" force="true">%customer_id%</parameter>
+        </data>
     </route>
 
     <route url="/V1/integration/customer/token" method="POST">
