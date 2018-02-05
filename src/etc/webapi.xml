@@ -123,7 +123,7 @@
     <route url="/V1/adyen/config" method="GET">
         <service class="\Hatimeria\Reagento\Api\HatimeriaAdyenConfigInterface" method="getConfig"/>
         <resources>
-            <resource ref="Magento_Config::system_config" />
+            <resource ref="Magento_Payment::payment" />
         </resources>
     </route>
 
