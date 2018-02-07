@@ -9,6 +9,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Integration\Model\CredentialsValidator;
 use Magento\Integration\Model\CustomerTokenService as MagentoCustomerTokenService;
+use Magento\Integration\Model\Oauth\Token\RequestThrottler;
 use Magento\Integration\Model\Oauth\TokenFactory as TokenModelFactory;
 use Magento\Integration\Model\ResourceModel\Oauth\Token\CollectionFactory as TokenCollectionFactory;
 use Psr\Log\LoggerInterface;
@@ -21,6 +22,9 @@ class CustomerTokenService extends MagentoCustomerTokenService implements Custom
     /** @var LoggerInterface */
     private $logger;
 
+    /** @var RequestThrottler */
+    private $requestThrottler;
+
     /**
      * CustomerTokenService constructor.
      * @param TokenModelFactory $tokenModelFactory
@@ -28,6 +32,7 @@ class CustomerTokenService extends MagentoCustomerTokenService implements Custom
      * @param TokenCollectionFactory $tokenModelCollectionFactory
      * @param CredentialsValidator $validatorHelper
      * @param MergeManagement $cartMergeManagement
+     * @param RequestThrottler $requestThrottler
      * @param LoggerInterface $logger
      */
     public function __construct(
@@ -36,11 +41,13 @@ class CustomerTokenService extends MagentoCustomerTokenService implements Custom
         TokenCollectionFactory $tokenModelCollectionFactory,
         CredentialsValidator $validatorHelper,
         MergeManagement $cartMergeManagement,
+        RequestThrottler $requestThrottler,
         LoggerInterface $logger
     ) {
         parent::__construct($tokenModelFactory, $accountManagement, $tokenModelCollectionFactory, $validatorHelper);
         $this->cartMergeManagement = $cartMergeManagement;
         $this->logger = $logger;
+        $this->requestThrottler = $requestThrottler;
     }
 
     /**
@@ -54,7 +61,19 @@ class CustomerTokenService extends MagentoCustomerTokenService implements Custom
      */
     public function createCustomerAccessToken($username, $password, $guestQuoteId = null)
     {
-        $token = parent::createCustomerAccessToken($username, $password);
+        //first check if account is not locked and if so change the message
+        try {
+            $this->requestThrottler->throttle($username, RequestThrottler::USER_TYPE_CUSTOMER);
+        } catch (AuthenticationException $e) {
+            throw new AuthenticationException(__('Your account is temporarily disabled due to too many failed attempt. Please try again later.'), $e);
+        }
+
+        try {
+            $token = parent::createCustomerAccessToken($username, $password);
+        } catch (AuthenticationException $e) {
+            //we know account is not locked so this is incorrect password or invalid username
+            throw new AuthenticationException(__('You did not sign in correctly or your account is not active.'), $e);
+        }
 
         if ($guestQuoteId) {
             $this->cartMergeManagement->mergeGuestAndCustomerQuotes($guestQuoteId, $username);
