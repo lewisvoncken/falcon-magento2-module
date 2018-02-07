@@ -20,6 +20,13 @@
                     <comment>Leaving fill empty will use default BASE_URL</comment>
                 </field>
             </group>
+            <group id="frontend" translate="label" type="text" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Frontend</label>
+                <field id="domain" translate="label comment" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Frontend Domain</label>
+                    <comment>Provide base url for frontend domain. It will be used in some redirects</comment>
+                </field>
+            </group>
             <group id="catalog" translate="label" type="text" sortOrder="200" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Catalog</label>
                 <field id="show_category_filter" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -66,21 +73,6 @@
                     <label>Paypal Redirect Cancel</label>
                     <comment>Redirect to address or path</comment>
                 </field>
-            </group>
-        </section>
-
-        <section id="payment">
-            <group id="adyen_group_all_in_one">
-                <group id="adyen_cc">
-                    <field id="cc_image" translate="label" type="image" sortOrder="45" showInDefault="1" showInWebsite="1" showInStore="1">
-                        <label>Credit Card Image</label>
-                        <comment>Provide a image file to use as a representation of used cards</comment>
-                        <config_path>payment/adyen_cc/cc_image</config_path>
-                        <backend_model>Magento\Config\Model\Config\Backend\Image</backend_model>
-                        <upload_dir config="system/filesystem/media" scope_info="1">adyen/cc_logo</upload_dir>
-                        <base_url type="media" scope_info="1">adyen/cc_logo</base_url>
-                    </field>
-                </group>
             </group>
         </section>
     </system>

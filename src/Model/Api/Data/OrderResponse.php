@@ -2,27 +2,11 @@
 namespace Hatimeria\Reagento\Model\Api\Data;
 
 use Hatimeria\Reagento\Api\Data\OrderResponseInterface;
+use Hatimeria\Reagento\Api\Data\OrderResponseExtensionInterface;
 use Magento\Framework\Model\AbstractExtensibleModel;
 
 class OrderResponse extends AbstractExtensibleModel implements OrderResponseInterface
 {
-    /**
-     * @param \Hatimeria\Reagento\Api\Data\AdyenRedirectInterface $adyenRedirect
-     * @return \Hatimeria\Reagento\Api\Data\OrderResponseInterface
-     */
-    public function setAdyen(\Hatimeria\Reagento\Api\Data\AdyenRedirectInterface $adyenRedirect)
-    {
-        return $this->setData(self::ADYEN_REDIRECT, $adyenRedirect);
-    }
-
-    /**
-     * @return \Hatimeria\Reagento\Api\Data\AdyenRedirectInterface
-     */
-    public function getAdyen()
-    {
-        return $this->_getData(self::ADYEN_REDIRECT);
-    }
-
     /**
      * @param string $orderId
      * @return \Hatimeria\Reagento\Api\Data\OrderResponseInterface
@@ -55,5 +39,28 @@ class OrderResponse extends AbstractExtensibleModel implements OrderResponseInte
     public function getOrderRealId()
     {
         return $this->_getData(self::ORDER_REAL_ID);
+    }
+
+    /**
+     * @return \Hatimeria\Reagento\Api\Data\OrderResponseExtensionInterface
+     */
+    public function getExtensionAttributes()
+    {
+        $extensionAttributes = $this->_getExtensionAttributes();
+        if (!$extensionAttributes) {
+            /** @var OrderResponseExtensionInterface $extensionAttributes */
+            $extensionAttributes = $this->extensionAttributesFactory->create(OrderResponseInterface::class);
+        }
+
+        return $extensionAttributes;
+    }
+
+    /**
+     * @param \Hatimeria\Reagento\Api\Data\OrderResponseExtensionInterface $extensionAttributes
+     * @return \Hatimeria\Reagento\Api\Data\OrderResponseInterface
+     */
+    public function setExtensionAttributes(OrderResponseExtensionInterface $extensionAttributes)
+    {
+        return $this->_setExtensionAttributes($extensionAttributes);
     }
 }
