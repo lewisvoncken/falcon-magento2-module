@@ -8,12 +8,6 @@
     <preference for="Hatimeria\Reagento\Api\CustomerTokenServiceInterface" type="Hatimeria\Reagento\Model\CustomerTokenService" />
     <preference for="Hatimeria\Reagento\Api\Customer\AddressRepositoryInterface" type="Hatimeria\Reagento\Model\Customer\AddressRepository" />
     <preference for="Hatimeria\Reagento\Api\ContactFormInterface" type="Hatimeria\Reagento\Model\ContactForm" />
-    <preference for="Hatimeria\Reagento\Api\Data\AdyenConfigInterface" type="Hatimeria\Reagento\Model\Api\Data\AdyenConfig" />
-    <preference for="Hatimeria\Reagento\Api\Data\AdyenRedirectInterface" type="Hatimeria\Reagento\Model\Api\Data\AdyenRedirect" />
-    <preference for="Hatimeria\Reagento\Api\Data\AdyenRedirectAddressInterface" type="Hatimeria\Reagento\Model\Api\Data\AdyenRedirectAddress" />
-    <preference for="Hatimeria\Reagento\Api\Data\AdyenRedirectOpenInvoiceInterface" type="Hatimeria\Reagento\Model\Api\Data\AdyenRedirectOpenInvoice" />
-    <preference for="Hatimeria\Reagento\Api\Data\AdyenRedirectOpenInvoiceItemInterface" type="Hatimeria\Reagento\Model\Api\Data\AdyenRedirectOpenInvoiceItem" />
-    <preference for="Hatimeria\Reagento\Api\Data\AdyenRedirectShopperInterface" type="Hatimeria\Reagento\Model\Api\Data\AdyenRedirectShopper" />
     <preference for="Hatimeria\Reagento\Api\Data\BreadcrumbInterface" type="Hatimeria\Reagento\Model\Api\Data\Breadcrumb" />
     <preference for="Hatimeria\Reagento\Api\Data\CategorySearchResultsInterface" type="Magento\Framework\Api\SearchResults" />
     <preference for="Hatimeria\Reagento\Api\Data\CategoryTreeInterface" type="Hatimeria\Reagento\Model\Category" />
@@ -25,7 +19,6 @@
     <preference for="Hatimeria\Reagento\Api\Data\OrderInfoInterface" type="Hatimeria\Reagento\Model\OrderInfo" />
     <preference for="Hatimeria\Reagento\Api\Data\OrderResponseInterface" type="Hatimeria\Reagento\Model\Api\Data\OrderResponse" />
     <preference for="Hatimeria\Reagento\Api\Data\UrlDataInterface" type="Hatimeria\Reagento\Model\UrlData" />
-    <preference for="Hatimeria\Reagento\Api\HatimeriaAdyenConfigInterface" type="Hatimeria\Reagento\Model\Adyen\Config" />
     <preference for="Hatimeria\Reagento\Api\HatimeriaGuestOrderManagementInterface" type="Hatimeria\Reagento\Model\GuestOrderManagement" />
     <preference for="Hatimeria\Reagento\Api\HatimeriaOrderManagementInterface" type="Hatimeria\Reagento\Model\OrderManagement" />
     <preference for="Hatimeria\Reagento\Api\HomeCategoriesInterface" type="Hatimeria\Reagento\Model\CategoryRepository" />
@@ -72,9 +65,6 @@
     </virtualType>
 
     <!-- PLUGINS -->
-    <type name="Adyen\Payment\Controller\Process\Result">
-        <plugin name="hatimeriaReagentoAdyenProcessResult" type="Hatimeria\Reagento\Plugin\Adyen\Controller\Process\ResultPlugin" />
-    </type>
     <type name="Magento\CatalogUrlRewrite\Model\Product\AnchorUrlRewriteGenerator">
         <plugin name="hatimeriaReagentoAnchorUrlRewriteGeneratorPlugin" type="Hatimeria\Reagento\Plugin\CatalogUrlRewrite\Model\Product\AnchorUrlRewriteGenerator" />
     </type>
