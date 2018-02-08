@@ -1,7 +1,7 @@
 <?php
-namespace Hatimeria\Reagento\Model;
+namespace Hatimeria\Reagento\Model\Integration;
 
-use Hatimeria\Reagento\Api\CustomerTokenServiceInterface;
+use Hatimeria\Reagento\Api\Integration\CustomerTokenServiceInterface;
 use Hatimeria\Reagento\Model\Cart\MergeManagement;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Framework\Exception\AuthenticationException;

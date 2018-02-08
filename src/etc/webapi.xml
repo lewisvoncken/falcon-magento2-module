@@ -173,8 +173,15 @@
         </data>
     </route>
 
+    <route url="/V1/integration/admin/token" method="POST">
+        <service class="Hatimeria\Reagento\Api\Integration\AdminTokenServiceInterface" method="createAdminAccessToken"/>
+        <resources>
+            <resource ref="anonymous"/>
+        </resources>
+    </route>
+
     <route url="/V1/integration/customer/token" method="POST">
-        <service class="Hatimeria\Reagento\Api\CustomerTokenServiceInterface" method="createCustomerAccessToken"/>
+        <service class="Hatimeria\Reagento\Api\Integration\CustomerTokenServiceInterface" method="createCustomerAccessToken"/>
         <resources>
             <resource ref="anonymous"/>
         </resources>

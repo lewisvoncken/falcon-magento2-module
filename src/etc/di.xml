@@ -5,7 +5,6 @@
     <preference for="Hatimeria\Reagento\Api\Catalog\AttributeManagementInterface" type="Hatimeria\Reagento\Model\Catalog\AttributeManagement" />
     <preference for="Hatimeria\Reagento\Api\CategoryBreadcrumbsInterface" type="Hatimeria\Reagento\Model\CategoryBreadcrumbs" />
     <preference for="Hatimeria\Reagento\Api\CategoryManagementInterface" type="Hatimeria\Reagento\Model\CategoryManagement" />
-    <preference for="Hatimeria\Reagento\Api\CustomerTokenServiceInterface" type="Hatimeria\Reagento\Model\CustomerTokenService" />
     <preference for="Hatimeria\Reagento\Api\Customer\AddressRepositoryInterface" type="Hatimeria\Reagento\Model\Customer\AddressRepository" />
     <preference for="Hatimeria\Reagento\Api\ContactFormInterface" type="Hatimeria\Reagento\Model\ContactForm" />
     <preference for="Hatimeria\Reagento\Api\Data\BreadcrumbInterface" type="Hatimeria\Reagento\Model\Api\Data\Breadcrumb" />
@@ -23,6 +22,9 @@
     <preference for="Hatimeria\Reagento\Api\HatimeriaOrderManagementInterface" type="Hatimeria\Reagento\Model\OrderManagement" />
     <preference for="Hatimeria\Reagento\Api\HomeCategoriesInterface" type="Hatimeria\Reagento\Model\CategoryRepository" />
     <preference for="Hatimeria\Reagento\Api\InfoInterface" type="Hatimeria\Reagento\Model\Info" />
+    <preference for="Hatimeria\Reagento\Api\Integration\AdminTokenServiceInterface" type="Hatimeria\Reagento\Model\Integration\AdminTokenService" />
+    <preference for="Hatimeria\Reagento\Api\Integration\CustomerTokenServiceInterface" type="Hatimeria\Reagento\Model\Integration\CustomerTokenService" />
+    <preference for="Hatimeria\Reagento\Api\Integration\Data\AdminTokenInterface" type="Hatimeria\Reagento\Model\Integration\AdminToken" />
     <preference for="Hatimeria\Reagento\Api\MenuRepositoryInterface" type="Hatimeria\Reagento\Model\MenuRepository" />
     <preference for="Hatimeria\Reagento\Api\Payment\Data\PaypalDataInterface" type="Hatimeria\Reagento\Model\Payment\PaypalData" />
     <preference for="Hatimeria\Reagento\Api\Payment\PaypalInterface" type="Hatimeria\Reagento\Model\Payment\Paypal" />
