@@ -3,6 +3,7 @@
 namespace Hatimeria\Reagento\Model\Sales;
 
 use Hatimeria\Reagento\Api\Sales\GuestOrderManagementInterface;
+use Hatimeria\Reagento\Model\OrderIdMaskFactory;
 use Hatimeria\Reagento\Model\Sales\Order\Extension as OrderExtension;
 use Hatimeria\Reagento\Model\Sales\Order\Item\Extension as OrderItemExtension;
 use Magento\Framework\Exception\NoSuchEntityException;
