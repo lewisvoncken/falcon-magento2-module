@@ -12,7 +12,7 @@ interface CustomerTokenServiceInterface extends MagentoCustomerTokenServiceInter
      * @param string $username
      * @param string $password
      * @param string $guestQuoteId
-     * @return string Token created
+     * @return \Hatimeria\Reagento\Api\Integration\Data\CustomerTokenInterface Token created
      * @throws \Magento\Framework\Exception\AuthenticationException
      */
     public function createCustomerAccessToken($username, $password, $guestQuoteId = null);

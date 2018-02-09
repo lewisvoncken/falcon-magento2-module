@@ -25,6 +25,7 @@
     <preference for="Hatimeria\Reagento\Api\Integration\AdminTokenServiceInterface" type="Hatimeria\Reagento\Model\Integration\AdminTokenService" />
     <preference for="Hatimeria\Reagento\Api\Integration\CustomerTokenServiceInterface" type="Hatimeria\Reagento\Model\Integration\CustomerTokenService" />
     <preference for="Hatimeria\Reagento\Api\Integration\Data\AdminTokenInterface" type="Hatimeria\Reagento\Model\Integration\AdminToken" />
+    <preference for="Hatimeria\Reagento\Api\Integration\Data\CustomerTokenInterface" type="Hatimeria\Reagento\Model\Integration\CustomerToken" />
     <preference for="Hatimeria\Reagento\Api\MenuRepositoryInterface" type="Hatimeria\Reagento\Model\MenuRepository" />
     <preference for="Hatimeria\Reagento\Api\Payment\Data\PaypalDataInterface" type="Hatimeria\Reagento\Model\Payment\PaypalData" />
     <preference for="Hatimeria\Reagento\Api\Payment\PaypalInterface" type="Hatimeria\Reagento\Model\Payment\Paypal" />

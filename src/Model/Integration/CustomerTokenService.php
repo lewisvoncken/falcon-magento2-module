@@ -2,8 +2,11 @@
 namespace Hatimeria\Reagento\Model\Integration;
 
 use Hatimeria\Reagento\Api\Integration\CustomerTokenServiceInterface;
+use Hatimeria\Reagento\Api\Integration\Data\CustomerTokenInterface;
+use Hatimeria\Reagento\Api\Integration\Data\CustomerTokenInterfaceFactory;
 use Hatimeria\Reagento\Model\Cart\MergeManagement;
 use Magento\Customer\Api\AccountManagementInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -15,6 +18,12 @@ use Psr\Log\LoggerInterface;
 
 class CustomerTokenService extends MagentoCustomerTokenService implements CustomerTokenServiceInterface
 {
+    /** @var CustomerTokenInterfaceFactory */
+    private $customerTokenFactory;
+
+    /** @var ScopeConfigInterface */
+    private $scopeConfig;
+
     /** @var MergeManagement */
     private $cartMergeManagement;
 
@@ -27,6 +36,8 @@ class CustomerTokenService extends MagentoCustomerTokenService implements Custom
      * @param AccountManagementInterface $accountManagement
      * @param TokenCollectionFactory $tokenModelCollectionFactory
      * @param CredentialsValidator $validatorHelper
+     * @param CustomerTokenInterfaceFactory $customerTokenFactory
+     * @param ScopeConfigInterface $scopeConfig
      * @param MergeManagement $cartMergeManagement
      * @param LoggerInterface $logger
      */
@@ -35,10 +46,14 @@ class CustomerTokenService extends MagentoCustomerTokenService implements Custom
         AccountManagementInterface $accountManagement,
         TokenCollectionFactory $tokenModelCollectionFactory,
         CredentialsValidator $validatorHelper,
+        CustomerTokenInterfaceFactory $customerTokenFactory,
+        ScopeConfigInterface $scopeConfig,
         MergeManagement $cartMergeManagement,
         LoggerInterface $logger
     ) {
         parent::__construct($tokenModelFactory, $accountManagement, $tokenModelCollectionFactory, $validatorHelper);
+        $this->customerTokenFactory = $customerTokenFactory;
+        $this->scopeConfig = $scopeConfig;
         $this->cartMergeManagement = $cartMergeManagement;
         $this->logger = $logger;
     }
@@ -47,7 +62,7 @@ class CustomerTokenService extends MagentoCustomerTokenService implements Custom
      * @param string $username
      * @param string $password
      * @param string $guestQuoteId
-     * @return string
+     * @return CustomerTokenInterface
      * @throws AuthenticationException
      * @throws LocalizedException
      * @throws NoSuchEntityException
@@ -56,10 +71,15 @@ class CustomerTokenService extends MagentoCustomerTokenService implements Custom
     {
         $token = parent::createCustomerAccessToken($username, $password);
 
+        /** @var CustomerTokenInterface $customerToken */
+        $customerToken = $this->customerTokenFactory->create();
+        $customerToken->setToken($token);
+        $customerToken->setValidTime((int)$this->scopeConfig->getValue('oauth/access_token_lifetime/customer'));
+
         if ($guestQuoteId) {
             $this->cartMergeManagement->mergeGuestAndCustomerQuotes($guestQuoteId, $username);
         }
 
-        return $token;
+        return $customerToken;
     }
 }
