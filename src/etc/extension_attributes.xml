@@ -38,6 +38,9 @@
         <attribute code="row_total_incl_tax" type="string" />
         <attribute code="options" type="string" />
     </extension_attributes>
+    <extension_attributes for="Magento\Sales\Api\Data\OrderPaymentInterface">
+        <attribute code="method_name" type="string" />
+    </extension_attributes>
     <extension_attributes for="Magento\Store\Api\Data\StoreConfigInterface">
         <attribute code="optional_post_codes" type="mixed" />
         <attribute code="min_password_length" type="int" />
