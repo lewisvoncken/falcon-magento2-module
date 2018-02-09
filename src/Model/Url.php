@@ -98,7 +98,6 @@ class Url implements UrlInterface
                 case 'product':
                     /** @var Product|ProductInterface $entity */
                     $entity = $this->productRepository->getById($urlModel->getEntityId(), false, $this->getCurrentStoreId());
-                    $this->reagentoProductHelper->addAdditionalInformation($entity);
                     $this->reagentoHelper->addResponseTagsByObject($entity);
                     $urlData->setProduct($entity);
                     break;
