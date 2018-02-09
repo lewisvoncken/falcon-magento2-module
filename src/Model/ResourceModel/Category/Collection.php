@@ -2,32 +2,63 @@
 
 namespace Hatimeria\Reagento\Model\ResourceModel\Category;
 
+use Hatimeria\Reagento\Helper\Breadcrumb;
 use Hatimeria\Reagento\Helper\Category;
+use Magento\Catalog\Model\Category as CategoryModel;
 use Magento\Catalog\Model\ResourceModel\Category\Collection as MagentoCategoryCollection;
-use Magento\Catalog\Model\ResourceModel\Collection\AbstractCollection;
+use Magento\Eav\Model\Config;
+use Magento\Eav\Model\EntityFactory as ModelEntityFactory;
+use Magento\Eav\Model\ResourceModel\Helper;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\Data\Collection\EntityFactory as CollectionEntityFactory;
+use Magento\Framework\Data\Collection\Db\FetchStrategyInterface;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Validator\UniversalFactory;
+use Magento\Store\Model\StoreManagerInterface;
+use Psr\Log\LoggerInterface;
 
 class Collection extends MagentoCategoryCollection
 {
-    /**
-     * @var Category
-     */
+    /** @var Category */
     protected $hatimeriaCategoryHelper;
 
+    /** @var Breadcrumb */
+    protected $hatimeriaBreadcrumbHelper;
+
+    /**
+     * Collection constructor.
+     * @param CollectionEntityFactory $entityFactory
+     * @param LoggerInterface $logger
+     * @param FetchStrategyInterface $fetchStrategy
+     * @param ManagerInterface $eventManager
+     * @param Config $eavConfig
+     * @param ResourceConnection $resource
+     * @param ModelEntityFactory $eavEntityFactory
+     * @param Helper $resourceHelper
+     * @param UniversalFactory $universalFactory
+     * @param StoreManagerInterface $storeManager
+     * @param Category $hatimeriaCategoryHelper
+     * @param Breadcrumb $hatimeriaBreadcrumbHelper
+     * @param AdapterInterface|null $connection
+     */
     public function __construct(
-        \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
-        \Psr\Log\LoggerInterface $logger,
-        \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
-        \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Magento\Eav\Model\Config $eavConfig,
-        \Magento\Framework\App\ResourceConnection $resource,
-        \Magento\Eav\Model\EntityFactory $eavEntityFactory,
-        \Magento\Eav\Model\ResourceModel\Helper $resourceHelper,
-        \Magento\Framework\Validator\UniversalFactory $universalFactory,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Hatimeria\Reagento\Helper\Category $hatimeriaCategoryHelper,
-        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null
+        CollectionEntityFactory $entityFactory,
+        LoggerInterface $logger,
+        FetchStrategyInterface $fetchStrategy,
+        ManagerInterface $eventManager,
+        Config $eavConfig,
+        ResourceConnection $resource,
+        ModelEntityFactory $eavEntityFactory,
+        Helper $resourceHelper,
+        UniversalFactory $universalFactory,
+        StoreManagerInterface $storeManager,
+        Category $hatimeriaCategoryHelper,
+        Breadcrumb $hatimeriaBreadcrumbHelper,
+        AdapterInterface $connection = null
     ) {
         $this->hatimeriaCategoryHelper = $hatimeriaCategoryHelper;
+        $this->hatimeriaBreadcrumbHelper = $hatimeriaBreadcrumbHelper;
         return parent::__construct(
             $entityFactory,
             $logger,
@@ -42,12 +73,15 @@ class Collection extends MagentoCategoryCollection
             $connection
         );
     }
+
     /**
      * Load collection
      *
      * @param bool $printQuery
      * @param bool $logQuery
      * @return $this
+     * @throws \Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function load($printQuery = false, $logQuery = false)
     {
@@ -60,9 +94,9 @@ class Collection extends MagentoCategoryCollection
 
         parent::load($printQuery, $logQuery);
 
-        foreach ($this->_items as $category) {
+        foreach ($this->_items as $category) { /** @var CategoryModel $category */
             $this->hatimeriaCategoryHelper->addImageAttribute($category);
-            $this->hatimeriaCategoryHelper->addBreadcrumbsData($category, $this);
+            $this->hatimeriaBreadcrumbHelper->addCategoryBreadcrumbs($category, $this);
         }
 
         return $this;
@@ -83,6 +117,8 @@ class Collection extends MagentoCategoryCollection
      *
      * @param   mixed $idValue
      * @return  \Magento\Framework\DataObject
+     * @throws \Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getItemById($idValue)
     {
