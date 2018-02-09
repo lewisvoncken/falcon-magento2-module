@@ -55,6 +55,6 @@ class CustomerToken extends AbstractExtensibleObject implements CustomerTokenInt
      */
     public function setExtensionAttributes(CustomerTokenExtensionInterface $extensionAttributes)
     {
-        return $this->setData(self::EXTENSION_ATTRIBUTES_KEY, $$extensionAttributes);
+        return $this->setData(self::EXTENSION_ATTRIBUTES_KEY, $extensionAttributes);
     }
 }

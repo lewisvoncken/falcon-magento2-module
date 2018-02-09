@@ -54,6 +54,6 @@ class AdminToken extends AbstractExtensibleObject implements AdminTokenInterface
      */
     public function setExtensionAttributes($extensionAttributes)
     {
-        return $this->setData(self::EXTENSION_ATTRIBUTES_KEY, $$extensionAttributes);
+        return $this->setData(self::EXTENSION_ATTRIBUTES_KEY, $extensionAttributes);
     }
 }
