@@ -1,5 +1,12 @@
 # Custom events
 
+* `customer_generate_token_guest_cart_check`
+    - fired in `Hatimeria\Reagento\Model\CustomerTokenService::shouldMergeCart` after fetching guest cart
+    - params:
+        * `guest_cart`: `Magento\Framework\Quote\Api\Data\CartInterface`
+        * `cart_to_merge`: `Magento\Framework\DataObject`
+            * property `result` contains either guest cart object or false if given cart is already assigned to some customer
+
 * `order_management_customer_orders_before`
     - fired in `Hatimeria\Reagento\Model\OrderManagement::getCustomerOrders` before fetching customer orders from the database
     - params: 
@@ -12,4 +19,3 @@
         * `data`: `Magento\Framework\DataObject`
             * `fields` - an array with fields defined in the group
             * `conditions` - an array with fields condition to filter
-             
