@@ -1,15 +1,15 @@
 <?php
-namespace Hatimeria\Reagento\Model\Api\Data;
+namespace Deity\MagentoApi\Model\Api\Data;
 
-use Hatimeria\Reagento\Api\Data\OrderResponseInterface;
-use Hatimeria\Reagento\Api\Data\OrderResponseExtensionInterface;
+use Deity\MagentoApi\Api\Data\OrderResponseInterface;
+use Deity\MagentoApi\Api\Data\OrderResponseExtensionInterface;
 use Magento\Framework\Model\AbstractExtensibleModel;
 
 class OrderResponse extends AbstractExtensibleModel implements OrderResponseInterface
 {
     /**
      * @param string $orderId
-     * @return \Hatimeria\Reagento\Api\Data\OrderResponseInterface
+     * @return \Deity\MagentoApi\Api\Data\OrderResponseInterface
      */
     public function setOrderId($orderId)
     {
@@ -26,7 +26,7 @@ class OrderResponse extends AbstractExtensibleModel implements OrderResponseInte
 
     /**
      * @param string $incrementId
-     * @return \Hatimeria\Reagento\Api\Data\OrderResponseInterface
+     * @return \Deity\MagentoApi\Api\Data\OrderResponseInterface
      */
     public function setOrderRealId($incrementId)
     {
@@ -42,7 +42,7 @@ class OrderResponse extends AbstractExtensibleModel implements OrderResponseInte
     }
 
     /**
-     * @return \Hatimeria\Reagento\Api\Data\OrderResponseExtensionInterface
+     * @return \Deity\MagentoApi\Api\Data\OrderResponseExtensionInterface
      */
     public function getExtensionAttributes()
     {
@@ -56,8 +56,8 @@ class OrderResponse extends AbstractExtensibleModel implements OrderResponseInte
     }
 
     /**
-     * @param \Hatimeria\Reagento\Api\Data\OrderResponseExtensionInterface $extensionAttributes
-     * @return \Hatimeria\Reagento\Api\Data\OrderResponseInterface
+     * @param \Deity\MagentoApi\Api\Data\OrderResponseExtensionInterface $extensionAttributes
+     * @return \Deity\MagentoApi\Api\Data\OrderResponseInterface
      */
     public function setExtensionAttributes(OrderResponseExtensionInterface $extensionAttributes)
     {

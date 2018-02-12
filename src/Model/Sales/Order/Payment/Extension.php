@@ -1,5 +1,5 @@
 <?php
-namespace Hatimeria\Reagento\Model\Sales\Order\Payment;
+namespace Deity\MagentoApi\Model\Sales\Order\Payment;
 
 use Magento\Framework\Api\ExtensionAttributesFactory;
 use Magento\Framework\App\Config\ScopeConfigInterface;

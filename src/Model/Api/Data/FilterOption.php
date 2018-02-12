@@ -1,9 +1,9 @@
 <?php
 
-namespace Hatimeria\Reagento\Model\Api\Data;
+namespace Deity\MagentoApi\Model\Api\Data;
 
-use Hatimeria\Reagento\Api\Data\FilterOptionInterface;
-use Hatimeria\Reagento\Api\Data\FilterOptionExtensionInterface;
+use Deity\MagentoApi\Api\Data\FilterOptionInterface;
+use Deity\MagentoApi\Api\Data\FilterOptionExtensionInterface;
 use Magento\Framework\Model\AbstractExtensibleModel;
 
 class FilterOption extends AbstractExtensibleModel implements FilterOptionInterface
@@ -18,7 +18,7 @@ class FilterOption extends AbstractExtensibleModel implements FilterOptionInterf
 
     /**
      * @param string $label
-     * @return \Hatimeria\Reagento\Api\Data\FilterOptionInterface
+     * @return \Deity\MagentoApi\Api\Data\FilterOptionInterface
      */
     public function setLabel($label)
     {
@@ -35,7 +35,7 @@ class FilterOption extends AbstractExtensibleModel implements FilterOptionInterf
 
     /**
      * @param string $value
-     * @return \Hatimeria\Reagento\Api\Data\FilterOptionInterface
+     * @return \Deity\MagentoApi\Api\Data\FilterOptionInterface
      */
     public function setValue($value)
     {
@@ -52,7 +52,7 @@ class FilterOption extends AbstractExtensibleModel implements FilterOptionInterf
 
     /**
      * @param boolean $active
-     * @return \Hatimeria\Reagento\Api\Data\FilterOptionInterface
+     * @return \Deity\MagentoApi\Api\Data\FilterOptionInterface
      */
     public function setActive($active)
     {

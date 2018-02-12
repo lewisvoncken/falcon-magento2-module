@@ -1,8 +1,8 @@
 <?php
 
-namespace Hatimeria\Reagento\Model\Category;
+namespace Deity\MagentoApi\Model\Category;
 
-use Hatimeria\Reagento\Api\Data\CategoryTreeInterface;
+use Deity\MagentoApi\Api\Data\CategoryTreeInterface;
 
 class Tree extends \Magento\Catalog\Model\Category\Tree
 {

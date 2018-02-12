@@ -1,6 +1,6 @@
 <?php
 
-namespace Hatimeria\Reagento\Observer\Cms;
+namespace Deity\MagentoApi\Observer\Cms;
 
 use Magento\Cms\Model\ResourceModel\AbstractCollection;
 use Magento\Framework\Event\Observer as EventObserver;

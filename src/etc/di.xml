@@ -2,46 +2,46 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
 
     <!-- INTERFACE PREFERENCES FOR DI -->
-    <preference for="Hatimeria\Reagento\Api\Catalog\AttributeManagementInterface" type="Hatimeria\Reagento\Model\Catalog\AttributeManagement" />
-    <preference for="Hatimeria\Reagento\Api\CategoryBreadcrumbsInterface" type="Hatimeria\Reagento\Model\CategoryBreadcrumbs" />
-    <preference for="Hatimeria\Reagento\Api\CategoryManagementInterface" type="Hatimeria\Reagento\Model\CategoryManagement" />
-    <preference for="Hatimeria\Reagento\Api\CustomerTokenServiceInterface" type="Hatimeria\Reagento\Model\CustomerTokenService" />
-    <preference for="Hatimeria\Reagento\Api\Customer\AddressRepositoryInterface" type="Hatimeria\Reagento\Model\Customer\AddressRepository" />
-    <preference for="Hatimeria\Reagento\Api\ContactFormInterface" type="Hatimeria\Reagento\Model\ContactForm" />
-    <preference for="Hatimeria\Reagento\Api\Data\BreadcrumbInterface" type="Hatimeria\Reagento\Model\Api\Data\Breadcrumb" />
-    <preference for="Hatimeria\Reagento\Api\Data\CategorySearchResultsInterface" type="Magento\Framework\Api\SearchResults" />
-    <preference for="Hatimeria\Reagento\Api\Data\CategoryTreeInterface" type="Hatimeria\Reagento\Model\Category" />
-    <preference for="Hatimeria\Reagento\Api\Data\FilterInterface" type="Hatimeria\Reagento\Model\Api\Data\Filter" />
-    <preference for="Hatimeria\Reagento\Api\Data\FilterOptionInterface" type="Hatimeria\Reagento\Model\Api\Data\FilterOption" />
-    <preference for="Hatimeria\Reagento\Api\Data\GalleryMediaEntrySizeInterface" type="Hatimeria\Reagento\Model\GalleryMediaEntrySize" />
-    <preference for="Hatimeria\Reagento\Api\Data\InfoDataInterface" type="Hatimeria\Reagento\Model\InfoData" />
-    <preference for="Hatimeria\Reagento\Api\Data\MenuInterface" type="Hatimeria\Reagento\Model\Api\Data\Menu" />
-    <preference for="Hatimeria\Reagento\Api\Data\OrderInfoInterface" type="Hatimeria\Reagento\Model\OrderInfo" />
-    <preference for="Hatimeria\Reagento\Api\Data\OrderResponseInterface" type="Hatimeria\Reagento\Model\Api\Data\OrderResponse" />
-    <preference for="Hatimeria\Reagento\Api\Data\UrlDataInterface" type="Hatimeria\Reagento\Model\UrlData" />
-    <preference for="Hatimeria\Reagento\Api\Sales\GuestOrderManagementInterface" type="Hatimeria\Reagento\Model\Sales\GuestOrderManagement" />
-    <preference for="Hatimeria\Reagento\Api\Sales\OrderManagementInterface" type="Hatimeria\Reagento\Model\Sales\OrderManagement" />
-    <preference for="Hatimeria\Reagento\Api\HomeCategoriesInterface" type="Hatimeria\Reagento\Model\CategoryRepository" />
-    <preference for="Hatimeria\Reagento\Api\InfoInterface" type="Hatimeria\Reagento\Model\Info" />
-    <preference for="Hatimeria\Reagento\Api\MenuRepositoryInterface" type="Hatimeria\Reagento\Model\MenuRepository" />
-    <preference for="Hatimeria\Reagento\Api\Payment\Data\PaypalDataInterface" type="Hatimeria\Reagento\Model\Payment\PaypalData" />
-    <preference for="Hatimeria\Reagento\Api\Payment\PaypalInterface" type="Hatimeria\Reagento\Model\Payment\Paypal" />
-    <preference for="Hatimeria\Reagento\Api\ProductRepositoryInterface" type="Hatimeria\Reagento\Model\ProductRepository" />
-    <preference for="Hatimeria\Reagento\Api\QuoteMaskInterface" type="Hatimeria\Reagento\Model\QuoteMask" />
-    <preference for="Hatimeria\Reagento\Api\UrlInterface" type="Hatimeria\Reagento\Model\Url" />
+    <preference for="Deity\MagentoApi\Api\Catalog\AttributeManagementInterface" type="Deity\MagentoApi\Model\Catalog\AttributeManagement" />
+    <preference for="Deity\MagentoApi\Api\CategoryBreadcrumbsInterface" type="Deity\MagentoApi\Model\CategoryBreadcrumbs" />
+    <preference for="Deity\MagentoApi\Api\CategoryManagementInterface" type="Deity\MagentoApi\Model\CategoryManagement" />
+    <preference for="Deity\MagentoApi\Api\CustomerTokenServiceInterface" type="Deity\MagentoApi\Model\CustomerTokenService" />
+    <preference for="Deity\MagentoApi\Api\Customer\AddressRepositoryInterface" type="Deity\MagentoApi\Model\Customer\AddressRepository" />
+    <preference for="Deity\MagentoApi\Api\ContactFormInterface" type="Deity\MagentoApi\Model\ContactForm" />
+    <preference for="Deity\MagentoApi\Api\Data\BreadcrumbInterface" type="Deity\MagentoApi\Model\Api\Data\Breadcrumb" />
+    <preference for="Deity\MagentoApi\Api\Data\CategorySearchResultsInterface" type="Magento\Framework\Api\SearchResults" />
+    <preference for="Deity\MagentoApi\Api\Data\CategoryTreeInterface" type="Deity\MagentoApi\Model\Category" />
+    <preference for="Deity\MagentoApi\Api\Data\FilterInterface" type="Deity\MagentoApi\Model\Api\Data\Filter" />
+    <preference for="Deity\MagentoApi\Api\Data\FilterOptionInterface" type="Deity\MagentoApi\Model\Api\Data\FilterOption" />
+    <preference for="Deity\MagentoApi\Api\Data\GalleryMediaEntrySizeInterface" type="Deity\MagentoApi\Model\GalleryMediaEntrySize" />
+    <preference for="Deity\MagentoApi\Api\Data\InfoDataInterface" type="Deity\MagentoApi\Model\InfoData" />
+    <preference for="Deity\MagentoApi\Api\Data\MenuInterface" type="Deity\MagentoApi\Model\Api\Data\Menu" />
+    <preference for="Deity\MagentoApi\Api\Data\OrderInfoInterface" type="Deity\MagentoApi\Model\OrderInfo" />
+    <preference for="Deity\MagentoApi\Api\Data\OrderResponseInterface" type="Deity\MagentoApi\Model\Api\Data\OrderResponse" />
+    <preference for="Deity\MagentoApi\Api\Data\UrlDataInterface" type="Deity\MagentoApi\Model\UrlData" />
+    <preference for="Deity\MagentoApi\Api\Sales\GuestOrderManagementInterface" type="Deity\MagentoApi\Model\Sales\GuestOrderManagement" />
+    <preference for="Deity\MagentoApi\Api\Sales\OrderManagementInterface" type="Deity\MagentoApi\Model\Sales\OrderManagement" />
+    <preference for="Deity\MagentoApi\Api\HomeCategoriesInterface" type="Deity\MagentoApi\Model\CategoryRepository" />
+    <preference for="Deity\MagentoApi\Api\InfoInterface" type="Deity\MagentoApi\Model\Info" />
+    <preference for="Deity\MagentoApi\Api\MenuRepositoryInterface" type="Deity\MagentoApi\Model\MenuRepository" />
+    <preference for="Deity\MagentoApi\Api\Payment\Data\PaypalDataInterface" type="Deity\MagentoApi\Model\Payment\PaypalData" />
+    <preference for="Deity\MagentoApi\Api\Payment\PaypalInterface" type="Deity\MagentoApi\Model\Payment\Paypal" />
+    <preference for="Deity\MagentoApi\Api\ProductRepositoryInterface" type="Deity\MagentoApi\Model\ProductRepository" />
+    <preference for="Deity\MagentoApi\Api\QuoteMaskInterface" type="Deity\MagentoApi\Model\QuoteMask" />
+    <preference for="Deity\MagentoApi\Api\UrlInterface" type="Deity\MagentoApi\Model\Url" />
 
     <!-- OVERRIDES -->
-    <preference for="Magento\Catalog\Helper\Image" type="Hatimeria\Reagento\Helper\Catalog\Image" />
-    <preference for="Magento\Paypal\Model\Express\Checkout" type="Hatimeria\Reagento\Model\Payment\Paypal\Express\Checkout" />
-    <preference for="Magento\Paypal\Model\Express" type="Hatimeria\Reagento\Model\Payment\Paypal\Express" />
-    <preference for="Magento\Paypal\Model\Express\Checkout" type="Hatimeria\Reagento\Model\Payment\Paypal\Express\Checkout" />
-    <preference for="Magento\Paypal\Model\Pro" type="Hatimeria\Reagento\Model\Payment\Paypal\Pro" />
+    <preference for="Magento\Catalog\Helper\Image" type="Deity\MagentoApi\Helper\Catalog\Image" />
+    <preference for="Magento\Paypal\Model\Express\Checkout" type="Deity\MagentoApi\Model\Payment\Paypal\Express\Checkout" />
+    <preference for="Magento\Paypal\Model\Express" type="Deity\MagentoApi\Model\Payment\Paypal\Express" />
+    <preference for="Magento\Paypal\Model\Express\Checkout" type="Deity\MagentoApi\Model\Payment\Paypal\Express\Checkout" />
+    <preference for="Magento\Paypal\Model\Pro" type="Deity\MagentoApi\Model\Payment\Paypal\Pro" />
 
     <!-- CUSTOM MAGENTO COMMANDS -->
     <type name="Magento\Framework\Console\CommandListInterface">
         <arguments>
             <argument name="commands" xsi:type="array">
-                <item name="rapidflowAttributeOptions" xsi:type="object">Hatimeria\Reagento\Console\Command\Rapidflow\Attribute\OptionsCommand</item>
+                <item name="rapidflowAttributeOptions" xsi:type="object">Deity\MagentoApi\Console\Command\Rapidflow\Attribute\OptionsCommand</item>
             </argument>
         </arguments>
     </type>
@@ -55,29 +55,29 @@
     </type>
     <virtualType name="ProductRepositoryCollectionFactory" type="Magento\Catalog\Model\ResourceModel\Product\CollectionFactory">
         <arguments>
-            <argument name="instanceName" xsi:type="string">Hatimeria\Reagento\Model\ResourceModel\Product\Collection</argument>
+            <argument name="instanceName" xsi:type="string">Deity\MagentoApi\Model\ResourceModel\Product\Collection</argument>
         </arguments>
     </virtualType>
     <virtualType name="ProductRepositorySearchResultsFactory" type="Magento\Catalog\Api\Data\ProductSearchResultsInterfaceFactory">
         <arguments>
-            <argument name="instanceName" xsi:type="string">Hatimeria\Reagento\Api\SearchResults</argument>
+            <argument name="instanceName" xsi:type="string">Deity\MagentoApi\Api\SearchResults</argument>
         </arguments>
     </virtualType>
 
     <!-- PLUGINS -->
     <type name="Magento\CatalogUrlRewrite\Model\Product\AnchorUrlRewriteGenerator">
-        <plugin name="hatimeriaReagentoAnchorUrlRewriteGeneratorPlugin" type="Hatimeria\Reagento\Plugin\CatalogUrlRewrite\Model\Product\AnchorUrlRewriteGenerator" />
+        <plugin name="deityMagentoApiAnchorUrlRewriteGeneratorPlugin" type="Deity\MagentoApi\Plugin\CatalogUrlRewrite\Model\Product\AnchorUrlRewriteGenerator" />
     </type>
     <type name="Magento\CatalogUrlRewrite\Model\Product\CategoriesUrlRewriteGenerator">
-        <plugin name="hatimeriaReagentoCategoriesUrlRewriteGeneratorPlugin" type="Hatimeria\Reagento\Plugin\CatalogUrlRewrite\Model\Product\CategoriesUrlRewriteGenerator" />
+        <plugin name="deityMagentoApiCategoriesUrlRewriteGeneratorPlugin" type="Deity\MagentoApi\Plugin\CatalogUrlRewrite\Model\Product\CategoriesUrlRewriteGenerator" />
     </type>
     <type name="Magento\CatalogUrlRewrite\Model\Product\CurrentUrlRewritesRegenerator">
-        <plugin name="hatimeriaReagentoCurrentUrlRewritesRegeneratorPlugin" type="Hatimeria\Reagento\Plugin\CatalogUrlRewrite\Model\Product\CurrentUrlRewritesRegenerator" />
+        <plugin name="deityMagentoApiCurrentUrlRewritesRegeneratorPlugin" type="Deity\MagentoApi\Plugin\CatalogUrlRewrite\Model\Product\CurrentUrlRewritesRegenerator" />
     </type>
     <type name="Magento\CatalogUrlRewrite\Observer\UrlRewriteHandler">
-        <plugin name="hatimeriaReagentoUrlRewriteHandlerPlugin" type="Hatimeria\Reagento\Plugin\CatalogUrlRewrite\Observer\UrlRewriteHandler" />
+        <plugin name="deityMagentoApiUrlRewriteHandlerPlugin" type="Deity\MagentoApi\Plugin\CatalogUrlRewrite\Observer\UrlRewriteHandler" />
     </type>
     <type name="Magento\Sales\Api\OrderManagementInterface">
-        <plugin name="hatimeriaReagentoOrderManagementPlugin" type="Hatimeria\Reagento\Plugin\Sales\Api\OrderManagement" />
+        <plugin name="deityMagentoApiOrderManagementPlugin" type="Deity\MagentoApi\Plugin\Sales\Api\OrderManagement" />
     </type>
 </config>

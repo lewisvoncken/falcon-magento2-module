@@ -1,13 +1,13 @@
 <?php
 
-namespace Hatimeria\Reagento\Api\Data;
+namespace Deity\MagentoApi\Api\Data;
 
 use Magento\Framework\Api\ExtensibleDataInterface;
 
 /**
  * Menu interface
  *
- * @package Hatimeria\Reagento\Api\Data
+ * @package Deity\MagentoApi\Api\Data
  * @api
  */
 interface MenuInterface extends ExtensibleDataInterface
@@ -30,7 +30,7 @@ interface MenuInterface extends ExtensibleDataInterface
 
     /**
      * @param string $name
-     * @return \Hatimeria\Reagento\Api\Data\MenuInterface
+     * @return \Deity\MagentoApi\Api\Data\MenuInterface
      */
     public function setName($name);
 
@@ -41,7 +41,7 @@ interface MenuInterface extends ExtensibleDataInterface
 
     /**
      * @param int $id
-     * @return \Hatimeria\Reagento\Api\Data\MenuInterface
+     * @return \Deity\MagentoApi\Api\Data\MenuInterface
      */
     public function setId($id);
 
@@ -52,7 +52,7 @@ interface MenuInterface extends ExtensibleDataInterface
 
     /**
      * @param string $url
-     * @return \Hatimeria\Reagento\Api\Data\MenuInterface
+     * @return \Deity\MagentoApi\Api\Data\MenuInterface
      */
     public function setUrl($url);
 
@@ -63,7 +63,7 @@ interface MenuInterface extends ExtensibleDataInterface
 
     /**
      * @param boolean $flag
-     * @return \Hatimeria\Reagento\Api\Data\MenuInterface
+     * @return \Deity\MagentoApi\Api\Data\MenuInterface
      */
     public function setHasActive($flag);
 
@@ -74,7 +74,7 @@ interface MenuInterface extends ExtensibleDataInterface
 
     /**
      * @param boolean $flag
-     * @return \Hatimeria\Reagento\Api\Data\MenuInterface
+     * @return \Deity\MagentoApi\Api\Data\MenuInterface
      */
     public function setIsActive($flag);
 
@@ -85,7 +85,7 @@ interface MenuInterface extends ExtensibleDataInterface
 
     /**
      * @param int $level
-     * @return \Hatimeria\Reagento\Api\Data\MenuInterface
+     * @return \Deity\MagentoApi\Api\Data\MenuInterface
      */
     public function setLevel($level);
 
@@ -96,7 +96,7 @@ interface MenuInterface extends ExtensibleDataInterface
 
     /**
      * @param boolean $flag
-     * @return \Hatimeria\Reagento\Api\Data\MenuInterface
+     * @return \Deity\MagentoApi\Api\Data\MenuInterface
      */
     public function setIsFirst($flag);
 
@@ -107,7 +107,7 @@ interface MenuInterface extends ExtensibleDataInterface
 
     /**
      * @param boolean $flag
-     * @return \Hatimeria\Reagento\Api\Data\MenuInterface
+     * @return \Deity\MagentoApi\Api\Data\MenuInterface
      */
     public function setIsLast($flag);
 
@@ -118,17 +118,17 @@ interface MenuInterface extends ExtensibleDataInterface
 
     /**
      * @param string $class
-     * @return \Hatimeria\Reagento\Api\Data\MenuInterface
+     * @return \Deity\MagentoApi\Api\Data\MenuInterface
      */
     public function setPositionClass($class);
     
     /**
-     * @return \Hatimeria\Reagento\Api\Data\MenuInterface[]
+     * @return \Deity\MagentoApi\Api\Data\MenuInterface[]
      */
     public function getChildren();
 
     /**
-     * @param \Hatimeria\Reagento\Api\Data\MenuInterface[] $children
+     * @param \Deity\MagentoApi\Api\Data\MenuInterface[] $children
      * @return mixed
      */
     public function setChildren($children);
@@ -136,18 +136,18 @@ interface MenuInterface extends ExtensibleDataInterface
     /**
      * Retrieve existing extension attributes object or create a new one.
      *
-     * @return \Hatimeria\Reagento\Api\Data\MenuExtensionInterface
+     * @return \Deity\MagentoApi\Api\Data\MenuExtensionInterface
      */
     public function getExtensionAttributes();
 
     /**
      * Set an extension attributes object.
      *
-     * @param \Hatimeria\Reagento\Api\Data\MenuExtensionInterface $extensionAttributes
+     * @param \Deity\MagentoApi\Api\Data\MenuExtensionInterface $extensionAttributes
      * @return $this
      */
     public function setExtensionAttributes(
-        \Hatimeria\Reagento\Api\Data\MenuExtensionInterface $extensionAttributes
+        \Deity\MagentoApi\Api\Data\MenuExtensionInterface $extensionAttributes
     );
 
 }

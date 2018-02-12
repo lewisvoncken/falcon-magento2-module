@@ -1,6 +1,6 @@
 <?php
 
-namespace Hatimeria\Reagento\Api\Data;
+namespace Deity\MagentoApi\Api\Data;
 
 use Magento\Framework\Api\ExtensibleDataInterface;
 use Magento\Framework\Phrase;
@@ -20,7 +20,7 @@ interface FilterInterface extends ExtensibleDataInterface
 
     /**
      * @param string|Phrase $label
-     * @return \Hatimeria\Reagento\Api\Data\FilterInterface
+     * @return \Deity\MagentoApi\Api\Data\FilterInterface
      */
     public function setLabel($label);
 
@@ -31,18 +31,18 @@ interface FilterInterface extends ExtensibleDataInterface
 
     /**
      * @param string $code
-     * @return \Hatimeria\Reagento\Api\Data\FilterInterface
+     * @return \Deity\MagentoApi\Api\Data\FilterInterface
      */
     public function setCode($code);
 
     /**
-     * @return \Hatimeria\Reagento\Api\Data\FilterOptionInterface[]|null
+     * @return \Deity\MagentoApi\Api\Data\FilterOptionInterface[]|null
      */
     public function getOptions();
 
     /**
-     * @param \Hatimeria\Reagento\Api\Data\FilterOptionInterface[] $options
-     * @return \Hatimeria\Reagento\Api\Data\FilterInterface
+     * @param \Deity\MagentoApi\Api\Data\FilterOptionInterface[] $options
+     * @return \Deity\MagentoApi\Api\Data\FilterInterface
      */
     public function setOptions($options);
 
@@ -53,7 +53,7 @@ interface FilterInterface extends ExtensibleDataInterface
 
     /**
      * @param int $attributeId
-     * @return \Hatimeria\Reagento\Api\Data\FilterInterface
+     * @return \Deity\MagentoApi\Api\Data\FilterInterface
      */
     public function setAttributeId($attributeId);
 
@@ -64,18 +64,18 @@ interface FilterInterface extends ExtensibleDataInterface
 
     /**
      * @param string $type
-     * @return \Hatimeria\Reagento\Api\Data\FilterInterface;
+     * @return \Deity\MagentoApi\Api\Data\FilterInterface;
      */
     public function setType($type);
 
     /**
-     * @return \Hatimeria\Reagento\Api\Data\FilterExtensionInterface
+     * @return \Deity\MagentoApi\Api\Data\FilterExtensionInterface
      */
     public function getExtensionAttributes();
 
     /**
-     * @param \Hatimeria\Reagento\Api\Data\FilterExtensionInterface $extensionAttributes
-     * @return \Hatimeria\Reagento\Api\Data\FilterInterface
+     * @param \Deity\MagentoApi\Api\Data\FilterExtensionInterface $extensionAttributes
+     * @return \Deity\MagentoApi\Api\Data\FilterInterface
      */
     public function setExtensionAttributes(FilterExtensionInterface $extensionAttributes);
 

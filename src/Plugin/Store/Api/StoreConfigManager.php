@@ -1,6 +1,6 @@
 <?php
 
-namespace Hatimeria\Reagento\Plugin\Store\Api;
+namespace Deity\MagentoApi\Plugin\Store\Api;
 
 use Magento\Customer\Model\AccountManagement;
 use Magento\Directory\Helper\Data;

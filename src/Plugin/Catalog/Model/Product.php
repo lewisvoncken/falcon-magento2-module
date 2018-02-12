@@ -1,19 +1,19 @@
 <?php
 
-namespace Hatimeria\Reagento\Plugin\Catalog\Model;
+namespace Deity\MagentoApi\Plugin\Catalog\Model;
 
-use Hatimeria\Reagento\Helper\Breadcrumb;
-use Hatimeria\Reagento\Helper\Product as HatimeriaProductHelper;
-use Hatimeria\Reagento\Model\Config\Source\BreadcrumbsAttribute;
+use Deity\MagentoApi\Helper\Breadcrumb;
+use Deity\MagentoApi\Helper\Product as DeityProductHelper;
 use Magento\Catalog\Model\Product as MagentoProduct;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
- * @package Hatimeria\Reagento\Model\Plugin
+ * @package Deity\MagentoApi\Model\Plugin
  */
 class Product
 {
-    /** @var HatimeriaProductHelper */
+    /** @var DeityProductHelper */
     protected $productHelper;
 
     /** @var Breadcrumb */
@@ -23,12 +23,12 @@ class Product
     protected $scopeConfig;
 
     /**
-     * @param HatimeriaProductHelper $productHelper
+     * @param DeityProductHelper $productHelper
      * @param Breadcrumb $breadcrumbHelper
      * @param ScopeConfigInterface $scopeConfig
      */
     public function __construct(
-        HatimeriaProductHelper $productHelper,
+        DeityProductHelper $productHelper,
         Breadcrumb $breadcrumbHelper,
         ScopeConfigInterface $scopeConfig
     ) {
@@ -42,7 +42,7 @@ class Product
      *
      * @param MagentoProduct $product
      * @return MagentoProduct
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function afterLoad(MagentoProduct $product)
     {

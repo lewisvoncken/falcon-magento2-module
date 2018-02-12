@@ -1,5 +1,5 @@
 <?php
-namespace Hatimeria\Reagento\Observer\Catalog\Product;
+namespace Deity\MagentoApi\Observer\Catalog\Product;
 
 
 use Magento\Catalog\Api\Data\ProductInterface;

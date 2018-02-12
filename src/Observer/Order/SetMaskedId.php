@@ -1,8 +1,8 @@
 <?php
 
-namespace Hatimeria\Reagento\Observer\Order;
+namespace Deity\MagentoApi\Observer\Order;
 
-use Hatimeria\Reagento\Model\OrderIdMaskFactory;
+use Deity\MagentoApi\Model\OrderIdMaskFactory;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Event\Observer;
 use Magento\Sales\Api\Data\OrderExtensionFactory;

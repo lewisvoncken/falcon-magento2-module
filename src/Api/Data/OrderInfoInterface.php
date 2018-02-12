@@ -1,6 +1,6 @@
 <?php
 
-namespace Hatimeria\Reagento\Api\Data;
+namespace Deity\MagentoApi\Api\Data;
 
 interface OrderInfoInterface
 {
@@ -11,7 +11,7 @@ interface OrderInfoInterface
 
     /**
      * @param int $id
-     * @return \Hatimeria\Reagento\Api\Data\OrderInfoInterface
+     * @return \Deity\MagentoApi\Api\Data\OrderInfoInterface
      */
     public function setOrderId($id);
 
@@ -22,7 +22,7 @@ interface OrderInfoInterface
 
     /**
      * @param mixed $revenue
-     * @return \Hatimeria\Reagento\Api\Data\OrderInfoInterface
+     * @return \Deity\MagentoApi\Api\Data\OrderInfoInterface
      */
     public function setRevenue($revenue);
 
@@ -33,7 +33,7 @@ interface OrderInfoInterface
 
     /**
      * @param mixed $shipping
-     * @return \Hatimeria\Reagento\Api\Data\OrderInfoInterface
+     * @return \Deity\MagentoApi\Api\Data\OrderInfoInterface
      */
     public function setShipping($shipping);
 
@@ -44,7 +44,7 @@ interface OrderInfoInterface
 
     /**
      * @param mixed $tax
-     * @return \Hatimeria\Reagento\Api\Data\OrderInfoInterface
+     * @return \Deity\MagentoApi\Api\Data\OrderInfoInterface
      */
     public function setTax($tax);
 
@@ -55,7 +55,7 @@ interface OrderInfoInterface
 
     /**
      * @param mixed $id
-     * @return \Hatimeria\Reagento\Api\Data\OrderInfoInterface
+     * @return \Deity\MagentoApi\Api\Data\OrderInfoInterface
      */
     public function setQuoteId($id);
 
@@ -66,7 +66,7 @@ interface OrderInfoInterface
 
     /**
      * @param string $id
-     * @return \Hatimeria\Reagento\Api\Data\OrderInfoInterface
+     * @return \Deity\MagentoApi\Api\Data\OrderInfoInterface
      */
     public function setMaskedId($id);
 }

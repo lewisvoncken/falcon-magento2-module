@@ -1,6 +1,6 @@
 <?php
 
-namespace Hatimeria\Reagento\Api;
+namespace Deity\MagentoApi\Api;
 
 interface ContactFormInterface
 {

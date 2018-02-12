@@ -1,6 +1,6 @@
 <?php
 
-namespace Hatimeria\Reagento\Api\Sales;
+namespace Deity\MagentoApi\Api\Sales;
 
 interface OrderManagementInterface
 {

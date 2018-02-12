@@ -1,22 +1,22 @@
 <?php
 
-namespace Hatimeria\Reagento\Plugin\Rest;
+namespace Deity\MagentoApi\Plugin\Rest;
 
-use Hatimeria\Reagento\Helper\Data as ReagentoHelper;
+use Deity\MagentoApi\Helper\Data as DeityHelper;
 
 class Response
 {
     /**
-     * @var ReagentoHelper
+     * @var DeityHelper
      */
-    protected $reagentoHelper;
+    protected $deityHelper;
     /**
-     * @param ReagentoHelper $reagentoHelper
+     * @param DeityHelper $deityHelper
      */
     public function __construct(
-        ReagentoHelper $reagentoHelper
+        DeityHelper $deityHelper
     ) {
-        $this->reagentoHelper = $reagentoHelper;
+        $this->deityHelper = $deityHelper;
     }
 
     /**
@@ -29,8 +29,8 @@ class Response
      */
     public function afterPrepareResponse(\Magento\Framework\Webapi\Rest\Response $subject, $result)
     {
-        $tags = [ReagentoHelper::defaultResponseTag];
-        $registeredTags = $this->reagentoHelper->getResponseTags();
+        $tags = [DeityHelper::defaultResponseTag];
+        $registeredTags = $this->deityHelper->getResponseTags();
         if (!empty($registeredTags)) {
             $tags = array_merge($tags, $registeredTags);
         }

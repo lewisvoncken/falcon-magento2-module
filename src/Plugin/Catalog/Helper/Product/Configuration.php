@@ -1,6 +1,6 @@
 <?php
 
-namespace Hatimeria\Reagento\Plugin\Catalog\Helper\Product;
+namespace Deity\MagentoApi\Plugin\Catalog\Helper\Product;
 
 use Magento\Catalog\Helper\Product\Configuration as CatalogHelper;
 

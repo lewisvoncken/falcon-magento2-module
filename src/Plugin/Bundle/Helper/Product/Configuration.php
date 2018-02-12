@@ -1,6 +1,6 @@
 <?php
 
-namespace Hatimeria\Reagento\Plugin\Bundle\Helper\Product;
+namespace Deity\MagentoApi\Plugin\Bundle\Helper\Product;
 
 use Magento\Bundle\Helper\Catalog\Product\Configuration as BundleHelper;
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace Hatimeria\Reagento\Plugin\Bundle\Product;
+namespace Deity\MagentoApi\Plugin\Bundle\Product;
 
 use Magento\Bundle\Api\Data\LinkInterface;
 use Magento\Bundle\Api\Data\LinkExtensionInterface;

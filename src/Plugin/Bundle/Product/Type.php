@@ -1,6 +1,6 @@
 <?php
 
-namespace Hatimeria\Reagento\Plugin\Bundle\Product;
+namespace Deity\MagentoApi\Plugin\Bundle\Product;
 
 use Magento\Bundle\Model\Product\Type as BundleType;
 use Magento\Bundle\Model\ResourceModel\Selection\Collection as ResourceSelectionCollection;
