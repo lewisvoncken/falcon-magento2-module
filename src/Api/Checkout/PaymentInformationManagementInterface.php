@@ -1,6 +1,6 @@
 <?php
 
-namespace Deity\MagentoApi\Api;
+namespace Deity\MagentoApi\Api\Checkout;
 
 use Magento\Checkout\Api\PaymentInformationManagementInterface as MagentoPaymentInformationManagementInterface;
 

@@ -68,20 +68,20 @@
         </resources>
     </route>
     <route url="/V1/guest-carts/:cartId/payment-information" method="POST">
-        <service class="\Deity\MagentoApi\Api\GuestPaymentInformationManagementInterface" method="savePaymentInformationAndPlaceOrder"/>
+        <service class="\Deity\MagentoApi\Api\Checkout\GuestPaymentInformationManagementInterface" method="savePaymentInformationAndPlaceOrder"/>
         <resources>
             <resource ref="anonymous" />
         </resources>
     </route>
     <route url="/V1/guest-carts/:cartId/deity-order" method="PUT">
-        <service class="\Deity\MagentoApi\Api\GuestCartManagementInterface" method="placeOrder"/>
+        <service class="\Deity\MagentoApi\Api\Checkout\GuestCartManagementInterface" method="placeOrder"/>
         <resources>
             <resource ref="anonymous" />
         </resources>
     </route>
 
     <route url="/V1/carts/mine/payment-information" method="POST">
-        <service class="\Deity\MagentoApi\Api\PaymentInformationManagementInterface" method="savePaymentInformationAndPlaceOrder"/>
+        <service class="\Deity\MagentoApi\Api\Checkout\PaymentInformationManagementInterface" method="savePaymentInformationAndPlaceOrder"/>
         <resources>
             <resource ref="self" />
         </resources>
@@ -90,7 +90,7 @@
         </data>
     </route>
     <route url="/V1/carts/mine/deity-order" method="PUT">
-        <service class="\Deity\MagentoApi\Api\CartManagementInterface" method="placeOrder"/>
+        <service class="\Deity\MagentoApi\Api\Checkout\CartManagementInterface" method="placeOrder"/>
         <resources>
             <resource ref="self" />
         </resources>

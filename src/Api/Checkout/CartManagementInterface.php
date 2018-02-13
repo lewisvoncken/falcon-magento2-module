@@ -1,6 +1,6 @@
 <?php
 
-namespace Deity\MagentoApi\Api;
+namespace Deity\MagentoApi\Api\Checkout;
 
 use Magento\Quote\Api\Data\PaymentInterface;
 use Magento\Quote\Api\CartManagementInterface as MagentoCartManagementInterface;
