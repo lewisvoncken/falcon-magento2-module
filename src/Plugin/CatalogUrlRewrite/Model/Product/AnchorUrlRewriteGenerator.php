@@ -1,8 +1,8 @@
 <?php
 
-namespace Hatimeria\Reagento\Plugin\CatalogUrlRewrite\Model\Product;
+namespace Deity\MagentoApi\Plugin\CatalogUrlRewrite\Model\Product;
 
-use Hatimeria\Reagento\Helper\Data;
+use Deity\MagentoApi\Helper\Data;
 use Magento\Catalog\Model\Product;
 use Magento\CatalogUrlRewrite\Model\ObjectRegistry;
 use Magento\CatalogUrlRewrite\Model\Product\AnchorUrlRewriteGenerator as MagentoAnchorUrlRewriteGenerator;

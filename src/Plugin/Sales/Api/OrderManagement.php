@@ -1,9 +1,9 @@
 <?php
 
-namespace Hatimeria\Reagento\Plugin\Sales\Api;
+namespace Deity\MagentoApi\Plugin\Sales\Api;
 
-use Hatimeria\Reagento\Model\OrderIdMask;
-use Hatimeria\Reagento\Model\OrderIdMaskFactory;
+use Deity\MagentoApi\Model\OrderIdMask;
+use Deity\MagentoApi\Model\OrderIdMaskFactory;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\OrderManagementInterface;
 use Psr\Log\LoggerInterface;

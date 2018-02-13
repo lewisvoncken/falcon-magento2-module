@@ -1,5 +1,5 @@
 <?php
-namespace Hatimeria\Reagento\Model\Payment\Paypal;
+namespace Deity\MagentoApi\Model\Payment\Paypal;
 
 use Magento\Paypal\Model\Pro as PaypalPro;
 

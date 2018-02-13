@@ -1,24 +1,24 @@
 <?php
 
-namespace Hatimeria\Reagento\Plugin\Catalog\Model;
+namespace Deity\MagentoApi\Plugin\Catalog\Model;
 
-use Hatimeria\Reagento\Helper\Breadcrumb;
-use Hatimeria\Reagento\Helper\Category as HatimeriaCategoryHelper;
+use Deity\MagentoApi\Helper\Breadcrumb;
+use Deity\MagentoApi\Helper\Category as CategoryHelper;
 use Magento\Catalog\Model\Category as MagentoCategory;
 
 class Category
 {
-    /** @var HatimeriaCategoryHelper */
+    /** @var CategoryHelper */
     protected $categoryHelper;
 
     /** @var Breadcrumb */
     protected $breadcrumbHelper;
 
     /**
-     * @param HatimeriaCategoryHelper $categoryHelper
+     * @param CategoryHelper $categoryHelper
      * @param Breadcrumb $breadcrumbHelper
      */
-    public function __construct(HatimeriaCategoryHelper $categoryHelper, Breadcrumb $breadcrumbHelper)
+    public function __construct(CategoryHelper $categoryHelper, Breadcrumb $breadcrumbHelper)
     {
         $this->categoryHelper = $categoryHelper;
         $this->breadcrumbHelper = $breadcrumbHelper;

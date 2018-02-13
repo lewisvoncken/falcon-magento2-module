@@ -1,5 +1,5 @@
 <?php
-namespace Hatimeria\Reagento\Controller\Payment\Paypal\Express;
+namespace Deity\MagentoApi\Controller\Payment\Paypal\Express;
 
 use Psr\Log\LoggerInterface;
 use Magento\Paypal\Controller\Express\Cancel as CancelAction;
@@ -10,7 +10,7 @@ use Magento\Framework\Controller\ResultFactory;
 
 /**
  * Class Cancel
- * @package Hatimeria\Reagento\Controller
+ * @package Deity\MagentoApi\Controller
  */
 class Cancel extends CancelAction
 {
@@ -131,7 +131,7 @@ class Cancel extends CancelAction
         $token = $request->getParam('token');
         $payerId = $request->getParam('PayerID');
         $redirectUrlFailure = $this->scopeConfig->getValue(
-            'hatimeria/payment/paypal_redirect_failure',
+            'deity_payment/paypal/redirect_failure',
             ScopeConfigInterface::SCOPE_TYPE_DEFAULT
         );
 
@@ -139,7 +139,7 @@ class Cancel extends CancelAction
             $this->initQuote($cartId);
 
             $redirectUrl = $this->scopeConfig->getValue(
-                'hatimeria/payment/paypal_redirect_cancel',
+                'deity_payment/paypal/redirect_cancel',
                 ScopeConfigInterface::SCOPE_TYPE_DEFAULT
             );
 

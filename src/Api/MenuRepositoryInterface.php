@@ -1,16 +1,16 @@
 <?php
 
-namespace Hatimeria\Reagento\Api;
+namespace Deity\MagentoApi\Api;
 
 /**
  * Interface MenuRepositoryInterface
- * @package Hatimeria\Reagento\Api
+ * @package Deity\MagentoApi\Api
  * @api
  */
 interface MenuRepositoryInterface
 {
     /**
-     * @return \Hatimeria\Reagento\Api\Data\MenuInterface[]
+     * @return \Deity\MagentoApi\Api\Data\MenuInterface[]
      */
     public function getTree();
 }

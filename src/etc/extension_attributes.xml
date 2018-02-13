@@ -7,14 +7,14 @@
     <extension_attributes for="Magento\Catalog\Api\Data\ProductInterface">
         <attribute code="thumbnail_resized_url" type="string" />
         <attribute code="thumbnail_url" type="string" />
-        <attribute code="media_gallery_sizes" type="Hatimeria\Reagento\Api\Data\GalleryMediaEntrySizeInterface[]" />
+        <attribute code="media_gallery_sizes" type="Deity\MagentoApi\Api\Data\GalleryMediaEntrySizeInterface[]" />
         <attribute code="catalog_display_price" type="float" />
         <attribute code="min_price" type="float" />
         <attribute code="max_price" type="float" />
-        <attribute code="breadcrumbs" type="Hatimeria\Reagento\Api\Data\BreadcrumbInterface[]" />
+        <attribute code="breadcrumbs" type="Deity\MagentoApi\Api\Data\BreadcrumbInterface[]" />
     </extension_attributes>
     <extension_attributes for="Magento\Catalog\Api\Data\CategoryInterface">
-        <attribute code="breadcrumbs" type="Hatimeria\Reagento\Api\Data\BreadcrumbInterface[]"/>
+        <attribute code="breadcrumbs" type="Deity\MagentoApi\Api\Data\BreadcrumbInterface[]"/>
     </extension_attributes>
     <extension_attributes for="Magento\Customer\Api\Data\CustomerInterface">
         <attribute code="guest_quote_id" type="string" />

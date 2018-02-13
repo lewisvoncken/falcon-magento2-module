@@ -1,6 +1,6 @@
 <?php
 
-namespace Hatimeria\Reagento\Model\Config\Source;
+namespace Deity\MagentoApi\Model\Config\Source;
 
 use Magento\Framework\Data\OptionSourceInterface;
 use Magento\Framework\Option\ArrayInterface;
@@ -9,13 +9,10 @@ use Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory as A
 use Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection as AttributeCollection;
 /**
  * Breadcrumb attribute source model
- *
- * @package Hatimeria\Reagento\Model\Config\Source
- * @author Artur Jewuła <artur.jewula@hatimeria.pl>
  */
 class BreadcrumbsAttribute implements OptionSourceInterface, ArrayInterface
 {
-    const BREADCRUMBS_ATTRIBUTES_CONFIG_PATH = 'reagento/catalog/breadcrumbs_attributes';
+    const BREADCRUMBS_ATTRIBUTES_CONFIG_PATH = 'deity/catalog/breadcrumbs_attributes';
 
     /** @var array $options */
     protected $options = [];

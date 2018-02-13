@@ -1,5 +1,5 @@
 <?php
-namespace Hatimeria\Reagento\Model\ResourceModel;
+namespace Deity\MagentoApi\Model\ResourceModel;
 
 use Magento\Framework\EntityManager\EntityManager;
 use Magento\Catalog\Api\Data\CategoryInterface;

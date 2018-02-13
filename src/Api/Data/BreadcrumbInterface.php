@@ -1,6 +1,6 @@
 <?php
 
-namespace Hatimeria\Reagento\Api\Data;
+namespace Deity\MagentoApi\Api\Data;
 
 interface BreadcrumbInterface
 {
@@ -17,7 +17,7 @@ interface BreadcrumbInterface
 
     /**
      * @param int $id
-     * @return \Hatimeria\Reagento\Api\Data\BreadcrumbInterface
+     * @return \Deity\MagentoApi\Api\Data\BreadcrumbInterface
      */
     public function setId($id);
 
@@ -28,7 +28,7 @@ interface BreadcrumbInterface
 
     /**
      * @param string $name
-     * @return \Hatimeria\Reagento\Api\Data\BreadcrumbInterface
+     * @return \Deity\MagentoApi\Api\Data\BreadcrumbInterface
      */
     public function setName($name);
 
@@ -39,7 +39,7 @@ interface BreadcrumbInterface
 
     /**
      * @param string $urlPath
-     * @return \Hatimeria\Reagento\Api\Data\BreadcrumbInterface
+     * @return \Deity\MagentoApi\Api\Data\BreadcrumbInterface
      */
     public function setUrlPath($urlPath);
 
@@ -50,7 +50,7 @@ interface BreadcrumbInterface
 
     /**
      * @param string $urlKey
-     * @return \Hatimeria\Reagento\Api\Data\BreadcrumbInterface
+     * @return \Deity\MagentoApi\Api\Data\BreadcrumbInterface
      */
     public function setUrlKey($urlKey);
 
@@ -61,13 +61,13 @@ interface BreadcrumbInterface
 
     /**
      * @param array $urlQuery
-     * @return \Hatimeria\Reagento\Api\Data\BreadcrumbInterface
+     * @return \Deity\MagentoApi\Api\Data\BreadcrumbInterface
      */
     public function setUrlQuery($urlQuery);
 
     /**
      * @param array $data
-     * @return \Hatimeria\Reagento\Api\Data\BreadcrumbInterface
+     * @return \Deity\MagentoApi\Api\Data\BreadcrumbInterface
      */
     public function loadFromData($data);
 

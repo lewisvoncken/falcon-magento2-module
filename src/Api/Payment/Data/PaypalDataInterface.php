@@ -1,9 +1,9 @@
 <?php
-namespace Hatimeria\Reagento\Api\Payment\Data;
+namespace Deity\MagentoApi\Api\Payment\Data;
 
 /**
  * Class PaymentDataInterface
- * @package Hatimeria\Reagento\Api\Data
+ * @package Deity\MagentoApi\Api\Data
  */
 interface PaypalDataInterface
 {

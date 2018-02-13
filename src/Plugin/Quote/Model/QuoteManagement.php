@@ -1,9 +1,9 @@
 <?php
 
-namespace Hatimeria\Reagento\Plugin\Quote\Model;
+namespace Deity\MagentoApi\Plugin\Quote\Model;
 
-use Hatimeria\Reagento\Api\Data\OrderResponseInterface;
-use Hatimeria\Reagento\Api\Data\OrderResponseInterfaceFactory;
+use Deity\MagentoApi\Api\Data\OrderResponseInterface;
+use Deity\MagentoApi\Api\Data\OrderResponseInterfaceFactory;
 use Magento\Framework\Event\Manager;
 use Magento\Quote\Model\QuoteManagement as MagentoQuoteManagement;
 use Magento\Sales\Api\Data\OrderInterface;
@@ -53,7 +53,7 @@ class QuoteManagement
         $obj->setOrderRealId($order->getIncrementId());
 
         $this->eventManager->dispatch(
-            'reagento_place_order_response',
+            'deity_place_order_response',
             [
                 'response' => $obj,
                 'order' => $order

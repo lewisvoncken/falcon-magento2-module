@@ -1,8 +1,8 @@
 <?php
 
-namespace Hatimeria\Reagento\Observer\Cms;
+namespace Deity\MagentoApi\Observer\Cms;
 
-use Hatimeria\Reagento\Helper\Cms as CmsHelper;
+use Deity\MagentoApi\Helper\Cms as CmsHelper;
 use Magento\Cms\Model\Block;
 use Magento\Cms\Model\Page;
 use Magento\Framework\Event\Observer as EventObserver;

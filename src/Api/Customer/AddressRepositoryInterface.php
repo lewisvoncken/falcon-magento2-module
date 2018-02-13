@@ -1,5 +1,5 @@
 <?php
-namespace Hatimeria\Reagento\Api\Customer;
+namespace Deity\MagentoApi\Api\Customer;
 
 use Magento\Customer\Api\Data\AddressInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;

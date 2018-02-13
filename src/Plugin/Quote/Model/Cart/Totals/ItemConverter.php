@@ -1,6 +1,6 @@
 <?php
 
-namespace Hatimeria\Reagento\Plugin\Quote\Model\Cart\Totals;
+namespace Deity\MagentoApi\Plugin\Quote\Model\Cart\Totals;
 
 use Magento\CatalogInventory\Api\StockRegistryInterface;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
@@ -8,7 +8,7 @@ use Magento\Quote\Api\Data\TotalsItemExtensionFactory;
 use Magento\Quote\Model\Cart\Totals\ItemConverter as MagentoItemConverter;
 use Magento\Quote\Model\Cart\Totals\Item as TotalsItem;
 use Magento\Quote\Model\Quote\Item as QuoteItem;
-use Hatimeria\Reagento\Model\Cart\Item\AttributeList;
+use Deity\MagentoApi\Model\Cart\Item\AttributeList;
 
 class ItemConverter
 {

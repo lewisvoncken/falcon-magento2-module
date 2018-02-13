@@ -1,15 +1,16 @@
 <?php
 
-namespace Hatimeria\Reagento\Helper;
+namespace Deity\MagentoApi\Helper;
 
-use Hatimeria\Reagento\Model\Api\Data\StockItem;
-use Hatimeria\Reagento\Model\Api\Data\StockItemFactory;
+use Deity\MagentoApi\Model\Api\Data\StockItem;
+use Deity\MagentoApi\Model\Api\Data\StockItemFactory;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\ResourceModel\Product\Collection as ProductCollection;
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\CatalogInventory\Api\StockItemCriteriaInterface;
 use Magento\CatalogInventory\Api\StockItemCriteriaInterfaceFactory;
 use Magento\CatalogInventory\Api\StockItemRepositoryInterface;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Store\Model\StoreManagerInterface;
 
 class Stock
@@ -24,31 +25,32 @@ class Stock
     protected $storeManager;
 
     /** @var StockItemFactory */
-    protected $reagentoStockItemFactory;
+    protected $deityStockItemFactory;
 
     /**
      * Stock constructor.
      * @param StockItemRepositoryInterface $stockRepository
      * @param StockItemCriteriaInterfaceFactory $stockCriteriaInterfaceFactory
      * @param StoreManagerInterface $storeManager
-     * @param StockItemFactory $reagentoStockItemFactory
+     * @param StockItemFactory $deityStockItemFactory
      */
     public function __construct(
         StockItemRepositoryInterface $stockRepository,
         StockItemCriteriaInterfaceFactory $stockCriteriaInterfaceFactory,
         StoreManagerInterface $storeManager,
-        StockItemFactory $reagentoStockItemFactory
+        StockItemFactory $deityStockItemFactory
     ) {
         $this->stockRepository = $stockRepository;
         $this->stockCriteriaInterfaceFactory = $stockCriteriaInterfaceFactory;
         $this->storeManager = $storeManager;
-        $this->reagentoStockItemFactory = $reagentoStockItemFactory;
+        $this->deityStockItemFactory = $deityStockItemFactory;
     }
 
     /**
      * Add stock item to product collection
      *
      * @param ProductCollection $collection
+     * @throws LocalizedException
      */
     public function addStockDataToCollection(ProductCollection $collection)
     {
@@ -65,6 +67,7 @@ class Stock
     /**
      * @param ProductCollection $collection
      * @return StockItemInterface[]
+     * @throws LocalizedException
      */
     protected function getStockForCollection(ProductCollection $collection)
     {
@@ -105,12 +108,12 @@ class Stock
      */
     protected function prepareStockItem(StockItemInterface $stockItem)
     {
-        $reagentoStockItem = $this->reagentoStockItemFactory->create();
+        $deityStockItem = $this->deityStockItemFactory->create();
         foreach(StockItem::FIELDS as $key) {
-            $reagentoStockItem->setData($key, $stockItem->getData($key));
+            $deityStockItem->setData($key, $stockItem->getData($key));
         }
 
-        /** @var StockItem $reagentoStockItem */
-        return $reagentoStockItem;
+        /** @var StockItem $deityStockItem */
+        return $deityStockItem;
     }
 }

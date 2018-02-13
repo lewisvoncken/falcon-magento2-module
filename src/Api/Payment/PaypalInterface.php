@@ -1,16 +1,16 @@
 <?php
-namespace Hatimeria\Reagento\Api\Payment;
+namespace Deity\MagentoApi\Api\Payment;
 
 /**
  * Interface PaymentInterface
- * @package Hatimeria\Reagento\Api
+ * @package Deity\MagentoApi\Api
  */
 interface PaypalInterface
 {
     /**
      * Fetch PayPal token
      * @param string $cartId
-     * @return \Hatimeria\Reagento\Api\Payment\Data\PaypalDataInterface
+     * @return \Deity\MagentoApi\Api\Payment\Data\PaypalDataInterface
      */
     public function getToken($cartId);
 }

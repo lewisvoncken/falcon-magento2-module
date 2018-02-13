@@ -1,18 +1,18 @@
 <?php
 
-namespace Hatimeria\Reagento\Api\Data;
+namespace Deity\MagentoApi\Api\Data;
 
 interface ProductSearchResultsInterface extends \Magento\Catalog\Api\Data\ProductSearchResultsInterface
 {
     /**
      * Get filters
-     * @return \Hatimeria\Reagento\Api\Data\FilterInterface[]
+     * @return \Deity\MagentoApi\Api\Data\FilterInterface[]
      */
     public function getFilters();
 
     /**
      * Set filters
-     * @param \Hatimeria\Reagento\Api\Data\FilterInterface[] $items
+     * @param \Deity\MagentoApi\Api\Data\FilterInterface[] $items
      * @return $this
      */
     public function setFilters($items);

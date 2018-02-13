@@ -1,5 +1,5 @@
 <?php
-namespace Hatimeria\Reagento\Plugin\Quote\Model\Cart;
+namespace Deity\MagentoApi\Plugin\Quote\Model\Cart;
 
 use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
 use Magento\Catalog\Model\ResourceModel\Product\Website\Link;

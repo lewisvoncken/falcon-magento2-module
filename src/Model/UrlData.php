@@ -1,11 +1,11 @@
 <?php
 
-namespace Hatimeria\Reagento\Model;
+namespace Deity\MagentoApi\Model;
 
-use Hatimeria\Reagento\Api\Data\UrlDataInterface;
+use Deity\MagentoApi\Api\Data\UrlDataInterface;
 
 /**
- * @package Hatimeria\Reagento\Model
+ * @package Deity\MagentoApi\Model
  */
 class UrlData extends \Magento\Framework\DataObject implements UrlDataInterface
 {

@@ -9,9 +9,9 @@
 
         <referenceContainer name="page.wrapper">
             <block class="Magento\Framework\View\Element\Template"
-                   name="hatimeria_link"
+                   name="deity_link"
                    before="-"
-                   template="Hatimeria_Reagento::link.phtml"/>
+                   template="Deity_MagentoApi::link.phtml"/>
         </referenceContainer>
     </body>
 </page>

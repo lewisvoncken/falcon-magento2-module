@@ -1,8 +1,8 @@
 <?php
 
-namespace Hatimeria\Reagento\Plugin\CatalogUrlRewrite\Observer;
+namespace Deity\MagentoApi\Plugin\CatalogUrlRewrite\Observer;
 
-use Hatimeria\Reagento\Helper\Data;
+use Deity\MagentoApi\Helper\Data;
 use Magento\Catalog\Model\Category;
 use Magento\CatalogUrlRewrite\Observer\UrlRewriteHandler as MagentoUrlRewriteHandler;
 

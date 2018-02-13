@@ -1,11 +1,11 @@
 <?php
 
-namespace Hatimeria\Reagento\Model\Sales;
+namespace Deity\MagentoApi\Model\Sales;
 
-use Hatimeria\Reagento\Api\Sales\GuestOrderManagementInterface;
-use Hatimeria\Reagento\Model\OrderIdMaskFactory;
-use Hatimeria\Reagento\Model\Sales\Order\Extension as OrderExtension;
-use Hatimeria\Reagento\Model\Sales\Order\Item\Extension as OrderItemExtension;
+use Deity\MagentoApi\Api\Sales\GuestOrderManagementInterface;
+use Deity\MagentoApi\Model\OrderIdMaskFactory;
+use Deity\MagentoApi\Model\Sales\Order\Extension as OrderExtension;
+use Deity\MagentoApi\Model\Sales\Order\Item\Extension as OrderItemExtension;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\Data\OrderItemInterface;

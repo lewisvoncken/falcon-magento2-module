@@ -1,12 +1,12 @@
 <?php
 
-namespace Hatimeria\Reagento\Api;
+namespace Deity\MagentoApi\Api;
 
 interface QuoteMaskInterface
 {
     /**
      * @param string $quoteId
-     * @return \Hatimeria\Reagento\Api\Data\OrderInfoInterface
+     * @return \Deity\MagentoApi\Api\Data\OrderInfoInterface
      */
     public function getItem($quoteId);
 }

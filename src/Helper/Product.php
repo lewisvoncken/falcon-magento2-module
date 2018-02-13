@@ -1,10 +1,10 @@
 <?php
 
-namespace Hatimeria\Reagento\Helper;
+namespace Deity\MagentoApi\Helper;
 
-use Hatimeria\Reagento\Api\Data\GalleryMediaEntrySizeInterface;
-use Hatimeria\Reagento\Helper\Media as MediaHelper;
-use Hatimeria\Reagento\Model\Config\Source\BreadcrumbsAttribute;
+use Deity\MagentoApi\Api\Data\GalleryMediaEntrySizeInterface;
+use Deity\MagentoApi\Helper\Media as MediaHelper;
+use Deity\MagentoApi\Model\Config\Source\BreadcrumbsAttribute;
 use Magento\Catalog\Api\Data\ProductExtension;
 use Magento\Catalog\Api\Data\ProductExtensionFactory;
 use Magento\Catalog\Api\Data\ProductInterface;
@@ -17,7 +17,7 @@ use Magento\Framework\ObjectManagerInterface;
 
 
 /**
- * @package Hatimeria\Reagento\Helper
+ * @package Deity\MagentoApi\Helper
  */
 class Product extends AbstractHelper
 {
@@ -100,7 +100,7 @@ class Product extends AbstractHelper
             }
 
             /** @var GalleryMediaEntrySizeInterface $sizesEntry */
-            $sizesEntry = $this->objectManager->create('Hatimeria\Reagento\Api\Data\GalleryMediaEntrySizeInterface');
+            $sizesEntry = $this->objectManager->create('Deity\MagentoApi\Api\Data\GalleryMediaEntrySizeInterface');
 
             $file = $mediaGalleryEntry->getFile();
             $sizesEntry->setThumbnail($this->mediaHelper->getProductImageUrl($product, $file, 'product_media_gallery_item_thumbnail'));

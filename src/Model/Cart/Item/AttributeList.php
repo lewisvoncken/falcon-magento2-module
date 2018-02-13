@@ -1,6 +1,6 @@
 <?php
 
-namespace Hatimeria\Reagento\Model\Cart\Item;
+namespace Deity\MagentoApi\Model\Cart\Item;
 
 class AttributeList
 {

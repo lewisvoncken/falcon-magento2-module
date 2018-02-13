@@ -1,8 +1,8 @@
 <?php
-namespace Hatimeria\Reagento\Helper;
+namespace Deity\MagentoApi\Helper;
 
-use Hatimeria\Reagento\Api\Data\BreadcrumbInterface;
-use Hatimeria\Reagento\Api\Data\BreadcrumbInterfaceFactory;
+use Deity\MagentoApi\Api\Data\BreadcrumbInterface;
+use Deity\MagentoApi\Api\Data\BreadcrumbInterfaceFactory;
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Api\Data\CategoryInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
@@ -149,7 +149,7 @@ class Breadcrumb extends AbstractHelper
     protected function processCategoryBreadcrumbs(ProductInterface $product, $categoryId, $filters)
     {
         $useSubcategoryFilter = $this->scopeConfig->getValue(
-            \Hatimeria\Reagento\Helper\Category::SHOW_CATEGORY_FILTER_PATH,
+            \Deity\MagentoApi\Helper\Category::SHOW_CATEGORY_FILTER_PATH,
             ScopeInterface::SCOPE_STORE,
             $this->storeManager->getStore()->getId()
         );

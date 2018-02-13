@@ -1,11 +1,11 @@
 <?php
 
-namespace Hatimeria\Reagento\Model\Sales;
+namespace Deity\MagentoApi\Model\Sales;
 
-use Hatimeria\Reagento\Api\Sales\OrderManagementInterface;
-use Hatimeria\Reagento\Model\Sales\Order\Extension as OrderExtension;
-use Hatimeria\Reagento\Model\Sales\Order\Item\Extension as OrderItemExtension;
-use Hatimeria\Reagento\Model\Sales\Order\Payment\Extension as OrderPaymentExtension;
+use Deity\MagentoApi\Api\Sales\OrderManagementInterface;
+use Deity\MagentoApi\Model\Sales\Order\Extension as OrderExtension;
+use Deity\MagentoApi\Model\Sales\Order\Item\Extension as OrderItemExtension;
+use Deity\MagentoApi\Model\Sales\Order\Payment\Extension as OrderPaymentExtension;
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\Api\Search\FilterGroup;
 use Magento\Framework\Api\SearchCriteria;

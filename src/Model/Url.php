@@ -1,12 +1,11 @@
 <?php
 
-namespace Hatimeria\Reagento\Model;
+namespace Deity\MagentoApi\Model;
 
-use Hatimeria\Reagento\Api\UrlInterface;
-use Hatimeria\Reagento\Api\Data\UrlDataInterface;
-use Hatimeria\Reagento\Helper\Data as ReagentoHelper;
-use Hatimeria\Reagento\Helper\Product as ReagentoProductHelper;
-use Hatimeria\Reagento\Model\UrlDataFactory;
+use Deity\MagentoApi\Api\UrlInterface;
+use Deity\MagentoApi\Helper\Data as DeityHelper;
+use Deity\MagentoApi\Helper\Product as DeityProductHelper;
+use Deity\MagentoApi\Model\UrlDataFactory;
 use Magento\Catalog\Api\Data\CategoryInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Product;
@@ -21,7 +20,7 @@ use Magento\Store\Model\StoreManagerInterface;
 use Magento\UrlRewrite\Model\UrlFinderInterface;
 
 /**
- * @package Hatimeria\Reagento\Model
+ * @package Deity\MagentoApi\Model
  */
 class Url implements UrlInterface
 {
@@ -35,16 +34,14 @@ class Url implements UrlInterface
     /** @var \Magento\Catalog\Api\CategoryRepository */
     protected $categoryRepository;
 
-    /** @var \Hatimeria\Reagento\Model\UrlDataFactory */
+    /** @var \Deity\MagentoApi\Model\UrlDataFactory */
     protected $urlDataFactory;
-    /**
-     * @var ReagentoHelper
-     */
-    protected $reagentoHelper;
-    /**
-     * @var ReagentoProductHelper
-     */
-    protected $reagentoProductHelper;
+
+    /** @var DeityHelper */
+    protected $deityHelper;
+
+    /** @var DeityProductHelper */
+    protected $deityProductHelper;
 
     /** @var StoreManagerInterface */
     protected $storeManager;
@@ -56,9 +53,9 @@ class Url implements UrlInterface
      * @param PageRepositoryInterface $pageRepository
      * @param ProductRepositoryInterface $productRepository
      * @param CategoryRepositoryInterface $categoryRepository
-     * @param \Hatimeria\Reagento\Model\UrlDataFactory $urlDataFactory
-     * @param ReagentoHelper $reagentoHelper
-     * @param ReagentoProductHelper $reagentoProductHelper
+     * @param \Deity\MagentoApi\Model\UrlDataFactory $urlDataFactory
+     * @param DeityHelper $deityHelper
+     * @param DeityProductHelper $deityProductHelper
      * @param StoreManagerInterface $storeManager
      */
     public function __construct(
@@ -68,8 +65,8 @@ class Url implements UrlInterface
         ProductRepositoryInterface $productRepository,
         CategoryRepositoryInterface $categoryRepository,
         UrlDataFactory $urlDataFactory,
-        ReagentoHelper $reagentoHelper,
-        ReagentoProductHelper $reagentoProductHelper,
+        DeityHelper $deityHelper,
+        DeityProductHelper $deityProductHelper,
         StoreManagerInterface $storeManager
     ) {
         $this->dataFactory = $dataFactory;
@@ -78,8 +75,8 @@ class Url implements UrlInterface
         $this->productRepository = $productRepository;
         $this->categoryRepository = $categoryRepository;
         $this->urlDataFactory = $urlDataFactory;
-        $this->reagentoHelper = $reagentoHelper;
-        $this->reagentoProductHelper = $reagentoProductHelper;
+        $this->deityHelper = $deityHelper;
+        $this->deityProductHelper = $deityProductHelper;
         $this->storeManager = $storeManager;
     }
 
@@ -98,21 +95,21 @@ class Url implements UrlInterface
                 case 'product':
                     /** @var Product|ProductInterface $entity */
                     $entity = $this->productRepository->getById($urlModel->getEntityId(), false, $this->getCurrentStoreId());
-                    $this->reagentoHelper->addResponseTagsByObject($entity);
+                    $this->deityHelper->addResponseTagsByObject($entity);
                     $urlData->setProduct($entity);
                     break;
 
                 case 'category':
                     /** @var \Magento\Catalog\Model\Category|CategoryInterface $entity */
                     $entity = $this->categoryRepository->get($urlModel->getEntityId(), $this->getCurrentStoreId());
-                    $this->reagentoHelper->addResponseTagsByObject($entity);
+                    $this->deityHelper->addResponseTagsByObject($entity);
                     $urlData->setCategory($entity);
                     break;
 
                 case 'cms-page':
                     /** @var Page|PageInterface $entity */
                     $entity = $this->pageRepository->getById($urlModel->getEntityId());
-                    $this->reagentoHelper->addResponseTagsByObject($entity);
+                    $this->deityHelper->addResponseTagsByObject($entity);
                     $urlData->setCmsPage($entity);
                     break;
 

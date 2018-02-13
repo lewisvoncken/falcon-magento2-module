@@ -1,9 +1,9 @@
 <?php
 
-namespace Hatimeria\Reagento\Model\ResourceModel\Category;
+namespace Deity\MagentoApi\Model\ResourceModel\Category;
 
-use Hatimeria\Reagento\Helper\Breadcrumb;
-use Hatimeria\Reagento\Helper\Category;
+use Deity\MagentoApi\Helper\Breadcrumb;
+use Deity\MagentoApi\Helper\Category;
 use Magento\Catalog\Model\Category as CategoryModel;
 use Magento\Catalog\Model\ResourceModel\Category\Collection as MagentoCategoryCollection;
 use Magento\Eav\Model\Config;
@@ -21,10 +21,10 @@ use Psr\Log\LoggerInterface;
 class Collection extends MagentoCategoryCollection
 {
     /** @var Category */
-    protected $hatimeriaCategoryHelper;
+    protected $categoryHelper;
 
     /** @var Breadcrumb */
-    protected $hatimeriaBreadcrumbHelper;
+    protected $breadcrumbHelper;
 
     /**
      * Collection constructor.
@@ -38,8 +38,8 @@ class Collection extends MagentoCategoryCollection
      * @param Helper $resourceHelper
      * @param UniversalFactory $universalFactory
      * @param StoreManagerInterface $storeManager
-     * @param Category $hatimeriaCategoryHelper
-     * @param Breadcrumb $hatimeriaBreadcrumbHelper
+     * @param Category $categoryHelper
+     * @param Breadcrumb $breadcrumbHelper
      * @param AdapterInterface|null $connection
      */
     public function __construct(
@@ -53,12 +53,12 @@ class Collection extends MagentoCategoryCollection
         Helper $resourceHelper,
         UniversalFactory $universalFactory,
         StoreManagerInterface $storeManager,
-        Category $hatimeriaCategoryHelper,
-        Breadcrumb $hatimeriaBreadcrumbHelper,
+        Category $categoryHelper,
+        Breadcrumb $breadcrumbHelper,
         AdapterInterface $connection = null
     ) {
-        $this->hatimeriaCategoryHelper = $hatimeriaCategoryHelper;
-        $this->hatimeriaBreadcrumbHelper = $hatimeriaBreadcrumbHelper;
+        $this->categoryHelper = $categoryHelper;
+        $this->breadcrumbHelper = $breadcrumbHelper;
         return parent::__construct(
             $entityFactory,
             $logger,
@@ -95,8 +95,8 @@ class Collection extends MagentoCategoryCollection
         parent::load($printQuery, $logQuery);
 
         foreach ($this->_items as $category) { /** @var CategoryModel $category */
-            $this->hatimeriaCategoryHelper->addImageAttribute($category);
-            $this->hatimeriaBreadcrumbHelper->addCategoryBreadcrumbs($category, $this);
+            $this->categoryHelper->addImageAttribute($category);
+            $this->breadcrumbHelper->addCategoryBreadcrumbs($category, $this);
         }
 
         return $this;

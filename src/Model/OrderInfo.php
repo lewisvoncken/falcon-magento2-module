@@ -1,8 +1,8 @@
 <?php
 
-namespace Hatimeria\Reagento\Model;
+namespace Deity\MagentoApi\Model;
 
-use Hatimeria\Reagento\Api\Data\OrderInfoInterface;
+use Deity\MagentoApi\Api\Data\OrderInfoInterface;
 use Magento\Framework\Model\AbstractModel;
 
 class OrderInfo extends AbstractModel implements OrderInfoInterface

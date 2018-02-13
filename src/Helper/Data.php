@@ -1,6 +1,6 @@
 <?php
 
-namespace Hatimeria\Reagento\Helper;
+namespace Deity\MagentoApi\Helper;
 
 use Magento\Framework\App\Cache\Tag\Resolver\Proxy as TagResolver;
 use Magento\Framework\App\Helper\Context;
@@ -13,8 +13,8 @@ use Magento\Store\Model\StoreManagerInterface;
 class Data extends AbstractHelper
 {
     const RESPONSE_TAGS_REGISTRY = 'response_tags';
-    const GENERATE_CATEGORY_PRODUCT_URL_PATH = 'reagento/catalog/disable_product_category_rewrites';
-    const FRONTEND_DOMAIN_PATH = 'reagento/frontend/domain';
+    const GENERATE_CATEGORY_PRODUCT_URL_PATH = 'deity/catalog/disable_product_category_rewrites';
+    const FRONTEND_DOMAIN_PATH = 'deity/frontend/domain';
 
     /**
      * Default response tag sent in X-Cache-Tags header in REST
@@ -98,7 +98,7 @@ class Data extends AbstractHelper
      */
     public function getNodeServerUrl()
     {
-        $url = $this->scopeConfig->getValue("reagento/general/node_server", ScopeInterface::SCOPE_STORE);
+        $url = $this->scopeConfig->getValue("deity/general/node_server", ScopeInterface::SCOPE_STORE);
 
         if (empty($url)) {
             $url = $this->storeManager->getStore(0)->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_LINK);
@@ -114,7 +114,7 @@ class Data extends AbstractHelper
      */
     public function isClearCacheEnabled()
     {
-        return $this->scopeConfig->isSetFlag("reagento/general/clear_cache", ScopeInterface::SCOPE_STORE);
+        return $this->scopeConfig->isSetFlag("deity /general/clear_cache", ScopeInterface::SCOPE_STORE);
     }
 
     /**
@@ -127,7 +127,7 @@ class Data extends AbstractHelper
      */
     private function getConfigValue($key, $scope = ScopeInterface::SCOPE_STORE, $storeId = null)
     {
-        $path = strstr($key, '/') ? $key : "hatimeria/reagento/$key";
+        $path = strstr($key, '/') ? $key : "deity/core/$key";
         return $this->scopeConfig->getValue($path, $scope, $storeId);
     }
 

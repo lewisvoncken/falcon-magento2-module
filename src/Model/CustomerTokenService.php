@@ -1,9 +1,9 @@
 <?php
-namespace Hatimeria\Reagento\Model;
+namespace Deity\MagentoApi\Model;
 
 use Exception;
-use Hatimeria\Reagento\Api\CustomerTokenServiceInterface;
-use Hatimeria\Reagento\Model\Cart\MergeManagement;
+use Deity\MagentoApi\Api\CustomerTokenServiceInterface;
+use Deity\MagentoApi\Model\Cart\MergeManagement;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\Event\Manager;

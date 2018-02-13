@@ -1,6 +1,6 @@
 <?php
 
-namespace Hatimeria\Reagento\Helper\Catalog;
+namespace Deity\MagentoApi\Helper\Catalog;
 
 class Image extends \Magento\Catalog\Helper\Image
 {
