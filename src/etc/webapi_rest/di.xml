@@ -2,10 +2,10 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
 
     <!-- INTERFACE PREFERENCES FOR DI -->
-    <preference for="Deity\MagentoApi\Api\CartManagementInterface" type="\Magento\Quote\Model\QuoteManagement" />
-    <preference for="Deity\MagentoApi\Api\GuestCartManagementInterface" type="\Magento\Quote\Model\GuestCart\GuestCartManagement" />
-    <preference for="Deity\MagentoApi\Api\GuestPaymentInformationManagementInterface" type="\Magento\Checkout\Model\GuestPaymentInformationManagement" />
-    <preference for="Deity\MagentoApi\Api\PaymentInformationManagementInterface" type="\Magento\Checkout\Model\PaymentInformationManagement" />
+    <preference for="Deity\MagentoApi\Api\Checkout\CartManagementInterface" type="\Magento\Quote\Model\QuoteManagement" />
+    <preference for="Deity\MagentoApi\Api\Checkout\GuestCartManagementInterface" type="\Magento\Quote\Model\GuestCart\GuestCartManagement" />
+    <preference for="Deity\MagentoApi\Api\Checkout\GuestPaymentInformationManagementInterface" type="\Magento\Checkout\Model\GuestPaymentInformationManagement" />
+    <preference for="Deity\MagentoApi\Api\Checkout\PaymentInformationManagementInterface" type="\Magento\Checkout\Model\PaymentInformationManagement" />
 
     <!-- OVERRIDES -->
     <preference for="Magento\Catalog\Model\ResourceModel\Category" type="\Deity\MagentoApi\Model\ResourceModel\Category" />
