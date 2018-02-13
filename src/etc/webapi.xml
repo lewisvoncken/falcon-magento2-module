@@ -179,4 +179,24 @@
             <resource ref="anonymous"/>
         </resources>
     </route>
+
+    <route url="/V1/customers/me/newsletter/subscribe" method="PUT">
+        <service class="Deity\MagentoApi\Api\Customer\NewsletterManagerInterface" method="subscribeCustomer"/>
+        <resources>
+            <resource ref="self"/>
+        </resources>
+        <data>
+            <parameter name="customerId" force="true">%customer_id%</parameter>
+        </data>
+    </route>
+
+    <route url="/V1/customers/me/newsletter/unsubscribe" method="PUT">
+        <service class="Deity\MagentoApi\Api\Customer\NewsletterManagerInterface" method="unsubscribeCustomer"/>
+        <resources>
+            <resource ref="self"/>
+        </resources>
+        <data>
+            <parameter name="customerId" force="true">%customer_id%</parameter>
+        </data>
+    </route>
 </routes>

@@ -3,7 +3,7 @@ namespace Deity\MagentoApi\Model\Customer;
 
 
 use Deity\MagentoApi\Api\Customer\AddressRepositoryInterface;
-use Magento\Authorization\Model\UserContextInterface;
+use Deity\MagentoApi\Model\Security\CustomerContext;
 use Magento\Customer\Api\AddressRepositoryInterface as CustomerAddressRepositoryInterface;
 use Magento\Customer\Api\Data\AddressSearchResultsInterface;
 use Magento\Customer\Api\Data\AddressInterface;
@@ -18,35 +18,36 @@ use Magento\Framework\Exception\NoSuchEntityException;
 
 class AddressRepository implements AddressRepositoryInterface
 {
-    /** @var UserContextInterface */
-    protected $userContext;
+
+    /** @var CustomerContext */
+    private $customerContext;
 
     /** @var AddressRegistry */
-    protected $addressRegistry;
+    private $addressRegistry;
 
     /** @var CustomerAddressRepositoryInterface */
-    protected $addressRepository;
+    private $addressRepository;
 
     /** @var SearchCriteriaBuilder */
-    protected $searchCriteriaBuilder;
+    private $searchCriteriaBuilder;
 
     /**
      * AddressRepository constructor.
-     * @param UserContextInterface $userContext
+     * @param CustomerContext $customerContext
      * @param AddressRegistry $addressRegistry
      * @param \Magento\Customer\Api\AddressRepositoryInterface $addressRepository
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      */
     public function __construct(
-        UserContextInterface $userContext,
+        CustomerContext $customerContext,
         AddressRegistry $addressRegistry,
         CustomerAddressRepositoryInterface $addressRepository,
         SearchCriteriaBuilder $searchCriteriaBuilder
     ) {
-        $this->userContext = $userContext;
         $this->addressRegistry = $addressRegistry;
         $this->addressRepository = $addressRepository;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
+        $this->customerContext = $customerContext;
     }
 
     /**
@@ -57,7 +58,7 @@ class AddressRepository implements AddressRepositoryInterface
      */
     public function getCustomerAddressList(SearchCriteriaInterface $searchCriteria = null)
     {
-        $this->checkCustomerContext();
+        $this->customerContext->checkCustomerContext();
 
         $searchCriteriaBuilder = $this->searchCriteriaBuilder;
         if ($searchCriteria) {
@@ -66,7 +67,7 @@ class AddressRepository implements AddressRepositoryInterface
             $searchCriteriaBuilder->setFilterGroups($searchCriteria->getFilterGroups());
             $searchCriteriaBuilder->setSortOrders($searchCriteria->getSortOrders() ?: []);
         }
-        $customerId = $this->getCurrentCustomerId();
+        $customerId = $this->customerContext->getCurrentCustomerId();
         $searchCriteriaBuilder = $this->searchCriteriaBuilder->addFilter('parent_id', $customerId);
         /** @var AddressSearchResultsInterface $searchResult */
         $searchResult = $this->addressRepository->getList($searchCriteriaBuilder->create());
@@ -85,9 +86,9 @@ class AddressRepository implements AddressRepositoryInterface
      */
     public function getCustomerAddress($addressId)
     {
-        $this->checkCustomerContext();
+        $this->customerContext->checkCustomerContext();
         $addressModel = $this->addressRegistry->retrieve($addressId);
-        if ($addressModel->getCustomerId() !== $this->getCurrentCustomerId()) {
+        if ($addressModel->getCustomerId() !== $this->customerContext->getCurrentCustomerId()) {
             throw new AuthorizationException(__('Customer is not allowed to view this address'));
         }
 
@@ -102,9 +103,9 @@ class AddressRepository implements AddressRepositoryInterface
      */
     public function createCustomerAddress(AddressInterface $address)
     {
-        $this->checkCustomerContext();
+        $this->customerContext->checkCustomerContext();
         $address->setId(null);
-        $address->setCustomerId($this->getCurrentCustomerId());
+        $address->setCustomerId($this->customerContext->getCurrentCustomerId());
         return $this->ensureDefaultAddressFlags($this->addressRepository->save($address));
     }
 
@@ -115,16 +116,17 @@ class AddressRepository implements AddressRepositoryInterface
      */
     public function updateCustomerAddress(AddressInterface $address)
     {
-        $this->checkCustomerContext();
+        $this->customerContext->checkCustomerContext();
         if (!$address->getId()) {
             throw new InputException(__('Provided address does not exists'));
         }
+        $customerId = $this->customerContext->getCurrentCustomerId();
         $addressModel = $this->addressRegistry->retrieve($address->getId());
-        if ($addressModel->getCustomerId() !== $this->getCurrentCustomerId()) {
+        if ($addressModel->getCustomerId() !== $customerId) {
             throw new AuthorizationException(__('Customer is not allowed to update this address'));
         }
 
-        $address->setCustomerId($this->getCurrentCustomerId());
+        $address->setCustomerId($customerId);
         return $this->ensureDefaultAddressFlags($this->addressRepository->save($address));
     }
 
@@ -137,39 +139,14 @@ class AddressRepository implements AddressRepositoryInterface
      */
     public function deleteCustomerAddress($addressId)
     {
-        $this->checkCustomerContext();
+        $this->customerContext->checkCustomerContext();
         /** @var Address $address */
         $address = $this->addressRegistry->retrieve($addressId);
-        if ($address->getCustomerId() !== $this->getCurrentCustomerId()) {
+        if ($address->getCustomerId() !== $this->customerContext->getCurrentCustomerId()) {
             throw new AuthorizationException(__('Customer is not allowed to delete this address'));
         }
 
         return $this->addressRepository->deleteById($addressId);
-    }
-
-    /**
-     * Get current user id
-     *
-     * @return int
-     */
-    protected function getCurrentCustomerId()
-    {
-        return $this->userContext->getUserId();
-    }
-
-    /**
-     * Check if current user context is for logged in customer
-     *
-     * @return bool
-     * @throws AuthorizationException
-     */
-    private function checkCustomerContext()
-    {
-        if ($this->userContext->getUserType() !== UserContextInterface::USER_TYPE_CUSTOMER) {
-            throw new AuthorizationException(__('This method is available only for customer tokens'));
-        }
-
-        return true;
     }
 
     /**

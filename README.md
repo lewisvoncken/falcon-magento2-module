@@ -30,6 +30,8 @@ Custom API endpoints provided by this module:
 - `[PUT] /rest/V1/carts/mine/deity-order` - place order with Adyen credit card as a logged in customer - getting an object as a response
 - `[PUT] /rest/V1/guest-carts/:cartId/deity-order` - place order with Adyen credit card - getting an object as a response
 - `[PUT] /rest/V1/customers/me/address` - update customer address
+- `[PUT] /rest/V1/customers/me/newsletter/subscribe` - subscribe customer to newsletter
+- `[PUT] /rest/V1/customers/me/newsletter/unsubscribe` - unsubscribe customer to newsletter
 - `[DELETE] /rest/V1/customers/me/address/:addressId` - remove customer address
 
 Extension attributes:
@@ -62,7 +64,8 @@ Extension attributes:
 - `Magento\Customer\Api\Data\CustomerInterface`:
     ```json
     {
-      "guest_quote_id": "string"
+      "guest_quote_id": "string",
+      "newsletter_subscriber": "boolean"
     }
     ```
 - `Magento\Sales\Api\Data\OrderInterface`:
