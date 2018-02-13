@@ -17,6 +17,7 @@ use Magento\Integration\Model\Oauth\TokenFactory as TokenModelFactory;
 use Magento\Integration\Model\ResourceModel\Oauth\Token\CollectionFactory as TokenCollectionFactory;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Api\Data\CartInterface;
+use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\QuoteIdMask;
 use Magento\Quote\Model\QuoteIdMaskFactory;
 use Psr\Log\LoggerInterface;
@@ -126,13 +127,13 @@ class CustomerTokenService extends MagentoCustomerTokenService implements Custom
         $quoteIdMask = $this->quoteIdMaskFactory->create();
         $quoteIdMask->load($guestQuoteId, 'masked_id');
 
-        /** @var CartInterface $guestCart */
+        /** @var CartInterface|Quote $guestCart */
         $guestCart = $this->cartRepository->getActive($quoteIdMask->getQuoteId());
 
         $cartToMerge = new DataObject();
         $cartToMerge->setData(
             'result',
-            ($guestCart->getCustomerIsGuest() ? $guestCart : false)
+            (!$guestCart->getCustomerId() ? $guestCart : false)
         );
 
         $this->eventManager->dispatch(
