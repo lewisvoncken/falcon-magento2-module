@@ -2,7 +2,7 @@
     "name": "deity-core/deity-magento-api",
     "description": "Deity Core Magento Rest API",
     "type": "magento2-module",
-    "version": "0.2.0",
+    "version": "1.0.0",
     "license": "proprietary",
     "autoload": {
         "files": [
