@@ -1,6 +1,6 @@
 <?php
 
-namespace deityMagentoApi\Cmd;
+namespace Deity\MagentoCmd;
 
 use Composer\Script\Event;
 use Composer\Util\ProcessExecutor;
