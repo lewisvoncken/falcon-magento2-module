@@ -1,8 +1,8 @@
 <?php
 
-namespace Hatimeria\Reagento\Model;
+namespace Deity\MagentoApi\Model;
 
-use Hatimeria\Reagento\Api\ProductRepositoryInterface;
+use Deity\MagentoApi\Api\ProductRepositoryInterface;
 use Magento\Catalog\Api\Data\ProductSearchResultsInterfaceFactory;
 use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
 use Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper;
@@ -169,7 +169,7 @@ class ProductRepository extends \Magento\Catalog\Model\ProductRepository impleme
             $attributes
         );
 
-        /** @var \Hatimeria\Reagento\Api\SearchResults $searchResult */
+        /** @var \Deity\MagentoApi\Api\SearchResults $searchResult */
         $searchResult = $this->searchResultsFactory->create();
         $searchResult->setSearchCriteria($searchCriteria);
         $searchResult->setItems($collection->getItems());

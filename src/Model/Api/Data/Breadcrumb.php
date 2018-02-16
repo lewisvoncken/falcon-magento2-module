@@ -1,9 +1,9 @@
 <?php
 
-namespace Hatimeria\Reagento\Model\Api\Data;
+namespace Deity\MagentoApi\Model\Api\Data;
 
-use Hatimeria\Reagento\Api\Data\BreadcrumbInterface;
-use Hatimeria\Reagento\Api\Data\BreadcrumbExtensionInterface;
+use Deity\MagentoApi\Api\Data\BreadcrumbInterface;
+use Deity\MagentoApi\Api\Data\BreadcrumbExtensionInterface;
 use Magento\Framework\Model\AbstractExtensibleModel;
 
 class Breadcrumb extends AbstractExtensibleModel implements BreadcrumbInterface
@@ -32,7 +32,7 @@ class Breadcrumb extends AbstractExtensibleModel implements BreadcrumbInterface
 
     /**
      * @param int $id
-     * @return \Hatimeria\Reagento\Api\Data\BreadcrumbInterface
+     * @return \Deity\MagentoApi\Api\Data\BreadcrumbInterface
      */
     public function setId($id)
     {
@@ -49,7 +49,7 @@ class Breadcrumb extends AbstractExtensibleModel implements BreadcrumbInterface
 
     /**
      * @param string $name
-     * @return \Hatimeria\Reagento\Api\Data\BreadcrumbInterface
+     * @return \Deity\MagentoApi\Api\Data\BreadcrumbInterface
      */
     public function setName($name)
     {
@@ -66,7 +66,7 @@ class Breadcrumb extends AbstractExtensibleModel implements BreadcrumbInterface
 
     /**
      * @param string $urlPath
-     * @return \Hatimeria\Reagento\Api\Data\BreadcrumbInterface
+     * @return \Deity\MagentoApi\Api\Data\BreadcrumbInterface
      */
     public function setUrlPath($urlPath)
     {
@@ -83,7 +83,7 @@ class Breadcrumb extends AbstractExtensibleModel implements BreadcrumbInterface
 
     /**
      * @param string $urlKey
-     * @return \Hatimeria\Reagento\Api\Data\BreadcrumbInterface
+     * @return \Deity\MagentoApi\Api\Data\BreadcrumbInterface
      */
     public function setUrlKey($urlKey)
     {
@@ -100,7 +100,7 @@ class Breadcrumb extends AbstractExtensibleModel implements BreadcrumbInterface
 
     /**
      * @param array $urlQuery
-     * @return \Hatimeria\Reagento\Api\Data\BreadcrumbInterface
+     * @return \Deity\MagentoApi\Api\Data\BreadcrumbInterface
      */
     public function setUrlQuery($urlQuery)
     {
@@ -109,7 +109,7 @@ class Breadcrumb extends AbstractExtensibleModel implements BreadcrumbInterface
 
     /**
      * @param array $data
-     * @return \Hatimeria\Reagento\Api\Data\BreadcrumbInterface
+     * @return \Deity\MagentoApi\Api\Data\BreadcrumbInterface
      */
     public function loadFromData($data)
     {

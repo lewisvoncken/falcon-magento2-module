@@ -1,11 +1,11 @@
 <?php
 
-namespace Hatimeria\Reagento\Model;
+namespace Deity\MagentoApi\Model;
 
-use Hatimeria\Reagento\Api\Data\FilterInterface;
-use Hatimeria\Reagento\Api\Data\FilterInterfaceFactory;
-use Hatimeria\Reagento\Api\Data\FilterOptionInterface;
-use Hatimeria\Reagento\Api\Data\FilterOptionInterfaceFactory;
+use Deity\MagentoApi\Api\Data\FilterInterface;
+use Deity\MagentoApi\Api\Data\FilterInterfaceFactory;
+use Deity\MagentoApi\Api\Data\FilterOptionInterface;
+use Deity\MagentoApi\Api\Data\FilterOptionInterfaceFactory;
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Eav\Model\Config;
@@ -22,13 +22,10 @@ use Magento\Catalog\Model\ResourceModel\Eav\Attribute as CatalogResourceAttribut
 
 /**
  * Product list filter handling class
- *
- * @package Hatimeria\Reagento\Model
- * @author Artur Jewuła <artur.jewula@hatimeria.pl>
  */
 class Filter
 {
-    const AVAILABILITY_ENABLED = 'reagento/catalog/availability_status';
+    const AVAILABILITY_ENABLED = 'deity/catalog/availability_status';
 
     /** @var ResourceConnection */
     protected $resourceConnection;
@@ -237,7 +234,7 @@ class Filter
 
         $storeId = $this->storeManager->getStore()->getId();
         $showCategoryFilter = $this->scopeConfig->getValue(
-            \Hatimeria\Reagento\Helper\Category::SHOW_CATEGORY_FILTER_PATH,
+            \Deity\MagentoApi\Helper\Category::SHOW_CATEGORY_FILTER_PATH,
             ScopeInterface::SCOPE_STORE, $storeId
         );
         if (!$selectSubCategories || !$showCategoryFilter) {

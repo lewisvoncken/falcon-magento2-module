@@ -1,6 +1,6 @@
 <?php
 
-namespace Hatimeria\Reagento\Model\ResourceModel\Page;
+namespace Deity\MagentoApi\Model\ResourceModel\Page;
 
 class Collection extends \Magento\Cms\Model\ResourceModel\Page\Collection
 {

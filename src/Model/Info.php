@@ -1,12 +1,12 @@
 <?php
 
-namespace Hatimeria\Reagento\Model;
+namespace Deity\MagentoApi\Model;
 
-use Hatimeria\Reagento\Api\Data\InfoDataInterface;
-use Hatimeria\Reagento\Api\InfoInterface;
+use Deity\MagentoApi\Api\Data\InfoDataInterface;
+use Deity\MagentoApi\Api\InfoInterface;
 
 /**
- * @package Hatimeria\Reagento\Model
+ * @package Deity\MagentoApi\Model
  */
 class Info implements InfoInterface
 {
@@ -14,7 +14,7 @@ class Info implements InfoInterface
     private $customerUrl;
 
     public function __construct(
-        \Hatimeria\Reagento\Api\Data\InfoDataInterfaceFactory $dataFactory,
+        \Deity\MagentoApi\Api\Data\InfoDataInterfaceFactory $dataFactory,
         \Magento\Customer\Model\Url $customerUrl
     ) {
         $this->dataFactory = $dataFactory;
@@ -22,7 +22,7 @@ class Info implements InfoInterface
     }
 
     /**
-     * @return \Hatimeria\Reagento\Api\Data\InfoDataInterface
+     * @return \Deity\MagentoApi\Api\Data\InfoDataInterface
      */
     public function getInfo()
     {

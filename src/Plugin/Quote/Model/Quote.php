@@ -1,5 +1,5 @@
 <?php
-namespace Hatimeria\Reagento\Plugin\Quote\Model;
+namespace Deity\MagentoApi\Plugin\Quote\Model;
 
 use Magento\Quote\Model\Quote as QuoteModel;
 

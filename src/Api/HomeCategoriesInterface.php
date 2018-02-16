@@ -1,13 +1,13 @@
 <?php
 
-namespace Hatimeria\Reagento\Api;
+namespace Deity\MagentoApi\Api;
 
 interface HomeCategoriesInterface
 {
     /**
      *
      * @param mixed $searchCriteria
-     * @return \Hatimeria\Reagento\Api\Data\CategorySearchResultsInterface
+     * @return \Deity\MagentoApi\Api\Data\CategorySearchResultsInterface
      */
     public function getHomepageList($searchCriteria = []);
 }

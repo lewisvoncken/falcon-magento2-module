@@ -1,6 +1,6 @@
 <?php
 
-namespace Hatimeria\Reagento\Helper;
+namespace Deity\MagentoApi\Helper;
 
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Model\Category as MagentoCategory;
@@ -14,7 +14,7 @@ use Magento\Store\Model\StoreManagerInterface;
 
 class Category extends AbstractHelper
 {
-    const SHOW_CATEGORY_FILTER_PATH = 'reagento/catalog/show_category_filter';
+    const SHOW_CATEGORY_FILTER_PATH = 'deity/catalog/show_category_filter';
 
     /** @var \Magento\Framework\View\ConfigInterface */
     private $viewConfig;

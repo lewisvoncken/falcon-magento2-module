@@ -2,12 +2,12 @@
 
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
     <system>
-        <tab id="hatimeria" translate="label" sortOrder="500">
-            <label>Hatimeria</label>
+        <tab id="deity" translate="label" sortOrder="500">
+            <label>Deity</label>
         </tab>
-        <section id="reagento" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
-            <label>Reagento</label>
-            <tab>hatimeria</tab>
+        <section id="deity" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+            <label>MagentoApi</label>
+            <tab>deity</tab>
             <resource>Magento_Catalog::config_catalog</resource>
             <group id="general" translate="label" type="text" sortOrder="90" showInDefault="1" showInWebsite="0" showInStore="0">
                 <label>General</label>
@@ -41,7 +41,7 @@
                 <field id="breadcrumbs_attributes" translate="label comment" type="multiselect" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Breadcrumbs attributes</label>
                     <comment>Select attributes that will be used while creating product breadcrumbs to return to filtered results</comment>
-                    <source_model>Hatimeria\Reagento\Model\Config\Source\BreadcrumbsAttribute</source_model>
+                    <source_model>Deity\MagentoApi\Model\Config\Source\BreadcrumbsAttribute</source_model>
                 </field>
                 <field id="disable_product_links" translate="label comment" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Disable Product Links in Product List Api Endpoint</label>
@@ -54,13 +54,13 @@
                 </field>
             </group>
         </section>
-        <section id="hatimeria" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="0" showInStore="0">
+        <section id="deity_payment" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="0" showInStore="0">
             <class>separator-top</class>
             <label>Payment</label>
-            <tab>hatimeria</tab>
-            <resource>Magento_Catalog::config_catalog</resource>
-            <group id="payment" translate="label" type="text" sortOrder="90" showInDefault="1" showInWebsite="0" showInStore="0">
-                <label>Payment</label>
+            <tab>deity</tab>
+            <resource>Magento_Payment::payment</resource>
+            <group id="paypal" translate="label" type="text" sortOrder="90" showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>Paypal</label>
                 <field id="paypal_redirect_success" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                     <label>Paypal Redirect Success</label>
                     <comment>Redirect to address or path</comment>

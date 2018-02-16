@@ -1,10 +1,10 @@
 <?php
-namespace Hatimeria\Reagento\Api\Catalog;
+namespace Deity\MagentoApi\Api\Catalog;
 
 interface AttributeManagementInterface
 {
     /**
-     * @return \Hatimeria\Reagento\Api\Data\FilterInterface[]
+     * @return \Deity\MagentoApi\Api\Data\FilterInterface[]
      */
     public function getCategoryFilters();
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Hatimeria\Reagento\Controller\Quote;
+namespace Deity\MagentoApi\Controller\Quote;
 
 use Magento\Checkout\Helper\Cart as CartHelper;
 use Magento\Checkout\Model\Session;
@@ -9,7 +9,7 @@ use Magento\Framework\App\Action\Context;
 
 /**
  * Switching
- * @package Hatimeria\Reagento\Controller\Quote
+ * @package Deity\MagentoApi\Controller\Quote
  */
 class Index extends Action
 {

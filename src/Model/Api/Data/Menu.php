@@ -1,9 +1,9 @@
 <?php
 
-namespace Hatimeria\Reagento\Model\Api\Data;
+namespace Deity\MagentoApi\Model\Api\Data;
 
-use Hatimeria\Reagento\Api\Data\MenuExtensionInterface;
-use Hatimeria\Reagento\Api\Data\MenuInterface;
+use Deity\MagentoApi\Api\Data\MenuExtensionInterface;
+use Deity\MagentoApi\Api\Data\MenuInterface;
 use Magento\Framework\Model\AbstractExtensibleModel;
 
 class Menu extends AbstractExtensibleModel implements MenuInterface
@@ -18,7 +18,7 @@ class Menu extends AbstractExtensibleModel implements MenuInterface
 
     /**
      * @param string $name
-     * @return \Hatimeria\Reagento\Api\Data\MenuInterface
+     * @return \Deity\MagentoApi\Api\Data\MenuInterface
      */
     public function setName($name)
     {
@@ -35,7 +35,7 @@ class Menu extends AbstractExtensibleModel implements MenuInterface
 
     /**
      * @param int $id
-     * @return \Hatimeria\Reagento\Api\Data\MenuInterface
+     * @return \Deity\MagentoApi\Api\Data\MenuInterface
      */
     public function setId($id)
     {
@@ -52,7 +52,7 @@ class Menu extends AbstractExtensibleModel implements MenuInterface
 
     /**
      * @param string $url
-     * @return \Hatimeria\Reagento\Api\Data\MenuInterface
+     * @return \Deity\MagentoApi\Api\Data\MenuInterface
      */
     public function setUrl($url)
     {
@@ -69,7 +69,7 @@ class Menu extends AbstractExtensibleModel implements MenuInterface
 
     /**
      * @param boolean $flag
-     * @return \Hatimeria\Reagento\Api\Data\MenuInterface
+     * @return \Deity\MagentoApi\Api\Data\MenuInterface
      */
     public function setHasActive($flag)
     {
@@ -86,7 +86,7 @@ class Menu extends AbstractExtensibleModel implements MenuInterface
 
     /**
      * @param boolean $flag
-     * @return \Hatimeria\Reagento\Api\Data\MenuInterface
+     * @return \Deity\MagentoApi\Api\Data\MenuInterface
      */
     public function setIsActive($flag)
     {
@@ -103,7 +103,7 @@ class Menu extends AbstractExtensibleModel implements MenuInterface
 
     /**
      * @param int $level
-     * @return \Hatimeria\Reagento\Api\Data\MenuInterface
+     * @return \Deity\MagentoApi\Api\Data\MenuInterface
      */
     public function setLevel($level)
     {
@@ -120,7 +120,7 @@ class Menu extends AbstractExtensibleModel implements MenuInterface
 
     /**
      * @param boolean $flag
-     * @return \Hatimeria\Reagento\Api\Data\MenuInterface
+     * @return \Deity\MagentoApi\Api\Data\MenuInterface
      */
     public function setIsFirst($flag)
     {
@@ -137,7 +137,7 @@ class Menu extends AbstractExtensibleModel implements MenuInterface
 
     /**
      * @param boolean $flag
-     * @return \Hatimeria\Reagento\Api\Data\MenuInterface
+     * @return \Deity\MagentoApi\Api\Data\MenuInterface
      */
     public function setIsLast($flag)
     {
@@ -154,7 +154,7 @@ class Menu extends AbstractExtensibleModel implements MenuInterface
 
     /**
      * @param string $class
-     * @return \Hatimeria\Reagento\Api\Data\MenuInterface
+     * @return \Deity\MagentoApi\Api\Data\MenuInterface
      */
     public function setPositionClass($class)
     {

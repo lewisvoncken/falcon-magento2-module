@@ -1,12 +1,12 @@
 <?php
-namespace Hatimeria\Reagento\Model\Catalog;
+namespace Deity\MagentoApi\Model\Catalog;
 
-use Hatimeria\Reagento\Api\Catalog\AttributeManagementInterface;
-use Hatimeria\Reagento\Api\Data\FilterInterface;
-use Hatimeria\Reagento\Api\Data\FilterInterfaceFactory;
-use Hatimeria\Reagento\Api\Data\FilterOptionInterface;
-use Hatimeria\Reagento\Api\Data\FilterOptionInterfaceFactory;
-use Hatimeria\Reagento\Helper\Category;
+use Deity\MagentoApi\Api\Catalog\AttributeManagementInterface;
+use Deity\MagentoApi\Api\Data\FilterInterface;
+use Deity\MagentoApi\Api\Data\FilterInterfaceFactory;
+use Deity\MagentoApi\Api\Data\FilterOptionInterface;
+use Deity\MagentoApi\Api\Data\FilterOptionInterfaceFactory;
+use Deity\MagentoApi\Helper\Category;
 use Magento\Catalog\Model\Product;
 use Magento\Eav\Api\AttributeRepositoryInterface;
 use Magento\Eav\Api\Data\AttributeInterface;

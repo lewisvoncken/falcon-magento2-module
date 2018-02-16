@@ -1,13 +1,13 @@
 <?php
 
-namespace HatimeriaReagento\Cmd;
+namespace Deity\MagentoCmd;
 
 use Composer\Script\Event;
 use Composer\Util\ProcessExecutor;
 
 /**
  * Helper Composer command to manage package releases
- * @package HatimeriaReagento\Cmd
+ * @package deityMagentoApi\Cmd
  */
 class Command
 {

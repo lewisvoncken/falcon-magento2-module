@@ -1,6 +1,6 @@
 <?php
 
-namespace Hatimeria\Reagento\Console\Command\Rapidflow\Attribute;
+namespace Deity\MagentoApi\Console\Command\Rapidflow\Attribute;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;

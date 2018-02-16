@@ -1,5 +1,5 @@
 <?php
-namespace Hatimeria\Reagento\Model\Cart;
+namespace Deity\MagentoApi\Model\Cart;
 
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
@@ -14,7 +14,7 @@ use Psr\Log\LoggerInterface;
 /**
  * Handle merging guest and customer quote when signing up and signing in
  *
- * @package Hatimeria\Reagento\Model\Cart
+ * @package Deity\MagentoApi\Model\Cart
  */
 class MergeManagement
 {

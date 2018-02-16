@@ -1,8 +1,8 @@
 <?php
 
-namespace Hatimeria\Reagento\Model;
+namespace Deity\MagentoApi\Model;
 
-use Hatimeria\Reagento\Api\ContactFormInterface;
+use Deity\MagentoApi\Api\ContactFormInterface;
 use Magento\Backend\App\Area\FrontNameResolver;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\RequestInterface;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Hatimeria\Reagento\Model\ResourceModel\Order;
+namespace Deity\MagentoApi\Model\ResourceModel\Order;
 
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 

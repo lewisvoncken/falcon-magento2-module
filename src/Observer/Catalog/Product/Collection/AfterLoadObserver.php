@@ -1,9 +1,9 @@
 <?php
 
-namespace Hatimeria\Reagento\Observer\Catalog\Product\Collection;
+namespace Deity\MagentoApi\Observer\Catalog\Product\Collection;
 
-use Hatimeria\Reagento\Helper\Product as HatimeriaProductHelper;
-use Hatimeria\Reagento\Helper\Stock as HatimeriaStockHelper;
+use Deity\MagentoApi\Helper\Product as ProductHelper;
+use Deity\MagentoApi\Helper\Stock as StockHelper;
 use Magento\Catalog\Model\Product as Product;
 use Magento\Catalog\Model\ResourceModel\Product\Collection as ProductCollection;
 use Magento\Catalog\Model\ResourceModel\Product\Compare\Item\Collection as CompareProductItemCollection;
@@ -15,27 +15,27 @@ use Magento\Framework\Event\ObserverInterface;
 use Magento\Store\Model\ScopeInterface;
 
 /**
- * @package Hatimeria\Reagento\Observer
+ * @package Deity\MagentoApi\Observer
  */
 class AfterLoadObserver implements ObserverInterface
 {
-    /** @var HatimeriaProductHelper */
+    /** @var ProductHelper */
     protected $productHelper;
 
-    /** @var HatimeriaStockHelper */
+    /** @var StockHelper */
     protected $stockHelper;
 
     /** @var ScopeConfigInterface */
     protected $scopeConfig;
 
     /**
-     * @param HatimeriaProductHelper $productHelper
-     * @param HatimeriaStockHelper $stockHelper
+     * @param ProductHelper $productHelper
+     * @param StockHelper $stockHelper
      * @param ScopeConfigInterface $scopeConfig
      */
     public function __construct(
-        HatimeriaProductHelper $productHelper,
-        HatimeriaStockHelper $stockHelper,
+        ProductHelper $productHelper,
+        StockHelper $stockHelper,
         ScopeConfigInterface $scopeConfig
     ) {
         $this->productHelper = $productHelper;
@@ -63,7 +63,7 @@ class AfterLoadObserver implements ObserverInterface
         }
 
         $addEmptyProductLinks = $this->scopeConfig->getValue(
-            'reagento/catalog/disable_product_links',
+            'deity/catalog/disable_product_links',
             ScopeInterface::SCOPE_STORE,
             $collection->getStoreId()
         );

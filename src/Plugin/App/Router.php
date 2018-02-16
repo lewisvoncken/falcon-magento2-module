@@ -1,6 +1,6 @@
 <?php
 
-namespace Hatimeria\Reagento\Plugin\App;
+namespace Deity\MagentoApi\Plugin\App;
 
 use Magento\Framework\App\Action\AbstractAction;
 use Magento\Framework\App\RouterInterface;
@@ -32,7 +32,7 @@ class Router
     {
         if ($actionInstance && $actionInstance instanceof AbstractAction) {
             $request = $actionInstance->getRequest();
-            //Currently apply only for paypal controller in Hatimeria extension, remove this condition when needed elsewhere
+            //Currently apply only for paypal controller in Deity_MagentoApi extension, remove this condition when needed elsewhere
             if (
                 'payment_paypal_express' == $request->getControllerName() &&
                 'checkoutExt' == $request->getModuleName()

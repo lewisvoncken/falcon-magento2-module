@@ -1,4 +1,4 @@
-# Reagento module coding standard
+# Deity core module coding standard
 
 ## PHP CODING STANDARDS
 

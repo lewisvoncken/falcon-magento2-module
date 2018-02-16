@@ -1,8 +1,8 @@
 <?php
 
-namespace Hatimeria\Reagento\Model;
+namespace Deity\MagentoApi\Model;
 
-use Hatimeria\Reagento\Api\CategoryBreadcrumbsInterface;
+use Deity\MagentoApi\Api\CategoryBreadcrumbsInterface;
 
 class CategoryBreadcrumbs implements CategoryBreadcrumbsInterface
 {

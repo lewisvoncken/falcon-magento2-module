@@ -1,9 +1,9 @@
 <?php
-namespace Hatimeria\Reagento\Model\Payment;
+namespace Deity\MagentoApi\Model\Payment;
 
-use Hatimeria\Reagento\Api\Payment\PaypalInterface;
+use Deity\MagentoApi\Api\Payment\PaypalInterface;
 use Magento\Framework\UrlInterface;
-use Hatimeria\Reagento\Model\Payment\PaypalDataFactory;
+use Deity\MagentoApi\Model\Payment\PaypalDataFactory;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Paypal\Model\Express\Checkout\Factory as PaypalCheckoutFactory;
 use Magento\Quote\Model\QuoteIdMaskFactory;
@@ -15,7 +15,7 @@ use Magento\Paypal\Model\Express\Checkout;
 
 /**
  * Class Payment
- * @package Hatimeria\Reagento\Model\Payment
+ * @package Deity\MagentoApi\Model\Payment
  */
 class Paypal implements PaypalInterface
 {
@@ -238,7 +238,7 @@ class Paypal implements PaypalInterface
     /**
      * Fetch PayPal token
      * @param string $cartId
-     * @return \Hatimeria\Reagento\Api\Payment\Data\PaypalDataInterface
+     * @return \Deity\MagentoApi\Api\Payment\Data\PaypalDataInterface
      */
     public function getToken($cartId)
     {

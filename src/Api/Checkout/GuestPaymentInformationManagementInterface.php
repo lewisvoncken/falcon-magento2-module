@@ -1,14 +1,14 @@
 <?php
 
-namespace Hatimeria\Reagento\Api;
+namespace Deity\MagentoApi\Api\Checkout;
 
-use Magento\Checkout\Api\GuestPaymentInformationManagementInterface;
+use Magento\Checkout\Api\GuestPaymentInformationManagementInterface as MagentoGuestPaymentInformationManagementInterface;
 
 /**
  * Interface for managing guest payment information
  * @api
  */
-interface HatimeriaGuestPaymentInformationManagementInterface extends GuestPaymentInformationManagementInterface
+interface GuestPaymentInformationManagementInterface extends MagentoGuestPaymentInformationManagementInterface
 {
     /**
      * Set payment information and place order for a specified cart.
@@ -18,7 +18,7 @@ interface HatimeriaGuestPaymentInformationManagementInterface extends GuestPayme
      * @param \Magento\Quote\Api\Data\PaymentInterface $paymentMethod
      * @param \Magento\Quote\Api\Data\AddressInterface|null $billingAddress
      * @throws \Magento\Framework\Exception\CouldNotSaveException
-     * @return int | \Hatimeria\Reagento\Api\Data\OrderResponseInterface
+     * @return int | \Deity\MagentoApi\Api\Data\OrderResponseInterface
      */
     public function savePaymentInformationAndPlaceOrder(
         $cartId,

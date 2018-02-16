@@ -1,13 +1,12 @@
 <?php
 
-namespace Hatimeria\Reagento\Controller\Payment\Paypal\Express;
+namespace Deity\MagentoApi\Controller\Payment\Paypal\Express;
 
 use Exception;
-use Hatimeria\Reagento\Helper\Data;
+use Deity\MagentoApi\Helper\Data;
 use Magento\Quote\Model\Quote;
 use Magento\Store\Model\StoreManager;
 use Psr\Log\LoggerInterface;
-use Magento\Catalog\Model\Config\Source\Price\Scope;
 use Magento\Framework\App\Action\Context;
 use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Checkout\Model\Session as CheckoutSession;
@@ -26,7 +25,7 @@ use Magento\Framework\Url as UrlBuilder;
 
 /**
  * Class ReturnAction
- * @package Hatimeria\Reagento\Controller\Paypal\Express
+ * @package Deity\MagentoApi\Controller\Paypal\Express
  */
 class ReturnAction extends \Magento\Paypal\Controller\Express\ReturnAction
 {
@@ -49,7 +48,7 @@ class ReturnAction extends \Magento\Paypal\Controller\Express\ReturnAction
     protected $storeManager;
 
     /** @var Data */
-    protected $reagentoHelper;
+    protected $deityHelper;
 
     /**
      * ReturnAction constructor.
@@ -67,7 +66,7 @@ class ReturnAction extends \Magento\Paypal\Controller\Express\ReturnAction
      * @param LoggerInterface $logger
      * @param \Magento\Framework\Url $urlBuilder
      * @param StoreManager $storeManager
-     * @param Data $reagentoHelper
+     * @param Data $deityHelper
      */
     public function __construct(
         Context $context,
@@ -84,7 +83,7 @@ class ReturnAction extends \Magento\Paypal\Controller\Express\ReturnAction
         LoggerInterface $logger,
         UrlBuilder $urlBuilder,
         StoreManager $storeManager,
-        Data $reagentoHelper
+        Data $deityHelper
     ) {
         parent::__construct(
             $context,
@@ -102,7 +101,7 @@ class ReturnAction extends \Magento\Paypal\Controller\Express\ReturnAction
         $this->logger = $logger;
         $this->urlBuilder = $urlBuilder;
         $this->storeManager = $storeManager;
-        $this->reagentoHelper = $reagentoHelper;
+        $this->deityHelper = $deityHelper;
     }
 
     /**
@@ -155,7 +154,7 @@ class ReturnAction extends \Magento\Paypal\Controller\Express\ReturnAction
         $token = $request->getParam('token');
         $payerId = $request->getParam('PayerID');
         $redirectUrlFailure = $this->scopeConfig->getValue(
-            'hatimeria/payment/paypal_redirect_failure',
+            'deity_payment/paypal/redirect_failure',
             ScopeConfigInterface::SCOPE_TYPE_DEFAULT
         );
         $redirectUrl = false;
@@ -176,7 +175,7 @@ class ReturnAction extends \Magento\Paypal\Controller\Express\ReturnAction
                     $redirectUrl = $url;
                 } else {
                     $redirectUrl = $this->scopeConfig->getValue(
-                        'hatimeria/payment/paypal_redirect_success',
+                        'deity_payment/paypal/redirect_success',
                         ScopeConfigInterface::SCOPE_TYPE_DEFAULT
                     );
                     $message = __('Your Order got a number: #%1', $this->_checkout->getOrder()->getIncrementId());
@@ -211,7 +210,7 @@ class ReturnAction extends \Magento\Paypal\Controller\Express\ReturnAction
             $redirectUrl = $this->urlBuilder->getBaseUrl() . trim($redirectUrl, ' /') . '?' . $urlParams;
         }
 
-        $redirectUrl = $this->reagentoHelper->prepareFrontendUrl($redirectUrl);
+        $redirectUrl = $this->deityHelper->prepareFrontendUrl($redirectUrl);
         return $resultRedirect->setUrl($redirectUrl);
     }
 

@@ -1,16 +1,16 @@
 <?php
 
-namespace Hatimeria\Reagento\Model;
+namespace Deity\MagentoApi\Model;
 
-use Hatimeria\Reagento\Api\Data\CategorySearchResultsInterface;
-use Hatimeria\Reagento\Api\HomeCategoriesInterface;
+use Deity\MagentoApi\Api\Data\CategorySearchResultsInterface;
+use Deity\MagentoApi\Api\HomeCategoriesInterface;
 
 class CategoryRepository extends \Magento\Catalog\Model\CategoryRepository implements HomeCategoriesInterface
 {
     /** @var \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory */
     private $categoryCollection;
 
-    /** @var \Hatimeria\Reagento\Api\Data\CategorySearchResultsInterfaceFactory */
+    /** @var \Deity\MagentoApi\Api\Data\CategorySearchResultsInterfaceFactory */
     private $searchResultsInterfaceFactory;
     /**
      * @var \Magento\Framework\Event\ManagerInterface
@@ -23,7 +23,7 @@ class CategoryRepository extends \Magento\Catalog\Model\CategoryRepository imple
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory $categoryCollection,
         \Magento\Framework\Event\ManagerInterface $eventDispatcher,
-        \Hatimeria\Reagento\Api\Data\CategorySearchResultsInterfaceFactory $searchResultsInterfaceFactory
+        \Deity\MagentoApi\Api\Data\CategorySearchResultsInterfaceFactory $searchResultsInterfaceFactory
     ){
         parent::__construct($categoryFactory, $categoryResource, $storeManager);
 
@@ -34,7 +34,7 @@ class CategoryRepository extends \Magento\Catalog\Model\CategoryRepository imple
 
     /**
      * @param mixed $searchCriteria
-     * @return \Hatimeria\Reagento\Api\Data\CategorySearchResultsInterface
+     * @return \Deity\MagentoApi\Api\Data\CategorySearchResultsInterface
      */
     public function getHomepageList($searchCriteria = [])
     {
@@ -56,7 +56,7 @@ class CategoryRepository extends \Magento\Catalog\Model\CategoryRepository imple
             ->setOrder('homepage_position', 'asc')
             ->setPage($page, $pageSize);
 
-        $this->_eventDispatcher->dispatch('reagento_category_homepage_list_prepare_collection', 
+        $this->_eventDispatcher->dispatch('deity_category_homepage_list_prepare_collection',
             ['collection' => $collection]);
 
         $searchResults->setItems($collection->getItems());

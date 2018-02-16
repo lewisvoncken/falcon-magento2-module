@@ -1,15 +1,15 @@
 {
-    "name": "hatimeria/reagento-magento-api",
-    "description": "Hatimeria Reagento Rest API",
+    "name": "deity-core/deity-magento-api",
+    "description": "Deity Core Magento Rest API",
     "type": "magento2-module",
-    "version": "0.2.0",
+    "version": "1.0.0",
     "license": "proprietary",
     "autoload": {
         "files": [
             "registration.php"
         ],
         "psr-4": {
-            "Hatimeria\\Reagento\\": ""
+            "Deity\\MagentoApi\\": ""
         }
     }
 }

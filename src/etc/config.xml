@@ -1,16 +1,18 @@
 <?xml version="1.0"?>
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
     <default>
-        <hatimeria>
-            <reagento>
+        <deity>
+            <core>
                 <app_logo_img>/logo.png</app_logo_img>
                 <app_home_url>/</app_home_url>
-            </reagento>
-            <payment>
-                <paypal_redirect_success>checkout/result/success</paypal_redirect_success>
-                <paypal_redirect_failure>checkout/result/failure</paypal_redirect_failure>
-                <paypal_redirect_cancel>checkout/result/cancel</paypal_redirect_cancel>
-            </payment>
-        </hatimeria>
+            </core>
+        </deity>
+        <deity_payment>
+            <paypal>
+                <redirect_success>checkout/result/success</redirect_success>
+                <redirect_failure>checkout/result/failure</redirect_failure>
+                <redirect_cancel>checkout/result/cancel</redirect_cancel>
+            </paypal>
+        </deity_payment>
     </default>
 </config>

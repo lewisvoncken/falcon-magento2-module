@@ -1,6 +1,6 @@
 <?php
 
-namespace Hatimeria\Reagento\Api\Integration;
+namespace Deity\MagentoApi\Api\Integration;
 
 use Magento\Integration\Api\CustomerTokenServiceInterface as MagentoCustomerTokenServiceInterface;
 

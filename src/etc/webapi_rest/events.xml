@@ -1,21 +1,21 @@
 <?xml version="1.0"?>
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
     <event name="catalog_product_collection_load_after">
-        <observer name="hatimeria_reagento_catalog_product_collection_load_after_observer" instance="Hatimeria\Reagento\Observer\Catalog\Product\Collection\AfterLoadObserver" />
+        <observer name="deity_magento_catalog_product_collection_load_after_observer" instance="Deity\MagentoApi\Observer\Catalog\Product\Collection\AfterLoadObserver" />
     </event>
     <event name="catalog_product_is_salable_after">
-        <observer name="hatimeria_reagento_catalog_product_saleable_check" instance="Hatimeria\Reagento\Observer\Catalog\Product\CheckWebsiteAvailability"/>
+        <observer name="deity_magento_catalog_product_saleable_check" instance="Deity\MagentoApi\Observer\Catalog\Product\CheckWebsiteAvailability"/>
     </event>
     <event name="cms_page_load_after">
-        <observer name="hatimeria_reagento_cms_page_load_after_observer" instance="Hatimeria\Reagento\Observer\Cms\AfterLoadObserver"/>
+        <observer name="deity_magento_cms_page_load_after_observer" instance="Deity\MagentoApi\Observer\Cms\AfterLoadObserver"/>
     </event>
     <event name="cms_block_load_after">
-        <observer name="hatimeria_reagento_cms_block_load_after_observer" instance="Hatimeria\Reagento\Observer\Cms\AfterLoadObserver"/>
+        <observer name="deity_magento_cms_block_load_after_observer" instance="Deity\MagentoApi\Observer\Cms\AfterLoadObserver"/>
     </event>
     <event name="cms_page_collection_load_after">
-        <observer name="hatimeria_reagento_cms_page_collection_load_after_observer" instance="Hatimeria\Reagento\Observer\Cms\AfterCollectionLoadObserver" />
+        <observer name="deity_magento_cms_page_collection_load_after_observer" instance="Deity\MagentoApi\Observer\Cms\AfterCollectionLoadObserver" />
     </event>
     <event name="cms_block_collection_load_after">
-        <observer name="hatimeria_reagento_cms_block_collection_load_after_observer" instance="Hatimeria\Reagento\Observer\Cms\AfterCollectionLoadObserver" />
+        <observer name="deity_magento_cms_block_collection_load_after_observer" instance="Deity\MagentoApi\Observer\Cms\AfterCollectionLoadObserver" />
     </event>
 </config>

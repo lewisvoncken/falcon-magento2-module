@@ -1,9 +1,14 @@
 <?php
-namespace Hatimeria\Reagento\Model\Integration;
+namespace Deity\MagentoApi\Model\Integration;
 
-use Hatimeria\Reagento\Api\Integration\CustomerTokenServiceInterface;
-use Hatimeria\Reagento\Model\Cart\MergeManagement;
+
+
+use Exception;
+use Deity\MagentoApi\Api\Integration\CustomerTokenServiceInterface;
+use Deity\MagentoApi\Model\Cart\MergeManagement;
 use Magento\Customer\Api\AccountManagementInterface;
+use Magento\Framework\DataObject;
+use Magento\Framework\Event\Manager;
 use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -12,6 +17,11 @@ use Magento\Integration\Model\CustomerTokenService as MagentoCustomerTokenServic
 use Magento\Integration\Model\Oauth\Token\RequestThrottler;
 use Magento\Integration\Model\Oauth\TokenFactory as TokenModelFactory;
 use Magento\Integration\Model\ResourceModel\Oauth\Token\CollectionFactory as TokenCollectionFactory;
+use Magento\Quote\Api\CartRepositoryInterface;
+use Magento\Quote\Api\Data\CartInterface;
+use Magento\Quote\Model\Quote;
+use Magento\Quote\Model\QuoteIdMask;
+use Magento\Quote\Model\QuoteIdMaskFactory;
 use Psr\Log\LoggerInterface;
 
 class CustomerTokenService extends MagentoCustomerTokenService implements CustomerTokenServiceInterface
@@ -19,11 +29,20 @@ class CustomerTokenService extends MagentoCustomerTokenService implements Custom
     /** @var MergeManagement */
     private $cartMergeManagement;
 
-    /** @var LoggerInterface */
-    private $logger;
-
     /** @var RequestThrottler */
     private $requestThrottler;
+
+    /** @var QuoteIdMaskFactory */
+    private $quoteIdMaskFactory;
+
+    /** @var CartRepositoryInterface */
+    private $cartRepository;
+
+    /** @var Manager */
+    private $eventManager;
+
+    /** @var LoggerInterface */
+    private $logger;
 
     /**
      * CustomerTokenService constructor.
@@ -33,6 +52,9 @@ class CustomerTokenService extends MagentoCustomerTokenService implements Custom
      * @param CredentialsValidator $validatorHelper
      * @param MergeManagement $cartMergeManagement
      * @param RequestThrottler $requestThrottler
+     * @param QuoteIdMaskFactory $quoteIdMaskFactory
+     * @param CartRepositoryInterface $cartRepository
+     * @param Manager $eventManager
      * @param LoggerInterface $logger
      */
     public function __construct(
@@ -42,12 +64,18 @@ class CustomerTokenService extends MagentoCustomerTokenService implements Custom
         CredentialsValidator $validatorHelper,
         MergeManagement $cartMergeManagement,
         RequestThrottler $requestThrottler,
+        QuoteIdMaskFactory $quoteIdMaskFactory,
+        CartRepositoryInterface $cartRepository,
+        Manager $eventManager,
         LoggerInterface $logger
     ) {
         parent::__construct($tokenModelFactory, $accountManagement, $tokenModelCollectionFactory, $validatorHelper);
         $this->cartMergeManagement = $cartMergeManagement;
-        $this->logger = $logger;
         $this->requestThrottler = $requestThrottler;
+        $this->quoteIdMaskFactory = $quoteIdMaskFactory;
+        $this->cartRepository = $cartRepository;
+        $this->eventManager = $eventManager;
+        $this->logger = $logger;
     }
 
     /**
@@ -57,7 +85,6 @@ class CustomerTokenService extends MagentoCustomerTokenService implements Custom
      * @return string
      * @throws AuthenticationException
      * @throws LocalizedException
-     * @throws NoSuchEntityException
      */
     public function createCustomerAccessToken($username, $password, $guestQuoteId = null)
     {
@@ -75,10 +102,47 @@ class CustomerTokenService extends MagentoCustomerTokenService implements Custom
             throw new AuthenticationException(__('You did not sign in correctly or your account is not active.'), $e);
         }
 
-        if ($guestQuoteId) {
-            $this->cartMergeManagement->mergeGuestAndCustomerQuotes($guestQuoteId, $username);
+        try {
+            if ($this->shouldMergeCart($guestQuoteId)) {
+                $this->cartMergeManagement->mergeGuestAndCustomerQuotes($guestQuoteId, $username);
+            }
+        } catch (Exception $e) {
+            $this->logger->critical($e);
         }
 
         return $token;
+    }
+
+    /**
+     * Check if provided guestQuoteId is for active and guest cart to avoid duplicating cart
+     *
+     * @param string $guestQuoteId
+     * @return CartInterface|false
+     * @throws NoSuchEntityException
+     */
+    private function shouldMergeCart($guestQuoteId)
+    {
+        if (!$guestQuoteId) {
+            return false;
+        }
+        /** @var QuoteIdMask $quoteIdMask */
+        $quoteIdMask = $this->quoteIdMaskFactory->create();
+        $quoteIdMask->load($guestQuoteId, 'masked_id');
+
+        /** @var CartInterface|Quote $guestCart */
+        $guestCart = $this->cartRepository->getActive($quoteIdMask->getQuoteId());
+
+        $cartToMerge = new DataObject();
+        $cartToMerge->setData(
+            'result',
+            (!$guestCart->getCustomerId() ? $guestCart : false)
+        );
+
+        $this->eventManager->dispatch(
+            'customer_generate_token_guest_cart_check',
+            ['guest_cart' => $guestCart, 'cart_to_merge' => $cartToMerge]
+        );
+
+        return $cartToMerge->getData('result');
     }
 }

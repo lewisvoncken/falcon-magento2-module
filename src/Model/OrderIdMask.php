@@ -1,6 +1,6 @@
 <?php
 
-namespace Hatimeria\Reagento\Model;
+namespace Deity\MagentoApi\Model;
 
 use Magento\Framework\Data\Collection\AbstractDb;
 use Magento\Framework\Math\Random;
@@ -51,7 +51,7 @@ class OrderIdMask extends AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('Hatimeria\Reagento\Model\ResourceModel\Order\OrderIdMask');
+        $this->_init('Deity\MagentoApi\Model\ResourceModel\Order\OrderIdMask');
     }
 
     /**

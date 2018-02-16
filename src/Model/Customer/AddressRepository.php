@@ -1,8 +1,8 @@
 <?php
-namespace Hatimeria\Reagento\Model\Customer;
+namespace Deity\MagentoApi\Model\Customer;
 
 
-use Hatimeria\Reagento\Api\Customer\AddressRepositoryInterface;
+use Deity\MagentoApi\Api\Customer\AddressRepositoryInterface;
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\Customer\Api\AddressRepositoryInterface as CustomerAddressRepositoryInterface;
 use Magento\Customer\Api\Data\AddressSearchResultsInterface;

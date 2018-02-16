@@ -1,33 +1,33 @@
 <?php
 
-namespace Hatimeria\Reagento\Observer\Cache;
+namespace Deity\MagentoApi\Observer\Cache;
 
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Event\Observer as EventObserver;
-use Hatimeria\Reagento\Model\NodeServer;
-use Hatimeria\Reagento\Helper\Data as ReagentoHelper;
+use Deity\MagentoApi\Model\NodeServer;
+use Deity\MagentoApi\Helper\Data as DeityHelper;
 
 class FlushAllObserver implements ObserverInterface
 {
     /**
-     * @var \Hatimeria\Reagento\Model\NodeServer
+     * @var \Deity\MagentoApi\Model\NodeServer
      */
     protected $nodeServer;
     /**
-     * @var ReagentoHelper
+     * @var DeityHelper
      */
-    protected $reagentoHelper;
+    protected $deityHelper;
 
     /**
-     *  @param \Hatimeria\Reagento\Model\NodeServer $nodeServer
-     *  @param ReagentoHelper $reagentoHelper
+     *  @param \Deity\MagentoApi\Model\NodeServer $nodeServer
+     *  @param DeityHelper $deityHelper
      */
     public function __construct(
-        \Hatimeria\Reagento\Model\NodeServer $nodeServer,
-        ReagentoHelper $reagentoHelper
+        \Deity\MagentoApi\Model\NodeServer $nodeServer,
+        DeityHelper $deityHelper
     ) {
         $this->nodeServer     = $nodeServer;
-        $this->reagentoHelper = $reagentoHelper;
+        $this->deityHelper = $deityHelper;
     }
 
     /**
@@ -36,13 +36,13 @@ class FlushAllObserver implements ObserverInterface
     public function execute(EventObserver $observer)
     {
         // check if node cache clear is enabled
-        if (!$this->reagentoHelper->isClearCacheEnabled()) {
+        if (!$this->deityHelper->isClearCacheEnabled()) {
 
             return;
         }
         // by flush all we mean to remove all magento related caches, not whole node cache
         // hence usage of default response tag
-        $this->nodeServer->sendInvalidate([ReagentoHelper::defaultResponseTag]);
+        $this->nodeServer->sendInvalidate([DeityHelper::defaultResponseTag]);
     }
 
 }

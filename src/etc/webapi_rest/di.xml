@@ -2,79 +2,79 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
 
     <!-- INTERFACE PREFERENCES FOR DI -->
-    <preference for="Hatimeria\Reagento\Api\HatimeriaCartManagementInterface" type="\Magento\Quote\Model\QuoteManagement" />
-    <preference for="Hatimeria\Reagento\Api\HatimeriaGuestCartManagementInterface" type="\Magento\Quote\Model\GuestCart\GuestCartManagement" />
-    <preference for="Hatimeria\Reagento\Api\HatimeriaGuestPaymentInformationManagementInterface" type="\Magento\Checkout\Model\GuestPaymentInformationManagement" />
-    <preference for="Hatimeria\Reagento\Api\HatimeriaPaymentInformationManagementInterface" type="\Magento\Checkout\Model\PaymentInformationManagement" />
+    <preference for="Deity\MagentoApi\Api\Checkout\CartManagementInterface" type="\Magento\Quote\Model\QuoteManagement" />
+    <preference for="Deity\MagentoApi\Api\Checkout\GuestCartManagementInterface" type="\Magento\Quote\Model\GuestCart\GuestCartManagement" />
+    <preference for="Deity\MagentoApi\Api\Checkout\GuestPaymentInformationManagementInterface" type="\Magento\Checkout\Model\GuestPaymentInformationManagement" />
+    <preference for="Deity\MagentoApi\Api\Checkout\PaymentInformationManagementInterface" type="\Magento\Checkout\Model\PaymentInformationManagement" />
 
     <!-- OVERRIDES -->
-    <preference for="Magento\Catalog\Model\ResourceModel\Category" type="\Hatimeria\Reagento\Model\ResourceModel\Category" />
-    <preference for="Magento\Catalog\Model\ResourceModel\Category\Collection" type="\Hatimeria\Reagento\Model\ResourceModel\Category\Collection" />
-    <preference for="Magento\Cms\Model\ResourceModel\Block\Collection" type="\Hatimeria\Reagento\Model\ResourceModel\Block\Collection" />
-    <preference for="Magento\Cms\Model\ResourceModel\Page\Collection" type="\Hatimeria\Reagento\Model\ResourceModel\Page\Collection" />
+    <preference for="Magento\Catalog\Model\ResourceModel\Category" type="\Deity\MagentoApi\Model\ResourceModel\Category" />
+    <preference for="Magento\Catalog\Model\ResourceModel\Category\Collection" type="\Deity\MagentoApi\Model\ResourceModel\Category\Collection" />
+    <preference for="Magento\Cms\Model\ResourceModel\Block\Collection" type="\Deity\MagentoApi\Model\ResourceModel\Block\Collection" />
+    <preference for="Magento\Cms\Model\ResourceModel\Page\Collection" type="\Deity\MagentoApi\Model\ResourceModel\Page\Collection" />
 
     <!-- PLUGINS -->
     <type name="Magento\Bundle\Helper\Catalog\Product\Configuration">
-        <plugin name="hatimeriaReagentoBundleProductConfigurationHelper" type="\Hatimeria\Reagento\Plugin\Bundle\Helper\Product\Configuration" />
+        <plugin name="deityMagentoApiBundleProductConfigurationHelper" type="\Deity\MagentoApi\Plugin\Bundle\Helper\Product\Configuration" />
     </type>
 
     <type name="Magento\Bundle\Model\Product\LinksList">
-        <plugin name="hatimeriaReagentoBundleProductLinkListPlugin" type="\Hatimeria\Reagento\Plugin\Bundle\Product\LinksList" />
+        <plugin name="deityMagentoApiBundleProductLinkListPlugin" type="\Deity\MagentoApi\Plugin\Bundle\Product\LinksList" />
     </type>
 
     <type name="Magento\Bundle\Model\Product\Type">
-        <plugin name="hatimeriaReagentoBundleProductTypePlugin" type="\Hatimeria\Reagento\Plugin\Bundle\Product\Type" />
+        <plugin name="deityMagentoApiBundleProductTypePlugin" type="\Deity\MagentoApi\Plugin\Bundle\Product\Type" />
     </type>
 
     <type name="Magento\Catalog\Helper\Product\Configuration">
-        <plugin name="hatimeriaReagentoProductConfigurationHelper" type="\Hatimeria\Reagento\Plugin\Catalog\Helper\Product\Configuration" />
+        <plugin name="deityMagentoApiProductConfigurationHelper" type="\Deity\MagentoApi\Plugin\Catalog\Helper\Product\Configuration" />
     </type>
 
     <type name="Magento\Catalog\Model\Category">
-        <plugin name="hatimeriaReagentoCategoryPlugin" type="\Hatimeria\Reagento\Plugin\Catalog\Model\Category" />
+        <plugin name="deityMagentoApiCategoryPlugin" type="\Deity\MagentoApi\Plugin\Catalog\Model\Category" />
     </type>
 
     <type name="Magento\Catalog\Model\Product">
-        <plugin name="hatimeriaReagentoProductPlugin" type="\Hatimeria\Reagento\Plugin\Catalog\Model\Product"/>
+        <plugin name="deityMagentoApiProductPlugin" type="\Deity\MagentoApi\Plugin\Catalog\Model\Product"/>
     </type>
 
     <type name="Magento\Customer\Api\AccountManagementInterface">
-        <plugin name="hatimeriaReagentoAccountManagement" type="\Hatimeria\Reagento\Plugin\Customer\Api\AccountManagement" />
+        <plugin name="deityMagentoApiAccountManagement" type="\Deity\MagentoApi\Plugin\Customer\Api\AccountManagement" />
     </type>
 
     <type name="Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface">
-        <plugin name="hatimeriaReagentoExtensionAttributeJoinProcessorPlugin" type="Hatimeria\Reagento\Plugin\ExtensionAttribute\JoinProcessor" />
+        <plugin name="deityMagentoApiExtensionAttributeJoinProcessorPlugin" type="Deity\MagentoApi\Plugin\ExtensionAttribute\JoinProcessor" />
     </type>
 
     <type name="Magento\Framework\App\RouterInterface">
-        <plugin name="hatimeriaReagentoRouterPlugin" type="Hatimeria\Reagento\Plugin\App\Router"/>
+        <plugin name="deityMagentoApiRouterPlugin" type="Deity\MagentoApi\Plugin\App\Router"/>
     </type>
 
     <type name="Magento\Framework\Webapi\Rest\Response">
-        <plugin name="hatimeriaReagentoRestResponse" type="Hatimeria\Reagento\Plugin\Rest\Response" />
+        <plugin name="deityMagentoApiRestResponse" type="Deity\MagentoApi\Plugin\Rest\Response" />
     </type>
 
     <type name="Magento\Quote\Api\CartItemRepositoryInterface">
-        <plugin name="hatimeriaReagentoCartItemRepositoryPlugin" type="Hatimeria\Reagento\Plugin\Quote\Model\Cart\ItemRepository" />
+        <plugin name="deityMagentoApiCartItemRepositoryPlugin" type="Deity\MagentoApi\Plugin\Quote\Model\Cart\ItemRepository" />
     </type>
 
     <type name="Magento\Quote\Model\Cart\Totals\ItemConverter">
-        <plugin name="hatimeriaReagentoTotalsItemConverter" type="Hatimeria\Reagento\Plugin\Quote\Model\Cart\Totals\ItemConverter" />
+        <plugin name="deityMagentoApiTotalsItemConverter" type="Deity\MagentoApi\Plugin\Quote\Model\Cart\Totals\ItemConverter" />
     </type>
 
     <type name="Magento\Quote\Model\Quote">
-        <plugin name="hatimeriaReagentoQuotePlugin" type="Hatimeria\Reagento\Plugin\Quote\Model\Quote" />
+        <plugin name="deityMagentoApiQuotePlugin" type="Deity\MagentoApi\Plugin\Quote\Model\Quote" />
     </type>
 
     <type name="Magento\Quote\Model\QuoteManagement">
-        <plugin name="hatimeriaReagentoQuoteManagement" type="Hatimeria\Reagento\Plugin\Quote\Model\QuoteManagement" />
+        <plugin name="deityMagentoApiQuoteManagement" type="Deity\MagentoApi\Plugin\Quote\Model\QuoteManagement" />
     </type>
 
     <type name="Magento\Store\Api\StoreConfigManagerInterface">
-        <plugin name="hatimeriaReagentoStoreConfigManager" type="Hatimeria\Reagento\Plugin\Store\Api\StoreConfigManager" />
+        <plugin name="deityMagentoApiStoreConfigManager" type="Deity\MagentoApi\Plugin\Store\Api\StoreConfigManager" />
     </type>
 
     <type name="Magento\Store\Api\StoreRepositoryInterface">
-        <plugin name="hatimeriaReagentoStoreRepositoryPlugin" type="Hatimeria\Reagento\Plugin\Store\Api\StoreRepository" />
+        <plugin name="deityMagentoApiStoreRepositoryPlugin" type="Deity\MagentoApi\Plugin\Store\Api\StoreRepository" />
     </type>
 </config>
