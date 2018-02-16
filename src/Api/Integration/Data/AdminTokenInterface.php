@@ -1,5 +1,5 @@
 <?php
-namespace Hatimeria\Reagento\Api\Integration\Data;
+namespace Deity\MagentoApi\Api\Integration\Data;
 
 use Magento\Framework\Api\ExtensibleDataInterface;
 
@@ -15,7 +15,7 @@ interface AdminTokenInterface extends ExtensibleDataInterface
 
     /**
      * @param string $token
-     * @return \Hatimeria\Reagento\Api\Integration\Data\AdminTokenInterface
+     * @return \Deity\MagentoApi\Api\Integration\Data\AdminTokenInterface
      */
     public function setToken($token);
 
@@ -26,18 +26,18 @@ interface AdminTokenInterface extends ExtensibleDataInterface
 
     /**
      * @param int $time
-     * @return \Hatimeria\Reagento\Api\Integration\Data\AdminTokenInterface
+     * @return \Deity\MagentoApi\Api\Integration\Data\AdminTokenInterface
      */
     public function setValidTime($time);
 
     /**
-     * @return \Hatimeria\Reagento\Api\Integration\Data\AdminTokenExtensionInterface
+     * @return \Deity\MagentoApi\Api\Integration\Data\AdminTokenExtensionInterface
      */
     public function getExtensionAttributes();
 
     /**
-     * @param \Hatimeria\Reagento\Api\Integration\Data\AdminTokenExtensionInterface $extensionAttributes
-     * @return \Hatimeria\Reagento\Api\Integration\Data\AdminTokenInterface
+     * @param \Deity\MagentoApi\Api\Integration\Data\AdminTokenExtensionInterface $extensionAttributes
+     * @return \Deity\MagentoApi\Api\Integration\Data\AdminTokenInterface
      */
     public function setExtensionAttributes($extensionAttributes);
 }

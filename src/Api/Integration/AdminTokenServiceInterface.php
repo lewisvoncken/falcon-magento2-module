@@ -1,5 +1,5 @@
 <?php
-namespace Hatimeria\Reagento\Api\Integration;
+namespace Deity\MagentoApi\Api\Integration;
 
 use Magento\Integration\Api\AdminTokenServiceInterface as MagentoAdminTokenServiceInterface;
 
@@ -11,7 +11,7 @@ interface AdminTokenServiceInterface extends MagentoAdminTokenServiceInterface
      *
      * @param string $username
      * @param string $password
-     * @return \Hatimeria\Reagento\Api\Integration\Data\AdminTokenInterface Token created
+     * @return \Deity\MagentoApi\Api\Integration\Data\AdminTokenInterface Token created
      * @throws \Magento\Framework\Exception\InputException For invalid input
      * @throws \Magento\Framework\Exception\AuthenticationException
      * @throws \Magento\Framework\Exception\LocalizedException

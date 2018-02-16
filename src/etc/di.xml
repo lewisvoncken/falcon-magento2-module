@@ -5,7 +5,9 @@
     <preference for="Deity\MagentoApi\Api\Catalog\AttributeManagementInterface" type="Deity\MagentoApi\Model\Catalog\AttributeManagement" />
     <preference for="Deity\MagentoApi\Api\CategoryBreadcrumbsInterface" type="Deity\MagentoApi\Model\CategoryBreadcrumbs" />
     <preference for="Deity\MagentoApi\Api\CategoryManagementInterface" type="Deity\MagentoApi\Model\CategoryManagement" />
+    <preference for="Deity\MagentoApi\Api\Integration\AdminTokenServiceInterface" type="Deity\MagentoApi\Model\Integration\AdminTokenService" />
     <preference for="Deity\MagentoApi\Api\Integration\CustomerTokenServiceInterface" type="Deity\MagentoApi\Model\Integration\CustomerTokenService" />
+    <preference for="Deity\MagentoApi\Api\Integration\Data\AdminTokenInterface" type="Deity\MagentoApi\Model\Integration\AdminToken" />
     <preference for="Deity\MagentoApi\Api\Customer\AddressRepositoryInterface" type="Deity\MagentoApi\Model\Customer\AddressRepository" />
     <preference for="Deity\MagentoApi\Api\ContactFormInterface" type="Deity\MagentoApi\Model\ContactForm" />
     <preference for="Deity\MagentoApi\Api\Data\BreadcrumbInterface" type="Deity\MagentoApi\Model\Api\Data\Breadcrumb" />
