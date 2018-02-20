@@ -1,8 +1,8 @@
 <?php
-namespace Hatimeria\Reagento\Model\Integration;
+namespace Deity\MagentoApi\Model\Integration;
 
-use Hatimeria\Reagento\Api\Integration\Data\CustomerTokenInterface;
-use Hatimeria\Reagento\Api\Integration\Data\CustomerTokenExtensionInterface;
+use Deity\MagentoApi\Api\Integration\Data\CustomerTokenInterface;
+use Deity\MagentoApi\Api\Integration\Data\CustomerTokenExtensionInterface;
 use Magento\Framework\Api\AbstractExtensibleObject;
 
 class CustomerToken extends AbstractExtensibleObject implements CustomerTokenInterface
@@ -17,7 +17,7 @@ class CustomerToken extends AbstractExtensibleObject implements CustomerTokenInt
 
     /**
      * @param string $token
-     * @return \Hatimeria\Reagento\Api\Integration\Data\CustomerTokenInterface
+     * @return \Deity\MagentoApi\Api\Integration\Data\CustomerTokenInterface
      */
     public function setToken($token)
     {
@@ -34,7 +34,7 @@ class CustomerToken extends AbstractExtensibleObject implements CustomerTokenInt
 
     /**
      * @param $time
-     * @return \Hatimeria\Reagento\Api\Integration\Data\CustomerTokenInterface
+     * @return \Deity\MagentoApi\Api\Integration\Data\CustomerTokenInterface
      */
     public function setValidTime($time)
     {
@@ -42,7 +42,7 @@ class CustomerToken extends AbstractExtensibleObject implements CustomerTokenInt
     }
 
     /**
-     * @return \Hatimeria\Reagento\Api\Integration\Data\CustomerTokenExtensionInterface
+     * @return \Deity\MagentoApi\Api\Integration\Data\CustomerTokenExtensionInterface
      */
     public function getExtensionAttributes()
     {
@@ -50,8 +50,8 @@ class CustomerToken extends AbstractExtensibleObject implements CustomerTokenInt
     }
 
     /**
-     * @param \Hatimeria\Reagento\Api\Integration\Data\CustomerTokenExtensionInterface $extensionAttributes
-     * @return \Hatimeria\Reagento\Api\Integration\Data\CustomerTokenInterface
+     * @param \Deity\MagentoApi\Api\Integration\Data\CustomerTokenExtensionInterface $extensionAttributes
+     * @return \Deity\MagentoApi\Api\Integration\Data\CustomerTokenInterface
      */
     public function setExtensionAttributes(CustomerTokenExtensionInterface $extensionAttributes)
     {

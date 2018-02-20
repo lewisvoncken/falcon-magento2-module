@@ -1,9 +1,9 @@
 <?php
-namespace Hatimeria\Reagento\Model\Integration;
+namespace Deity\MagentoApi\Model\Integration;
 
-use Hatimeria\Reagento\Api\Integration\AdminTokenServiceInterface;
-use Hatimeria\Reagento\Api\Integration\Data\AdminTokenInterface;
-use Hatimeria\Reagento\Api\Integration\Data\AdminTokenInterfaceFactory;
+use Deity\MagentoApi\Api\Integration\AdminTokenServiceInterface;
+use Deity\MagentoApi\Api\Integration\Data\AdminTokenInterface;
+use Deity\MagentoApi\Api\Integration\Data\AdminTokenInterfaceFactory;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Exception\AuthenticationException;
 use Magento\Integration\Model\AdminTokenService as MagentoAdminTokenService;

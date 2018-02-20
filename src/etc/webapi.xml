@@ -174,7 +174,7 @@
     </route>
 
     <route url="/V1/integration/admin/token" method="POST">
-        <service class="Hatimeria\Reagento\Api\Integration\AdminTokenServiceInterface" method="createAdminAccessToken"/>
+        <service class="Deity\MagentoApi\Api\Integration\AdminTokenServiceInterface" method="createAdminAccessToken"/>
         <resources>
             <resource ref="anonymous"/>
         </resources>

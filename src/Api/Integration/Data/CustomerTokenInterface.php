@@ -1,7 +1,7 @@
 <?php
-namespace Hatimeria\Reagento\Api\Integration\Data;
+namespace Deity\MagentoApi\Api\Integration\Data;
 
-use Hatimeria\Reagento\Api\Integration\Data\CustomerTokenExtensionInterface;
+use Deity\MagentoApi\Api\Integration\Data\CustomerTokenExtensionInterface;
 use Magento\Framework\Api\ExtensibleDataInterface;
 
 interface CustomerTokenInterface extends ExtensibleDataInterface
@@ -16,7 +16,7 @@ interface CustomerTokenInterface extends ExtensibleDataInterface
 
     /**
      * @param string $token
-     * @return \Hatimeria\Reagento\Api\Integration\Data\AdminTokenInterface
+     * @return \Deity\MagentoApi\Api\Integration\Data\AdminTokenInterface
      */
     public function setToken($token);
 
@@ -27,18 +27,18 @@ interface CustomerTokenInterface extends ExtensibleDataInterface
 
     /**
      * @param int $time
-     * @return \Hatimeria\Reagento\Api\Integration\Data\AdminTokenInterface
+     * @return \Deity\MagentoApi\Api\Integration\Data\AdminTokenInterface
      */
     public function setValidTime($time);
 
     /**
-     * @return \Hatimeria\Reagento\Api\Integration\Data\CustomerTokenExtensionInterface
+     * @return \Deity\MagentoApi\Api\Integration\Data\CustomerTokenExtensionInterface
      */
     public function getExtensionAttributes();
 
     /**
-     * @param \Hatimeria\Reagento\Api\Integration\Data\CustomerTokenExtensionInterface $extensionAttributes
-     * @return \Hatimeria\Reagento\Api\Integration\Data\AdminTokenInterface
+     * @param \Deity\MagentoApi\Api\Integration\Data\CustomerTokenExtensionInterface $extensionAttributes
+     * @return \Deity\MagentoApi\Api\Integration\Data\AdminTokenInterface
      */
     public function setExtensionAttributes(CustomerTokenExtensionInterface $extensionAttributes);
 }
