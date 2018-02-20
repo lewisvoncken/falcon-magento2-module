@@ -2,5 +2,5 @@
 
 \Magento\Framework\Component\ComponentRegistrar::register(
     \Magento\Framework\Component\ComponentRegistrar::MODULE
-    , "Hatimeria_Reagento", __DIR__
+    , "Deity_MagentoApi", __DIR__
 );

@@ -1,15 +1,15 @@
 <?php
 
-namespace Hatimeria\Reagento\Api;
+namespace Deity\MagentoApi\Api\Checkout;
 
 use Magento\Quote\Api\Data\PaymentInterface;
-use Magento\Quote\Api\CartManagementInterface;
+use Magento\Quote\Api\CartManagementInterface as MagentoCartManagementInterface;
 
 /**
- * Interface HatimeriaCartManagementInterface
+ * Interface CartManagementInterface
  * @api
  */
-interface HatimeriaCartManagementInterface extends CartManagementInterface
+interface CartManagementInterface extends MagentoCartManagementInterface
 {
     /**
      * Places an order for a specified cart.
@@ -17,7 +17,7 @@ interface HatimeriaCartManagementInterface extends CartManagementInterface
      * @param int $cartId The cart ID.
      * @param PaymentInterface|null $paymentMethod
      * @throws \Magento\Framework\Exception\CouldNotSaveException
-     * @return \Hatimeria\Reagento\Api\Data\OrderResponseInterface
+     * @return \Deity\MagentoApi\Api\Data\OrderResponseInterface
      */
     public function placeOrder($cartId, PaymentInterface $paymentMethod = null);
 }

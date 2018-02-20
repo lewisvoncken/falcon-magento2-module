@@ -1,6 +1,6 @@
 <?php
 
-namespace Hatimeria\Reagento\Helper;
+namespace Deity\MagentoApi\Helper;
 
 use Magento\Cms\Model\Block;
 use Magento\Cms\Model\Page;

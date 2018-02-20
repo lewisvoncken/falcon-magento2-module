@@ -1,5 +1,5 @@
 <?php
-namespace Hatimeria\Reagento\Model\Sales\Order;
+namespace Deity\MagentoApi\Model\Sales\Order;
 
 use Magento\Framework\Api\ExtensionAttributesFactory;
 use Magento\Framework\Pricing\PriceCurrencyInterface;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Hatimeria\Reagento\Model\Payment\Paypal\Express;
+namespace Deity\MagentoApi\Model\Payment\Paypal\Express;
 
 use Magento\Paypal\Model\Express\Checkout as MagentoCheckout;
 use Magento\Paypal\Model\Config as PaypalConfig;

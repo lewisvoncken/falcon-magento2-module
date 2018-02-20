@@ -1,14 +1,14 @@
 <?php
 
-namespace Hatimeria\Reagento\Api;
+namespace Deity\MagentoApi\Api;
 
 /**
- * @package Hatimeria\Reagento\Api
+ * @package Deity\MagentoApi\Api
  */
 interface InfoInterface
 {
     /**
-     * @return \Hatimeria\Reagento\Api\Data\InfoDataInterface
+     * @return \Deity\MagentoApi\Api\Data\InfoDataInterface
      */
     public function getInfo();
 }

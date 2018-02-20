@@ -1,5 +1,5 @@
 <?php
-namespace Hatimeria\Reagento\Model\Sales\OrderItem;
+namespace Deity\MagentoApi\Model\Sales\Order\Item;
 
 use Magento\Catalog\Api\Data\ProductExtensionInterface;
 use Magento\Catalog\Api\Data\ProductInterface;

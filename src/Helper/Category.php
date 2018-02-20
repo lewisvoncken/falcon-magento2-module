@@ -1,20 +1,20 @@
 <?php
 
-namespace Hatimeria\Reagento\Helper;
+namespace Deity\MagentoApi\Helper;
 
-use Hatimeria\Reagento\Api\Data\BreadcrumbInterface;
-use Hatimeria\Reagento\Api\Data\BreadcrumbInterfaceFactory;
 use Magento\Catalog\Api\CategoryRepositoryInterface;
-use Magento\Catalog\Api\Data\CategoryInterface;
 use Magento\Catalog\Model\Category as MagentoCategory;
-use Magento\Catalog\Model\Category\Collection as MagentoCategoryCollection;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\App\Helper\Context as AppContext;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Image\AdapterFactory;
+use Magento\Framework\View\ConfigInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
 class Category extends AbstractHelper
 {
-    const SHOW_CATEGORY_FILTER_PATH = 'reagento/catalog/show_category_filter';
+    const SHOW_CATEGORY_FILTER_PATH = 'deity/catalog/show_category_filter';
 
     /** @var \Magento\Framework\View\ConfigInterface */
     private $viewConfig;
@@ -31,33 +31,22 @@ class Category extends AbstractHelper
     /** @var CategoryRepositoryInterface */
     protected $categoryRepository;
 
-    /** @var \Magento\Catalog\Api\Data\CategoryExtensionFactory */
-    protected $extensionFactory;
-
-    /** @var BreadcrumbInterfaceFactory */
-    protected $breadcrumbFactory;
-
-    protected $loadedCategories = [];
-
     /**
+     * Category constructor.
      * @param AppContext $context
-     * @param \Magento\Framework\Image\AdapterFactory $imageFactory
-     * @param \Magento\Catalog\Api\Data\CategoryExtensionFactory $extensionFactory
-     * @param \Magento\Framework\Filesystem $filesystem
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\View\ConfigInterface $viewConfig
+     * @param AdapterFactory $imageFactory
+     * @param Filesystem $filesystem
+     * @param StoreManagerInterface $storeManager
+     * @param ConfigInterface $viewConfig
      * @param CategoryRepositoryInterface $categoryRepository
-     * @param BreadcrumbInterfaceFactory $breadcrumbFactory
      */
     public function __construct(
         AppContext $context,
-        \Magento\Framework\Image\AdapterFactory $imageFactory,
-        \Magento\Catalog\Api\Data\CategoryExtensionFactory $extensionFactory,
-        \Magento\Framework\Filesystem $filesystem,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\View\ConfigInterface $viewConfig,
-        CategoryRepositoryInterface $categoryRepository,
-        BreadcrumbInterfaceFactory $breadcrumbFactory
+        AdapterFactory $imageFactory,
+        Filesystem $filesystem,
+        StoreManagerInterface $storeManager,
+        ConfigInterface $viewConfig,
+        CategoryRepositoryInterface $categoryRepository
     ) {
         parent::__construct($context);
         $this->viewConfig = $viewConfig;
@@ -65,13 +54,12 @@ class Category extends AbstractHelper
         $this->filesystem = $filesystem;
         $this->imageFactory = $imageFactory;
         $this->categoryRepository = $categoryRepository;
-        $this->extensionFactory = $extensionFactory;
-        $this->breadcrumbFactory = $breadcrumbFactory;
     }
 
     /**
      * @param MagentoCategory $category
      * @param string $size
+     * @throws \Exception
      */
     public function addImageAttribute($category, $size = 'category_page_grid')
     {
@@ -85,6 +73,7 @@ class Category extends AbstractHelper
      * @param string $attribute Attribute name for convertion
      * @param string $size
      * @param string $imagePath
+     * @throws \Exception
      */
     public function convertImageAttributeToUrl($category, $attribute = 'image',  $size = 'category_page_grid', $imagePath = 'catalog/category/')
     {
@@ -123,69 +112,5 @@ class Category extends AbstractHelper
             . $categorySubPath . $resizedImagePath;
 
         $category->setData($attribute, $url);
-    }
-
-    /**
-     * @param MagentoCategory $category
-     * @param MagentoCategoryCollection $collection
-     */
-    public function addBreadcrumbsData($category, $collection = null)
-    {
-        $pathInStore = $category->getPathInStore();
-        if(empty($pathInStore)) {
-            return;
-        }
-
-        $result = [];
-
-        $pathIds = array_reverse(explode(',', $pathInStore));
-        array_pop($pathIds); // remove the current category from parent path ids
-
-        foreach ($pathIds as $id) {
-            if($collection) {
-                $parentCategory = $collection->getItemById($id);
-            } else if(array_key_exists($id, $this->loadedCategories)) {
-                $parentCategory = $this->loadedCategories[$id];
-            } else {
-                $parentCategory = $this->categoryRepository->get($id);
-                $this->loadedCategories[$id] = $parentCategory;
-            }
-
-            // todo: category may not be found - investigate why!
-            if(!$parentCategory) {
-                continue;
-            }
-
-            $result[] = $this->createBreadcrumb($parentCategory);
-        }
-
-        $result[] = $this->createBreadcrumb($category);
-
-        $extensionAttributes = $category->getExtensionAttributes();
-        if($extensionAttributes === null) {
-            $extensionAttributes = $this->extensionFactory->create();
-        }
-
-        $extensionAttributes->setData('breadcrumbs', $result);
-        $category->setExtensionAttributes($extensionAttributes);
-    }
-
-    /**
-     * @param CategoryInterface $category
-     * @return BreadcrumbInterface
-     */
-    protected function createBreadcrumb($category)
-    {
-        /** @var BreadcrumbInterface $breadcrumb */
-        $breadcrumb = $this->breadcrumbFactory->create();
-        $data = [
-            'id' => $category->getId(),
-            'name' => $category->getName(),
-            'url_path' => $category->getUrlPath(),
-            'url_key' => $category->getUrlKey()
-        ];
-        $breadcrumb->loadFromData($data);
-
-        return $breadcrumb;
     }
 }

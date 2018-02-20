@@ -1,8 +1,8 @@
 <?php
 
-namespace Hatimeria\Reagento\Model;
+namespace Deity\MagentoApi\Model;
 
-use Hatimeria\Reagento\Api\Data\InfoDataInterface;
+use Deity\MagentoApi\Api\Data\InfoDataInterface;
 use Magento\Framework\Model\AbstractModel;
 
 class InfoData extends AbstractModel implements InfoDataInterface

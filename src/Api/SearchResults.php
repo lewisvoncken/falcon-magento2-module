@@ -1,8 +1,8 @@
 <?php
 
-namespace Hatimeria\Reagento\Api;
+namespace Deity\MagentoApi\Api;
 
-use Hatimeria\Reagento\Api\Data\ProductSearchResultsInterface;
+use Deity\MagentoApi\Api\Data\ProductSearchResultsInterface;
 
 class SearchResults extends \Magento\Framework\Api\SearchResults implements ProductSearchResultsInterface
 {

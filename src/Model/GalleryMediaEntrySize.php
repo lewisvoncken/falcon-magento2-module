@@ -1,9 +1,9 @@
 <?php
 
-namespace Hatimeria\Reagento\Model;
+namespace Deity\MagentoApi\Model;
 
 use Magento\Framework\Model\AbstractModel;
-use Hatimeria\Reagento\Api\Data\GalleryMediaEntrySizeInterface;
+use Deity\MagentoApi\Api\Data\GalleryMediaEntrySizeInterface;
 
 class GalleryMediaEntrySize extends AbstractModel implements GalleryMediaEntrySizeInterface
 {

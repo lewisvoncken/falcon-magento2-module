@@ -1,8 +1,8 @@
 <?php
 
-namespace Hatimeria\Reagento\Api;
+namespace Deity\MagentoApi\Api\Sales;
 
-interface HatimeriaOrderManagementInterface
+interface OrderManagementInterface
 {
     /**
      * @param mixed $orderId

@@ -1,6 +1,6 @@
 <?php
 
-namespace Hatimeria\Reagento\Api\Data;
+namespace Deity\MagentoApi\Api\Data;
 
 /**
  * @api

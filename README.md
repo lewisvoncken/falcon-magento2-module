@@ -1,10 +1,9 @@
-# Reagento (Magento 2 module)
+# Deity MagentoApi (Magento 2 module)
 
 ## Elements introduced to magento by this module
 
 Custom API endpoints provided by this module:
 
-- `[GET] /rest/V1/adyen/config` - get adyen public config data (cc enabled, card types, CSE public key, etc.)
 - `[GET] /rest/V1/attributes/filters` - get list of attributes used in catalog filters 
 - `[GET] /rest/V1/categories/:categoryId/breadcrumbs` - get category breadcrumbs to the root category
 - `[GET] /rest/V1/categories/homepage` - get categories marked as "Show on homepage" (max - 6)
@@ -29,8 +28,8 @@ Custom API endpoints provided by this module:
 - `[POST] /rest/V1/guest-carts/:cartId/payment-information` (**overridden**) - modifies the docblock of function return type (may be int or OrderResponse object)
 - `[POST] /rest/V1/integration/admin/token` (**overridden**) - return object with token and valid time in hours
 - `[POST] /rest/V1/integration/customer/token` (**overridden**) - adding guestQuoteId param to merge current guest quote with logged in customer
-- `[PUT] /rest/V1/carts/mine/reagento-order` - place order with Adyen credit card as a logged in customer - getting an object as a response
-- `[PUT] /rest/V1/guest-carts/:cartId/reagento-order` - place order with Adyen credit card - getting an object as a response
+- `[PUT] /rest/V1/carts/mine/deity-order` - place order with Adyen credit card as a logged in customer - getting an object as a response
+- `[PUT] /rest/V1/guest-carts/:cartId/deity-order` - place order with Adyen credit card - getting an object as a response
 - `[PUT] /rest/V1/customers/me/address` - update customer address
 - `[DELETE] /rest/V1/customers/me/address/:addressId` - remove customer address
 
@@ -48,17 +47,17 @@ Extension attributes:
     {
       "thumbnail_resized_url": "string",
       "thumbnail_url": "string",
-      "media_gallery_sizes": "Hatimeria\Reagento\Api\Data\GalleryMediaEntrySizeInterface[]",
+      "media_gallery_sizes": "Deity\MagentoApi\Api\Data\GalleryMediaEntrySizeInterface[]",
       "catalog_display_price": "float",
       "min_price": "float",
       "max_price": "float",
-      "breadcrumbs": "Hatimeria\Reagento\Api\Data\BreadcrumbInterface[]"
+      "breadcrumbs": "Deity\MagentoApi\Api\Data\BreadcrumbInterface[]"
     }
     ```
 - `Magento\Catalog\Api\Data\CategoryInterface`:
     ```json
     {
-      "breadcrumbs": "Hatimeria\Reagento\Api\Data\BreadcrumbInterface[]"
+      "breadcrumbs": "Deity\MagentoApi\Api\Data\BreadcrumbInterface[]"
     }
     ```
 - `Magento\Customer\Api\Data\CustomerInterface`:

@@ -1,6 +1,6 @@
 <?php
 
-namespace Hatimeria\Reagento\Plugin\ExtensionAttribute;
+namespace Deity\MagentoApi\Plugin\ExtensionAttribute;
 
 use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 use Magento\Framework\Api\ExtensibleDataInterface;

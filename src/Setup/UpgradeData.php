@@ -1,6 +1,6 @@
 <?php
 
-namespace Hatimeria\Reagento\Setup;
+namespace Deity\MagentoApi\Setup;
 
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Catalog\Model\Category;
@@ -14,7 +14,7 @@ use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\UpgradeDataInterface;
 
 /**
- * @package Hatimeria\Reagento\Setup
+ * @package Deity\MagentoApi\Setup
  */
 class UpgradeData implements UpgradeDataInterface
 {

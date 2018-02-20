@@ -1,8 +1,8 @@
 <?php
 
-namespace Hatimeria\Reagento\Plugin\Customer\Api;
+namespace Deity\MagentoApi\Plugin\Customer\Api;
 
-use Hatimeria\Reagento\Model\Cart\MergeManagement;
+use Deity\MagentoApi\Model\Cart\MergeManagement;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\CustomerInterface;

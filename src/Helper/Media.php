@@ -1,6 +1,6 @@
 <?php
 
-namespace Hatimeria\Reagento\Helper;
+namespace Deity\MagentoApi\Helper;
 
 use Magento\Catalog\Model\Product as MagentoProduct;
 use Magento\Framework\App\Helper\AbstractHelper;

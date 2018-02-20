@@ -1,13 +1,13 @@
 <?php
 
-namespace Hatimeria\Reagento\Model\Payment;
+namespace Deity\MagentoApi\Model\Payment;
 
 use Magento\Framework\Model\AbstractModel;
-use Hatimeria\Reagento\Api\Payment\Data\PaypalDataInterface;
+use Deity\MagentoApi\Api\Payment\Data\PaypalDataInterface;
 
 /**
  * Class PaymentData
- * @package Hatimeria\Reagento\Model
+ * @package Deity\MagentoApi\Model
  */
 class PaypalData extends AbstractModel implements PaypalDataInterface
 {

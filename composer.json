@@ -1,19 +1,19 @@
 {
-    "name": "hatimeria/reagento-magento-api",
-    "description": "Hatimeria Reagento Rest API",
+    "name": "deity-core/deity-magento-api",
+    "description": "Deity Magento Rest API",
     "type": "magento2-module",
-    "version": "0.2.0",
+    "version": "1.0.0",
     "license": "proprietary",
     "autoload": {
         "files": [
             "src/registration.php"
         ],
         "psr-4": {
-            "Hatimeria\\Reagento\\": "src",
-            "HatimeriaReagento\\Cmd\\": "cmd"
+            "Deity\\MagentoApi\\": "src",
+            "Deity\\MagentoCmd\\": "cmd"
         }
     },
     "scripts": {
-        "release": "HatimeriaReagento\\Cmd\\Command::run"
+        "release": "Deity\\MagentoCmd\\Command::run"
     }
 }

@@ -1,31 +1,40 @@
 <?php
 
-namespace Hatimeria\Reagento\Plugin\Catalog\Model;
+namespace Deity\MagentoApi\Plugin\Catalog\Model;
 
-use Hatimeria\Reagento\Helper\Product as HatimeriaProductHelper;
-use Hatimeria\Reagento\Model\Config\Source\BreadcrumbsAttribute;
+use Deity\MagentoApi\Helper\Breadcrumb;
+use Deity\MagentoApi\Helper\Product as DeityProductHelper;
 use Magento\Catalog\Model\Product as MagentoProduct;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
- * @package Hatimeria\Reagento\Model\Plugin
+ * @package Deity\MagentoApi\Model\Plugin
  */
 class Product
 {
-    /** @var HatimeriaProductHelper */
+    /** @var DeityProductHelper */
     protected $productHelper;
+
+    /** @var Breadcrumb */
+    protected $breadcrumbHelper;
 
     /** @var ScopeConfigInterface */
     protected $scopeConfig;
 
     /**
-     * @param HatimeriaProductHelper $productHelper
+     * @param DeityProductHelper $productHelper
+     * @param Breadcrumb $breadcrumbHelper
      * @param ScopeConfigInterface $scopeConfig
      */
-    public function __construct(HatimeriaProductHelper $productHelper, ScopeConfigInterface $scopeConfig)
-    {
+    public function __construct(
+        DeityProductHelper $productHelper,
+        Breadcrumb $breadcrumbHelper,
+        ScopeConfigInterface $scopeConfig
+    ) {
         $this->productHelper = $productHelper;
         $this->scopeConfig = $scopeConfig;
+        $this->breadcrumbHelper = $breadcrumbHelper;
     }
 
     /**
@@ -33,6 +42,7 @@ class Product
      *
      * @param MagentoProduct $product
      * @return MagentoProduct
+     * @throws LocalizedException
      */
     public function afterLoad(MagentoProduct $product)
     {
@@ -42,24 +52,10 @@ class Product
         $this->productHelper->addProductImageAttribute($product);
         $this->productHelper->addProductImageAttribute($product, 'product_list_image', 'thumbnail_url');
         $this->productHelper->addMediaGallerySizes($product);
-        $this->productHelper->addBreadcrumbsData($product, $this->getFilterableAttributes());
+        $this->breadcrumbHelper->addProductBreadcrumbsData($product, $this->productHelper->getFilterableAttributes());
 
         $this->productHelper->calculateCatalogDisplayPrice($product);
 
         return $product;
-    }
-
-    /**
-     * @return array
-     */
-    protected function getFilterableAttributes()
-    {
-        $attributes = [];
-            
-        if ($config = $this->scopeConfig->getValue(BreadcrumbsAttribute::BREADCRUMBS_ATTRIBUTES_CONFIG_PATH)) {
-            $attributes = explode(',', $config);
-        }
-
-        return $attributes;
     }
 }

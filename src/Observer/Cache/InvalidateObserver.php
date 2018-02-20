@@ -1,16 +1,16 @@
 <?php
 
-namespace Hatimeria\Reagento\Observer\Cache;
+namespace Deity\MagentoApi\Observer\Cache;
 
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Event\Observer as EventObserver;
-use Hatimeria\Reagento\Model\NodeServer;
-use Hatimeria\Reagento\Helper\Data as ReagentoHelper;
+use Deity\MagentoApi\Model\NodeServer;
+use Deity\MagentoApi\Helper\Data as DeityHelper;
 
 class InvalidateObserver implements ObserverInterface
 {
     /**
-     * @var \Hatimeria\Reagento\Model\NodeServer
+     * @var \Deity\MagentoApi\Model\NodeServer
      */
     protected $nodeServer;
     /**
@@ -18,23 +18,23 @@ class InvalidateObserver implements ObserverInterface
      */
     protected $tagResolver;
     /**
-     * @var ReagentoHelper
+     * @var DeityHelper
      */
-    protected $reagentoHelper;
+    protected $deityHelper;
 
     /**
-     *  @param \Hatimeria\Reagento\Model\NodeServer $nodeServer
+     *  @param \Deity\MagentoApi\Model\NodeServer $nodeServer
      *  @param \Magento\Framework\App\Cache\Tag\Resolver\Proxy $tagResolver
-     *  @param ReagentoHelper $reagentoHelper
+     *  @param DeityHelper $deityHelper
      */
     public function __construct(
-        \Hatimeria\Reagento\Model\NodeServer $nodeServer,
+        \Deity\MagentoApi\Model\NodeServer $nodeServer,
         \Magento\Framework\App\Cache\Tag\Resolver\Proxy $tagResolver,
-        ReagentoHelper $reagentoHelper
+        DeityHelper $deityHelper
     ) {
         $this->nodeServer     = $nodeServer;
         $this->tagResolver    = $tagResolver;
-        $this->reagentoHelper = $reagentoHelper;
+        $this->deityHelper = $deityHelper;
     }
 
     /**
@@ -43,7 +43,7 @@ class InvalidateObserver implements ObserverInterface
     public function execute(EventObserver $observer)
     {
         // check if node cache clear is enabled
-        if (!$this->reagentoHelper->isClearCacheEnabled()) {
+        if (!$this->deityHelper->isClearCacheEnabled()) {
             
             return;
         }
@@ -61,7 +61,7 @@ class InvalidateObserver implements ObserverInterface
         // as the coverage of tags for api requests is very small
         // for now we will keep removing whole magento cache related data
         // on tag invalidation event
-        $this->nodeServer->sendInvalidate([ReagentoHelper::defaultResponseTag]);
+        $this->nodeServer->sendInvalidate([DeityHelper::defaultResponseTag]);
     }
 
 }

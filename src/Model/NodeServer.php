@@ -1,8 +1,9 @@
 <?php
 
-namespace Hatimeria\Reagento\Model;
+namespace Deity\MagentoApi\Model;
 
-use Hatimeria\Reagento\Helper\Data as ReagentoHelper;
+use Deity\MagentoApi\Helper\Data as DeityHelper;
+use Magento\Framework\HTTP\Adapter\CurlFactory;
 
 /**
  * Service to communicate with node internal api endpoints
@@ -12,33 +13,34 @@ class NodeServer
     /**
      * Curl Adapter Factory
      *
-     * @var \Magento\Framework\HTTP\Adapter\CurlFactory
+     * @var CurlFactory
      */
     protected $curlFactory;
     /**
-     * Basic reagento helper
+     * Basic deity helper
      *
-     * @var ReagentoHelper
+     * @var DeityHelper
      */
-    protected $reagentoHelper;
+    protected $deityHelper;
 
     /**
-     * @param \Magento\Framework\HTTP\Adapter\CurlFactory $curlFactory
-     * @param ReagentoHelper $reagentoHelper
+     * @param CurlFactory $curlFactory
+     * @param DeityHelper $deityHelper
      */
     public function __construct(
-        \Magento\Framework\HTTP\Adapter\CurlFactory $curlFactory,
-        ReagentoHelper $reagentoHelper
+        CurlFactory $curlFactory,
+        DeityHelper $deityHelper
     )
     {
         $this->curlFactory    = $curlFactory;
-        $this->reagentoHelper = $reagentoHelper;
+        $this->deityHelper = $deityHelper;
     }
 
     /**
-     * Send invalidation to reagento node app
+     * Send invalidation to deity node app
      *
      * @param [] $tags list of tags to invalidate
+     * @return bool
      */
     public function sendInvalidate($tags)
     {
@@ -52,7 +54,7 @@ class NodeServer
         $params = [
             'tags' => implode(',', $tags),
         ];
-        $url = rtrim($this->reagentoHelper->getNodeServerUrl(), '/'); 
+        $url = rtrim($this->deityHelper->getNodeServerUrl(), '/');
         $url .= '/api/cache/invalidate?';
         $url .= http_build_query($params);
         $curl->write(\Zend_Http_Client::GET, $url, '1.0');

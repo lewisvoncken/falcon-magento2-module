@@ -1,10 +1,10 @@
 <?php
 
-namespace Hatimeria\Reagento\Model;
+namespace Deity\MagentoApi\Model;
 
-use Hatimeria\Reagento\Api\Data\MenuInterface;
-use Hatimeria\Reagento\Api\Data\MenuInterfaceFactory;
-use Hatimeria\Reagento\Api\MenuRepositoryInterface;
+use Deity\MagentoApi\Api\Data\MenuInterface;
+use Deity\MagentoApi\Api\Data\MenuInterfaceFactory;
+use Deity\MagentoApi\Api\MenuRepositoryInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Data\Tree\Node;
 use Magento\Framework\Event\ManagerInterface;
@@ -60,7 +60,7 @@ class MenuRepository implements MenuRepositoryInterface
     }
 
     /**
-     * @return \Hatimeria\Reagento\Api\Data\MenuInterface[]
+     * @return \Deity\MagentoApi\Api\Data\MenuInterface[]
      */
     public function getTree()
     {

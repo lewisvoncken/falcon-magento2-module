@@ -1,8 +1,8 @@
 <?php
 
-namespace Hatimeria\Reagento\Model;
+namespace Deity\MagentoApi\Model;
 
-use Hatimeria\Reagento\Api\QuoteMaskInterface;
+use Deity\MagentoApi\Api\QuoteMaskInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Quote\Model\QuoteIdMask;
@@ -85,7 +85,7 @@ class QuoteMask implements QuoteMaskInterface
         }
 
         /** @var OrderInfo $result */
-        $result = $this->objectManager->create('\Hatimeria\Reagento\Api\Data\OrderInfoInterface');
+        $result = $this->objectManager->create('\Deity\MagentoApi\Api\Data\OrderInfoInterface');
         $result->setOrderId($order->getRealOrderId());
         $result->setRevenue($order->getGrandTotal());
         $result->setShipping($order->getShippingInclTax());

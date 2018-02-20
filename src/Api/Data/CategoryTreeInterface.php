@@ -1,6 +1,6 @@
 <?php
 
-namespace Hatimeria\Reagento\Api\Data;
+namespace Deity\MagentoApi\Api\Data;
 
 interface CategoryTreeInterface extends \Magento\Catalog\Api\Data\CategoryTreeInterface
 {
@@ -16,12 +16,12 @@ interface CategoryTreeInterface extends \Magento\Catalog\Api\Data\CategoryTreeIn
     public function setUrlPath($urlPath);
 
     /**
-     * @return \Hatimeria\Reagento\Api\Data\CategoryTreeInterface[]
+     * @return \Deity\MagentoApi\Api\Data\CategoryTreeInterface[]
      */
     public function getChildrenData();
 
     /**
-     * @param \Hatimeria\Reagento\Api\Data\CategoryTreeInterface[] $childrenData
+     * @param \Deity\MagentoApi\Api\Data\CategoryTreeInterface[] $childrenData
      * @return $this
      */
     public function setChildrenData(array $childrenData = null);

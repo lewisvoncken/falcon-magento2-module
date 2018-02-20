@@ -1,6 +1,6 @@
 <?php
 
-namespace Hatimeria\Reagento\Model\Api\Data;
+namespace Deity\MagentoApi\Model\Api\Data;
 
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\Framework\Model\AbstractExtensibleModel;
