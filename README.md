@@ -65,7 +65,7 @@ Extension attributes:
     ```json
     {
       "guest_quote_id": "string",
-      "newsletter_subscriber": "boolean"
+      "newsletter_subscriber": "bool"
     }
     ```
 - `Magento\Sales\Api\Data\OrderInterface`:
