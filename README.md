@@ -26,6 +26,7 @@ Custom API endpoints provided by this module:
 - `[POST] /rest/V1/customers/me/address` - create new address for customer
 - `[POST] /rest/V1/contact` - send a contact email
 - `[POST] /rest/V1/guest-carts/:cartId/payment-information` (**overridden**) - modifies the docblock of function return type (may be int or OrderResponse object)
+- `[POST] /rest/V1/integration/admin/token` (**overridden**) - return object with token and valid time in hours
 - `[POST] /rest/V1/integration/customer/token` (**overridden**) - adding guestQuoteId param to merge current guest quote with logged in customer
 - `[PUT] /rest/V1/carts/mine/deity-order` - place order with Adyen credit card as a logged in customer - getting an object as a response
 - `[PUT] /rest/V1/guest-carts/:cartId/deity-order` - place order with Adyen credit card - getting an object as a response

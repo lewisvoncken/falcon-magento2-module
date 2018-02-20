@@ -1,8 +1,10 @@
 <?php
-namespace Deity\MagentoApi\Model;
+namespace Deity\MagentoApi\Model\Integration;
+
+
 
 use Exception;
-use Deity\MagentoApi\Api\CustomerTokenServiceInterface;
+use Deity\MagentoApi\Api\Integration\CustomerTokenServiceInterface;
 use Deity\MagentoApi\Model\Cart\MergeManagement;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Framework\DataObject;

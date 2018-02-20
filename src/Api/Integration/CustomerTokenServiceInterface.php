@@ -1,6 +1,6 @@
 <?php
 
-namespace Deity\MagentoApi\Api;
+namespace Deity\MagentoApi\Api\Integration;
 
 use Magento\Integration\Api\CustomerTokenServiceInterface as MagentoCustomerTokenServiceInterface;
 
