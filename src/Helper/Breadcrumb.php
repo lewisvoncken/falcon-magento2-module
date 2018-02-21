@@ -149,7 +149,7 @@ class Breadcrumb extends AbstractHelper
     protected function processCategoryBreadcrumbs(ProductInterface $product, $categoryId, $filters)
     {
         $useSubcategoryFilter = $this->scopeConfig->getValue(
-            Category::SHOW_CATEGORY_FILTER_PATH,
+            \Deity\MagentoApi\Helper\Category::SHOW_CATEGORY_FILTER_PATH,
             ScopeInterface::SCOPE_STORE,
             $this->storeManager->getStore()->getId()
         );
