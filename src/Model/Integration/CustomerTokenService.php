@@ -1,9 +1,11 @@
 <?php
 namespace Deity\MagentoApi\Model\Integration;
 
-use Exception;
+use Deity\MagentoApi\Api\Integration\Data\CustomerTokenInterface;
 use Deity\MagentoApi\Api\Integration\CustomerTokenServiceInterface;
+use Deity\MagentoApi\Api\Integration\Data\CustomerTokenInterfaceFactory;
 use Deity\MagentoApi\Model\Cart\MergeManagement;
+use Exception;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\DataObject;
