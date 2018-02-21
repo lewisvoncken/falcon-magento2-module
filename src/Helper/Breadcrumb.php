@@ -7,7 +7,7 @@ use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Api\Data\CategoryInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Category as CategoryModel;
-use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product as ProductModel;
 use Magento\Catalog\Model\ResourceModel\Category\Collection as CategoryCollection;
 use Magento\Framework\Api\ExtensionAttributesFactory;
 use Magento\Framework\App\Helper\AbstractHelper;
@@ -119,7 +119,7 @@ class Breadcrumb extends AbstractHelper
     /**
      * Add breadcrumb data to product
      *
-     * @param Product|ProductInterface $product
+     * @param ProductModel|ProductInterface $product
      * @param string[] $filters
      */
     public function addProductBreadcrumbsData(ProductInterface $product, $filters = [])
@@ -149,7 +149,7 @@ class Breadcrumb extends AbstractHelper
     protected function processCategoryBreadcrumbs(ProductInterface $product, $categoryId, $filters)
     {
         $useSubcategoryFilter = $this->scopeConfig->getValue(
-            \Deity\MagentoApi\Helper\Category::SHOW_CATEGORY_FILTER_PATH,
+            Category::SHOW_CATEGORY_FILTER_PATH,
             ScopeInterface::SCOPE_STORE,
             $this->storeManager->getStore()->getId()
         );
