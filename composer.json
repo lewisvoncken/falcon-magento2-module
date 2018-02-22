@@ -15,5 +15,22 @@
     },
     "scripts": {
         "release": "Deity\\MagentoCmd\\Command::run"
+    },
+    "require": {
+        "magento/framework": "^101.0"
+    },
+    "require-dev": {
+        "phpro/grumphp": "^0.13.1",
+        "magento/marketplace-eqp": "dev-master@dev"
+    },
+    "repositories": {
+        "magento": {
+            "type": "composer",
+            "url": "https://repo.magento.com/"
+        },
+        "magento-eqp": {
+            "type": "vcs",
+            "url": "https://github.com/magento/marketplace-eqp.git"
+        }
     }
 }
