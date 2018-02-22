@@ -1,11 +1,10 @@
 # CHANGELOG
 
-## 0.1.46
+## 1.0.1
 
-- removed loading additional information on product collection load (media gallery, configurable options,
-  thumbnail_resized_url)
+- Add endpoints for newsletter subscribe and unsubscribe
+- Fix class name collisions in `Deity\MagentoApi\Helper\Breadcrumbs`
 
-## 0.1.11
+## 1.0.0
 
-- Adyen module included to the package dependencies
-- `Minicart` block is shown again (Emperia/Marketplace module use `window.checkout` data in its forms)
+- Deity_MagentoApi initial release

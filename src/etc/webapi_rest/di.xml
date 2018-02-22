@@ -6,6 +6,7 @@
     <preference for="Deity\MagentoApi\Api\Checkout\GuestCartManagementInterface" type="\Magento\Quote\Model\GuestCart\GuestCartManagement" />
     <preference for="Deity\MagentoApi\Api\Checkout\GuestPaymentInformationManagementInterface" type="\Magento\Checkout\Model\GuestPaymentInformationManagement" />
     <preference for="Deity\MagentoApi\Api\Checkout\PaymentInformationManagementInterface" type="\Magento\Checkout\Model\PaymentInformationManagement" />
+    <preference for="Deity\MagentoApi\Api\Customer\NewsletterManagerInterface" type="\Deity\MagentoApi\Model\Customer\NewsletterManager" />
 
     <!-- OVERRIDES -->
     <preference for="Magento\Catalog\Model\ResourceModel\Category" type="\Deity\MagentoApi\Model\ResourceModel\Category" />
@@ -40,6 +41,10 @@
 
     <type name="Magento\Customer\Api\AccountManagementInterface">
         <plugin name="deityMagentoApiAccountManagement" type="\Deity\MagentoApi\Plugin\Customer\Api\AccountManagement" />
+    </type>
+
+    <type name="Magento\Customer\Api\CustomerRepositoryInterface">
+        <plugin name="deityMagentoCustomerRepositoryPlugin" type="\Deity\MagentoApi\Plugin\Customer\Api\CustomerRepository" />
     </type>
 
     <type name="Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface">

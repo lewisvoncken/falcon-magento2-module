@@ -6,8 +6,8 @@ use Deity\MagentoApi\Api\Data\BreadcrumbInterfaceFactory;
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Api\Data\CategoryInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\Catalog\Model\Category;
-use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Category as CategoryModel;
+use Magento\Catalog\Model\Product as ProductModel;
 use Magento\Catalog\Model\ResourceModel\Category\Collection as CategoryCollection;
 use Magento\Framework\Api\ExtensionAttributesFactory;
 use Magento\Framework\App\Helper\AbstractHelper;
@@ -29,7 +29,7 @@ class Breadcrumb extends AbstractHelper
     /** @var ExtensionAttributesFactory */
     protected $extensionAttributesFactory;
 
-    /** @var Category[] */
+    /** @var CategoryModel[] */
     protected $loadedCategories = [];
 
     /**
@@ -70,11 +70,11 @@ class Breadcrumb extends AbstractHelper
     /**
      * Add breadcrumb data to category
      *
-     * @param Category $category
+     * @param CategoryModel $category
      * @param CategoryCollection|null $collection
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    public function addCategoryBreadcrumbs(Category $category, CategoryCollection $collection = null)
+    public function addCategoryBreadcrumbs(CategoryModel $category, CategoryCollection $collection = null)
     {
         $pathInStore = $category->getPathInStore();
         if(empty($pathInStore)) {
@@ -119,7 +119,7 @@ class Breadcrumb extends AbstractHelper
     /**
      * Add breadcrumb data to product
      *
-     * @param Product|ProductInterface $product
+     * @param ProductModel|ProductInterface $product
      * @param string[] $filters
      */
     public function addProductBreadcrumbsData(ProductInterface $product, $filters = [])
@@ -155,7 +155,7 @@ class Breadcrumb extends AbstractHelper
         );
         $breadcrumbs = [];
 
-        /** @var Category $category */
+        /** @var CategoryModel $category */
         try {
             $category = $this->categoryRepository->get($categoryId);
         } catch (\Exception $e) {
@@ -204,10 +204,10 @@ class Breadcrumb extends AbstractHelper
     /**
      * Prepare category data for breadcrumbs
      *
-     * @param Category $category
+     * @param CategoryModel $category
      * @return array
      */
-    protected function prepareCategoryBreadcrumbData(Category $category)
+    protected function prepareCategoryBreadcrumbData(CategoryModel $category)
     {
         return [
             'id' => $category->getId(),
