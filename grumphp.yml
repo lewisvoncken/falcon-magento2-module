@@ -19,3 +19,9 @@ parameters:
             standard: %standards_dir%/MEQP2
             show_warnings: true
             triggered_by: ['php','phtml']
+        phplint: []
+        phan: []
+        phpstan:
+            level: 7
+        phpmd:
+            ruleset: ['cleancode', 'codesize', 'design', 'unusedcode']
