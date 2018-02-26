@@ -88,7 +88,7 @@ class AddressRepository implements AddressRepositoryInterface
     {
         $this->customerContext->checkCustomerContext();
         $addressModel = $this->addressRegistry->retrieve($addressId);
-        if ($addressModel->getCustomerId() !== $this->customerContext->getCurrentCustomerId()) {
+        if ((int)$addressModel->getParentId() !== (int)$this->customerContext->getCurrentCustomerId()) {
             throw new AuthorizationException(__('Customer is not allowed to view this address'));
         }
 
@@ -122,7 +122,7 @@ class AddressRepository implements AddressRepositoryInterface
         }
         $customerId = $this->customerContext->getCurrentCustomerId();
         $addressModel = $this->addressRegistry->retrieve($address->getId());
-        if ($addressModel->getCustomerId() !== $customerId) {
+        if ((int)$addressModel->getCustomerId() !== (int)$customerId) {
             throw new AuthorizationException(__('Customer is not allowed to update this address'));
         }
 
@@ -142,7 +142,7 @@ class AddressRepository implements AddressRepositoryInterface
         $this->customerContext->checkCustomerContext();
         /** @var Address $address */
         $address = $this->addressRegistry->retrieve($addressId);
-        if ($address->getCustomerId() !== $this->customerContext->getCurrentCustomerId()) {
+        if ((int)$address->getCustomerId() !== (int)$this->customerContext->getCurrentCustomerId()) {
             throw new AuthorizationException(__('Customer is not allowed to delete this address'));
         }
 
