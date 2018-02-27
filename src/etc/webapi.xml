@@ -62,7 +62,7 @@
     </route>
 
     <route url="/V1/guest-carts/:cartId/paypal-fetch-token" method="GET">
-        <service class="Deity\MagentoApi\Api\Payment\PaypalInterface" method="getToken"/>
+        <service class="Deity\MagentoApi\Api\Payment\GuestPaypalInterface" method="getToken"/>
         <resources>
             <resource ref="anonymous" />
         </resources>
@@ -80,6 +80,15 @@
         </resources>
     </route>
 
+    <route url="/V1/carts/mine/paypal-fetch-token" method="GET">
+        <service class="Deity\MagentoApi\Api\Payment\PaypalInterface" method="getToken"/>
+        <resources>
+            <resource ref="self" />
+        </resources>
+        <data>
+            <parameter name="cartId" force="true">%cart_id%</parameter>
+        </data>
+    </route>
     <route url="/V1/carts/mine/payment-information" method="POST">
         <service class="\Deity\MagentoApi\Api\Checkout\PaymentInformationManagementInterface" method="savePaymentInformationAndPlaceOrder"/>
         <resources>

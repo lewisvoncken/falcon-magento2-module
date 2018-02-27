@@ -27,6 +27,7 @@
     <preference for="Deity\MagentoApi\Api\InfoInterface" type="Deity\MagentoApi\Model\Info" />
     <preference for="Deity\MagentoApi\Api\MenuRepositoryInterface" type="Deity\MagentoApi\Model\MenuRepository" />
     <preference for="Deity\MagentoApi\Api\Payment\Data\PaypalDataInterface" type="Deity\MagentoApi\Model\Payment\PaypalData" />
+    <preference for="Deity\MagentoApi\Api\Payment\GuestPaypalInterface" type="Deity\MagentoApi\Model\Payment\GuestPaypal" />
     <preference for="Deity\MagentoApi\Api\Payment\PaypalInterface" type="Deity\MagentoApi\Model\Payment\Paypal" />
     <preference for="Deity\MagentoApi\Api\ProductRepositoryInterface" type="Deity\MagentoApi\Model\ProductRepository" />
     <preference for="Deity\MagentoApi\Api\QuoteMaskInterface" type="Deity\MagentoApi\Model\QuoteMask" />
