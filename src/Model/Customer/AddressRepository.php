@@ -88,7 +88,7 @@ class AddressRepository implements AddressRepositoryInterface
     {
         $this->customerContext->checkCustomerContext();
         $addressModel = $this->addressRegistry->retrieve($addressId);
-        if ((int)$addressModel->getParentId() !== (int)$this->customerContext->getCurrentCustomerId()) {
+        if ((int)$addressModel->getCustomerId() !== (int)$this->customerContext->getCurrentCustomerId()) {
             throw new AuthorizationException(__('Customer is not allowed to view this address'));
         }
 
