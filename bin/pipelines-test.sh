@@ -63,11 +63,12 @@ sed -i -e "s/DB_NAME/$M2SETUP_DB_NAME/g" /var/www/html/dev/tests/api-functional/
 # Real path to phpunit executable must be used (not symlink in vendor/bin), otherwise composer autoloader is not found
 #
 cd /var/www/html/dev/tests/integration
-/usr/local/bin/php ../../../vendor/phpunit/phpunit/phpunit --log-junit ./test-reports/integration.xml
+/usr/local/bin/php ../../../vendor/phpunit/phpunit/phpunit --log-junit ${MODULE_DIR}/test-reports/integration.xml
 #
 # Run api functional tests
 #
 # Real path to phpunit executable must be used (not symlink in vendor/bin), otherwise composer autoloader is not found
 #
+curl http://127.0.0.1/rest/V1/info
 cd /var/www/html/dev/tests/api-functional
-/usr/local/bin/php ../../../vendor/phpunit/phpunit/phpunit --log-junit ./test-reports/api-functional.xml
+/usr/local/bin/php ../../../vendor/phpunit/phpunit/phpunit --log-junit ${MODULE_DIR}/test-reports/api-functional.xml
