@@ -8,10 +8,15 @@ export M2SETUP_DB_HOST=127.0.0.1
 export M2SETUP_DB_USER=root
 export M2SETUP_DB_PASSWORD=magento
 export M2SETUP_DB_NAME=magento
-
+#
+# Create temporary branch for installation in Magento
+#
 git checkout -b tmp
 git add -A
 git commit --allow-empty -m "tmp"
+#
+# Install Magento
+#
 curl -L http://pubfiles.nexcess.net/magento/ce-packages/magento2-$M2SETUP_VERSION.tar.gz | tar xzf - -o -C /var/www/html/
 cd /var/www/html
 /usr/local/bin/php ./bin/magento setup:install \
@@ -29,11 +34,17 @@ cd /var/www/html
   --currency=USD \
   --timezone=America/New_York
 /usr/local/bin/php ./bin/magento deploy:mode:set developer
+#
+# Install module from temporary branch
+#
 composer config http-basic.repo.magento.com ${MAGENTO_REPO_PUBLIC_KEY} ${MAGENTO_REPO_PRIVATE_KEY}
 composer config repositories.module vcs ${MODULE_DIR}
 composer require deity-core/deity-magento-api dev-tmp@dev
 /usr/local/bin/php ./bin/magento module:enable Deity_MagentoApi
 /usr/local/bin/php ./bin/magento setup:upgrade
+#
+# Copy test configuration
+#
 cp ${MODULE_DIR}/tests/integration/phpunit.xml.dist /var/www/html/dev/tests/integration/phpunit.xml
 cp ${MODULE_DIR}/tests/integration/install-config-mysql.php /var/www/html/dev/tests/integration/etc/
 cp ${MODULE_DIR}/tests/api-functional/phpunit.xml.dist /var/www/html/dev/tests/api-functional/phpunit.xml
@@ -46,7 +57,17 @@ sed -i -e "s/DB_HOST/$M2SETUP_DB_HOST/g" /var/www/html/dev/tests/api-functional/
 sed -i -e "s/DB_USER/$M2SETUP_DB_USER/g" /var/www/html/dev/tests/api-functional/config/install-config-mysql.php
 sed -i -e "s/DB_PASSWORD/$M2SETUP_DB_PASSWORD/g" /var/www/html/dev/tests/api-functional/config/install-config-mysql.php
 sed -i -e "s/DB_NAME/$M2SETUP_DB_NAME/g" /var/www/html/dev/tests/api-functional/config/install-config-mysql.php
+#
+# Run integration tests
+#
+# Real path to phpunit executable must be used (not symlink in vendor/bin), otherwise composer autoloader is not found
+#
 cd /var/www/html/dev/tests/integration
 /usr/local/bin/php ../../../vendor/phpunit/phpunit/phpunit --log-junit ./test-reports/integration.xml
+#
+# Run api functional tests
+#
+# Real path to phpunit executable must be used (not symlink in vendor/bin), otherwise composer autoloader is not found
+#
 cd /var/www/html/dev/tests/api-functional
 /usr/local/bin/php ../../../vendor/phpunit/phpunit/phpunit --log-junit ./test-reports/api-functional.xml
