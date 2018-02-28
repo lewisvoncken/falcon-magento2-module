@@ -13,6 +13,11 @@
             "Deity\\MagentoCmd\\": "cmd"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "Deity\\MagentoApi\\": ["tests/integration", "tests/api-functional"]
+        }
+    },
     "scripts": {
         "release": "Deity\\MagentoCmd\\Command::run"
     },
