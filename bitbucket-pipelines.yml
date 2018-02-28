@@ -12,7 +12,6 @@ pipelines:
           - ./bin/pipelines-test.sh
         services:
           - db
-          - app
 definitions:
   services:
     db:
@@ -20,7 +19,3 @@ definitions:
       environment:
         MYSQL_DATABASE: magento
         MYSQL_ROOT_PASSWORD: magento
-    app:
-      image: mageinferno/magento2-nginx:1.11-1
-      environment:
-        PHP_HOST: 127.0.0.1

@@ -14,7 +14,7 @@ return [
     'db-password'                  => 'DB_PASSWORD',
     'db-name'                      => 'DB_NAME',
     'backend-frontname'            => 'backend',
-    'base-url'                     => 'http://127.0.0.1/',
+    'base-url'                     => 'http://127.0.0.1:8082/',
     'use-secure'                   => '0',
     'use-rewrites'                 => '0',
     'admin-lastname'               => 'Admin',

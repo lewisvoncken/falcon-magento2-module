@@ -24,7 +24,7 @@ cd /var/www/html
   --db-name=${M2SETUP_DB_NAME} \
   --db-user=${M2SETUP_DB_USER} \
   --db-password=${M2SETUP_DB_PASSWORD} \
-  --base-url=http://127.0.0.1/ \
+  --base-url=http://127.0.0.1:8082/index.php/ \
   --admin-firstname=Admin \
   --admin-lastname=User \
   --admin-email=dummy@example.com \
@@ -58,6 +58,11 @@ sed -i -e "s/DB_USER/$M2SETUP_DB_USER/g" /var/www/html/dev/tests/api-functional/
 sed -i -e "s/DB_PASSWORD/$M2SETUP_DB_PASSWORD/g" /var/www/html/dev/tests/api-functional/config/install-config-mysql.php
 sed -i -e "s/DB_NAME/$M2SETUP_DB_NAME/g" /var/www/html/dev/tests/api-functional/config/install-config-mysql.php
 #
+# Run built in webserver (sufficient for API tests, and nginx service does not work well with Bitbucket Pipelines
+# because it is not possible to share volumes)
+#
+/usr/local/bin/php -S 127.0.0.1:8082 -t /var/www/html/pub/ /var/www/html/phpserver/router.php &
+#
 # Run integration tests
 #
 # Real path to phpunit executable must be used (not symlink in vendor/bin), otherwise composer autoloader is not found
@@ -65,10 +70,14 @@ sed -i -e "s/DB_NAME/$M2SETUP_DB_NAME/g" /var/www/html/dev/tests/api-functional/
 cd /var/www/html/dev/tests/integration
 /usr/local/bin/php ../../../vendor/phpunit/phpunit/phpunit --log-junit ${MODULE_DIR}/test-reports/integration.xml
 #
+# Curl smoke test (check if built in webserver can be reached and REST API call works)
+#
+curl -sSv http://127.0.0.1:8082/index.php/rest/V1/info
+echo
+#
 # Run api functional tests
 #
 # Real path to phpunit executable must be used (not symlink in vendor/bin), otherwise composer autoloader is not found
 #
-curl http://127.0.0.1/rest/V1/info
 cd /var/www/html/dev/tests/api-functional
 /usr/local/bin/php ../../../vendor/phpunit/phpunit/phpunit --log-junit ${MODULE_DIR}/test-reports/api-functional.xml
