@@ -21,4 +21,6 @@ definitions:
         MYSQL_DATABASE: magento
         MYSQL_ROOT_PASSWORD: magento
     app:
-      image: markoshust/magento-nginx:1.13
+      image: mageinferno/magento2-nginx:1.11-1
+      environment:
+        PHP_HOST: 127.0.0.1
