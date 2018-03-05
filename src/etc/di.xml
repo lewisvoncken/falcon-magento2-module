@@ -5,9 +5,6 @@
     <preference for="Deity\MagentoApi\Api\Catalog\AttributeManagementInterface" type="Deity\MagentoApi\Model\Catalog\AttributeManagement" />
     <preference for="Deity\MagentoApi\Api\CategoryBreadcrumbsInterface" type="Deity\MagentoApi\Model\CategoryBreadcrumbs" />
     <preference for="Deity\MagentoApi\Api\CategoryManagementInterface" type="Deity\MagentoApi\Model\CategoryManagement" />
-    <preference for="Deity\MagentoApi\Api\Integration\AdminTokenServiceInterface" type="Deity\MagentoApi\Model\Integration\AdminTokenService" />
-    <preference for="Deity\MagentoApi\Api\Integration\CustomerTokenServiceInterface" type="Deity\MagentoApi\Model\Integration\CustomerTokenService" />
-    <preference for="Deity\MagentoApi\Api\Integration\Data\AdminTokenInterface" type="Deity\MagentoApi\Model\Integration\AdminToken" />
     <preference for="Deity\MagentoApi\Api\Customer\AddressRepositoryInterface" type="Deity\MagentoApi\Model\Customer\AddressRepository" />
     <preference for="Deity\MagentoApi\Api\ContactFormInterface" type="Deity\MagentoApi\Model\ContactForm" />
     <preference for="Deity\MagentoApi\Api\Data\BreadcrumbInterface" type="Deity\MagentoApi\Model\Api\Data\Breadcrumb" />
@@ -25,6 +22,10 @@
     <preference for="Deity\MagentoApi\Api\Sales\OrderManagementInterface" type="Deity\MagentoApi\Model\Sales\OrderManagement" />
     <preference for="Deity\MagentoApi\Api\HomeCategoriesInterface" type="Deity\MagentoApi\Model\CategoryRepository" />
     <preference for="Deity\MagentoApi\Api\InfoInterface" type="Deity\MagentoApi\Model\Info" />
+    <preference for="Deity\MagentoApi\Api\Integration\AdminTokenServiceInterface" type="Deity\MagentoApi\Model\Integration\AdminTokenService" />
+    <preference for="Deity\MagentoApi\Api\Integration\CustomerTokenServiceInterface" type="Deity\MagentoApi\Model\Integration\CustomerTokenService" />
+    <preference for="Deity\MagentoApi\Api\Integration\Data\AdminTokenInterface" type="Deity\MagentoApi\Model\Integration\AdminToken" />
+    <preference for="Deity\MagentoApi\Api\Integration\Data\CustomerTokenInterface" type="Deity\MagentoApi\Model\Integration\CustomerToken" />
     <preference for="Deity\MagentoApi\Api\MenuRepositoryInterface" type="Deity\MagentoApi\Model\MenuRepository" />
     <preference for="Deity\MagentoApi\Api\Payment\Data\PaypalDataInterface" type="Deity\MagentoApi\Model\Payment\PaypalData" />
     <preference for="Deity\MagentoApi\Api\Payment\PaypalInterface" type="Deity\MagentoApi\Model\Payment\Paypal" />

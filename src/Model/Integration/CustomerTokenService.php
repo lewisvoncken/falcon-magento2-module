@@ -1,12 +1,13 @@
 <?php
 namespace Deity\MagentoApi\Model\Integration;
 
-
-
-use Exception;
+use Deity\MagentoApi\Api\Integration\Data\CustomerTokenInterface;
 use Deity\MagentoApi\Api\Integration\CustomerTokenServiceInterface;
+use Deity\MagentoApi\Api\Integration\Data\CustomerTokenInterfaceFactory;
 use Deity\MagentoApi\Model\Cart\MergeManagement;
+use Exception;
 use Magento\Customer\Api\AccountManagementInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\Event\Manager;
 use Magento\Framework\Exception\AuthenticationException;
@@ -26,6 +27,12 @@ use Psr\Log\LoggerInterface;
 
 class CustomerTokenService extends MagentoCustomerTokenService implements CustomerTokenServiceInterface
 {
+    /** @var CustomerTokenInterfaceFactory */
+    private $customerTokenFactory;
+
+    /** @var ScopeConfigInterface */
+    private $scopeConfig;
+
     /** @var MergeManagement */
     private $cartMergeManagement;
 
@@ -50,6 +57,8 @@ class CustomerTokenService extends MagentoCustomerTokenService implements Custom
      * @param AccountManagementInterface $accountManagement
      * @param TokenCollectionFactory $tokenModelCollectionFactory
      * @param CredentialsValidator $validatorHelper
+     * @param CustomerTokenInterfaceFactory $customerTokenFactory
+     * @param ScopeConfigInterface $scopeConfig
      * @param MergeManagement $cartMergeManagement
      * @param RequestThrottler $requestThrottler
      * @param QuoteIdMaskFactory $quoteIdMaskFactory
@@ -62,6 +71,8 @@ class CustomerTokenService extends MagentoCustomerTokenService implements Custom
         AccountManagementInterface $accountManagement,
         TokenCollectionFactory $tokenModelCollectionFactory,
         CredentialsValidator $validatorHelper,
+        CustomerTokenInterfaceFactory $customerTokenFactory,
+        ScopeConfigInterface $scopeConfig,
         MergeManagement $cartMergeManagement,
         RequestThrottler $requestThrottler,
         QuoteIdMaskFactory $quoteIdMaskFactory,
@@ -70,6 +81,8 @@ class CustomerTokenService extends MagentoCustomerTokenService implements Custom
         LoggerInterface $logger
     ) {
         parent::__construct($tokenModelFactory, $accountManagement, $tokenModelCollectionFactory, $validatorHelper);
+        $this->customerTokenFactory = $customerTokenFactory;
+        $this->scopeConfig = $scopeConfig;
         $this->cartMergeManagement = $cartMergeManagement;
         $this->requestThrottler = $requestThrottler;
         $this->quoteIdMaskFactory = $quoteIdMaskFactory;
@@ -82,7 +95,7 @@ class CustomerTokenService extends MagentoCustomerTokenService implements Custom
      * @param string $username
      * @param string $password
      * @param string $guestQuoteId
-     * @return string
+     * @return CustomerTokenInterface
      * @throws AuthenticationException
      * @throws LocalizedException
      */
@@ -102,6 +115,11 @@ class CustomerTokenService extends MagentoCustomerTokenService implements Custom
             throw new AuthenticationException(__('You did not sign in correctly or your account is not active.'), $e);
         }
 
+        /** @var CustomerTokenInterface $customerToken */
+        $customerToken = $this->customerTokenFactory->create();
+        $customerToken->setToken($token);
+        $customerToken->setValidTime((int)$this->scopeConfig->getValue('oauth/access_token_lifetime/customer'));
+
         try {
             if ($this->shouldMergeCart($guestQuoteId)) {
                 $this->cartMergeManagement->mergeGuestAndCustomerQuotes($guestQuoteId, $username);
@@ -110,7 +128,7 @@ class CustomerTokenService extends MagentoCustomerTokenService implements Custom
             $this->logger->critical($e);
         }
 
-        return $token;
+        return $customerToken;
     }
 
     /**
