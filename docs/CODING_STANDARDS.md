@@ -9,6 +9,7 @@ List of `PSR` rules used during the module development:
 - PSR-3: http://www.php-fig.org/psr/psr-3/ for logging use `\Psr\LoggerInterface` as it is dependency of magento platform; 
 for more information regarding creating custom log file see `LOGGING.md`
 - PSR-4: http://www.php-fig.org/psr/psr-4/ avoid adding PSR-0 written libraries
+- On top of that, the Magento coding standards (current version from https://github.com/magento/marketplace-eqp/tree/master/MEQP2) apply
 
 ## SPECIFIC RULES REGARDING MAGENTO RELATED CODE
 
@@ -30,8 +31,6 @@ In other words major of the module defines compatibility with the minor release 
 ### Scope of methods and properties
 
 - Use `public` only on methods and properties that are meant to be accessed from client side
-- Avoid defining public properties, create setter/getter class for them 
-- Avoid using `private` methods and properties, if there is no reason for it
 - `protected` methods and properties are regarded as internal to the code and are not part of backward compatibility check (this include not only function definition but existence of such function itself)
 
 ### Plugins
