@@ -122,6 +122,13 @@
         </resources>
     </route>
 
+    <route url="/V1/orders/get-order-from-paypal-hash/:paypalHash" method="GET">
+        <service class="\Deity\MagentoApi\Api\Sales\OrderManagementInterface" method="getOrderIdFromHash"/>
+        <resources>
+            <resource ref="anonymous" />
+        </resources>
+    </route>
+
     <route url="/V1/orders/mine" method="GET">
         <service class="\Deity\MagentoApi\Api\Sales\OrderManagementInterface" method="getCustomerOrders"/>
         <resources>
