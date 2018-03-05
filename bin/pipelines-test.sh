@@ -81,3 +81,7 @@ echo
 #
 cd /var/www/html/dev/tests/api-functional
 /usr/local/bin/php ../../../vendor/phpunit/phpunit/phpunit --log-junit ${MODULE_DIR}/test-reports/api-functional.xml
+#
+# Production mode: test if compilation runs without errors
+cd /var/www/html
+/usr/local/bin/php ./bin/magento deploy:mode:set production
