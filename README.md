@@ -119,3 +119,26 @@ Custom changes:
 Custom commands:
 
 - `rapidflow:attribute:options [-s|--shop="..."] [--attribute_codes="..."]` - Generate import file for option label translation
+
+
+# Development
+
+## GrumPHP
+
+If you develop the module within `vendor` of a Magento installation, follow these steps to use the code analysis tools:
+
+- Run `composer install` inside the repository directory
+- If you encounter an error like
+    ```
+    PHP Fatal error:  Uncaught Error: Call to undefined method Symfony\Component\Yaml\Parser::parseFile() in /home/fs/Projekte/deity/deity-sandbox/magento/vendor/symfony/dependency-injection/Loader/YamlFileLoader.php:667
+    ```
+    it is because of version conflicts of Symfony components between tools and the Magento installation. To prevent loading dependencies from the Magento installation, edit `vendor/bin/grumphp` and remove these lines:
+    ```
+        __DIR__ . '/../vendor/autoload.php',
+        __DIR__ . '/../../../autoload.php',
+    ```
+    Then run `vendor/bin/grumphp git:init`
+- You should see a message like:
+    ```
+    Watch out! GrumPHP is sniffing your commits!
+    ```
