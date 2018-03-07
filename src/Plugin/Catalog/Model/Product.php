@@ -13,14 +13,20 @@ use Magento\Framework\Exception\LocalizedException;
  */
 class Product
 {
-    /** @var DeityProductHelper */
-    protected $productHelper;
+    /**
+     * @var DeityProductHelper
+     */
+    private $productHelper;
 
-    /** @var Breadcrumb */
-    protected $breadcrumbHelper;
+    /**
+     * @var Breadcrumb
+     */
+    private $breadcrumbHelper;
 
-    /** @var ScopeConfigInterface */
-    protected $scopeConfig;
+    /**
+     * @var ScopeConfigInterface
+     */
+    private $scopeConfig;
 
     /**
      * @param DeityProductHelper $productHelper
