@@ -46,7 +46,6 @@ class Product
      */
     public function afterLoad(MagentoProduct $product)
     {
-        $this->productHelper->ensurePriceForConfigurableProduct($product);
         $this->productHelper->ensureOptionsForConfigurableProduct($product);
 
         $this->productHelper->addProductImageAttribute($product);
@@ -54,7 +53,15 @@ class Product
         $this->productHelper->addMediaGallerySizes($product);
         $this->breadcrumbHelper->addProductBreadcrumbsData($product, $this->productHelper->getFilterableAttributes());
 
-        $this->productHelper->calculateCatalogDisplayPrice($product);
+        if($product->getTypeId() !== 'configurable') {
+            /** configurable product price is set to 0
+             * and ensurePriceForConfigurableProduct may already set price with tax depending on settings
+             * which makes display price calculation impossible
+             **/
+            $this->productHelper->calculateCatalogDisplayPrice($product);
+        } else {
+            $this->productHelper->ensurePriceForConfigurableProduct($product);
+        }
 
         return $product;
     }
