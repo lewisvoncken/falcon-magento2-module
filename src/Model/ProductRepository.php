@@ -212,18 +212,18 @@ class ProductRepository extends \Magento\Catalog\Model\ProductRepository impleme
             $categoryLevelSelect = $this->connection
                 ->select()
                 ->from(['category' => $this->connection->getTableName('catalog_category_entity')], ['entity_id', 'level'])
-                ->where('entity_id in (?)', $categoryIDs)
-                ->order('level ASC');
+                ->where('category.entity_id in (?)', $categoryIDs)
+                ->order('category.level ASC');
 
             $categoryPositionSelect = $this->connection
                 ->select()
                 ->from(['cp' => $this->connection->getTableName('catalog_category_product')], ['category_id', 'product_id', 'position'])
                 ->join($categoryLevelSelect, 'cp.category_id = t.entity_id')
-                ->group('product_id');
+                ->group('cp.product_id');
 
             $collection->getSelect()
                 ->join($categoryPositionSelect, 'product_id = e.entity_id', 'position')
-                ->order('position ' . SortOrder::SORT_ASC);
+                ->order('t.position ' . SortOrder::SORT_ASC);
         }
     }
 
