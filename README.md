@@ -123,6 +123,14 @@ Custom commands:
 
 # Development
 
+##Branches
+
+We have currently 2 main branches of development:
+
+- release-1.0.1.x - this branch contains changes that are in sync with deity-core 1.2.x releases
+- master - main branch with changes ready for deity-core releases 1.3 and 2.0 (graph support).
+
+
 ## GrumPHP
 
 If you develop the module within `vendor` of a Magento installation, follow these steps to use the code analysis tools:
