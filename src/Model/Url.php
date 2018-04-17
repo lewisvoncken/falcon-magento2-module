@@ -25,7 +25,9 @@ use Magento\UrlRewrite\Model\UrlFinderInterface;
 class Url implements UrlInterface
 {
     protected $pageRepository;
+
     protected $dataFactory;
+
     protected $urlFinder;
 
     /** @var \Magento\Catalog\Api\ProductRepositoryInterface */
@@ -81,54 +83,80 @@ class Url implements UrlInterface
     }
 
     /**
-     * @inheritdoc
+     * @param string $requestPath
+     * @param bool $loadEntityData
+     * @param bool $secondCheck
+     * @return \Deity\MagentoApi\Api\Data\UrlDataInterface|UrlData
+     * @throws NoSuchEntityException
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function getUrl($requestPath, $secondCheck = false)
+    public function getUrl($requestPath, $loadEntityData = true, $secondCheck = false)
     {
-        $urlModel = $this->urlFinder->findOneByData(array('request_path' => $requestPath));
+        $urlModel = $this->getUrlModel($requestPath);
 
-        if ($urlModel) {
-            $urlData = $this->urlDataFactory->create();
-            $urlData->setEntityType($urlModel->getEntityType());
+        $urlData = $this->urlDataFactory->create();
+        $urlData->setEntityType($urlModel->getEntityType());
+        $urlData->setEntityId($urlModel->getEntityId());
 
-            switch ($urlModel->getEntityType()) {
-                case 'product':
-                    /** @var Product|ProductInterface $entity */
-                    $entity = $this->productRepository->getById($urlModel->getEntityId(), false, $this->getCurrentStoreId());
-                    $this->deityHelper->addResponseTagsByObject($entity);
-                    $urlData->setProduct($entity);
-                    break;
-
-                case 'category':
-                    /** @var \Magento\Catalog\Model\Category|CategoryInterface $entity */
-                    $entity = $this->categoryRepository->get($urlModel->getEntityId(), $this->getCurrentStoreId());
-                    $this->deityHelper->addResponseTagsByObject($entity);
-                    $urlData->setCategory($entity);
-                    break;
-
-                case 'cms-page':
-                    /** @var Page|PageInterface $entity */
-                    $entity = $this->pageRepository->getById($urlModel->getEntityId());
-                    $this->deityHelper->addResponseTagsByObject($entity);
-                    $urlData->setCmsPage($entity);
-                    break;
-
-                case 'custom':
-                    // Preventing multiple checks
-                    if(!$secondCheck) {
-                        return $this->getUrl($urlModel->getTargetPath(), true);
-                    }
-                    break;
-            }
-
-            if (isset($entity)) {
-                $this->validateEntityAvailableInStore($entity, $urlData->getEntityType());
-            }
-
+        if (!$loadEntityData) {
             return $urlData;
         }
 
-        throw new NoSuchEntityException(__('Requested entity doesn\'t exist'));
+        switch ($urlModel->getEntityType()) {
+            case 'product':
+                /** @var Product|ProductInterface $entity */
+                $entity = $this->productRepository->getById($urlModel->getEntityId(), false, $this->getCurrentStoreId());
+                $this->deityHelper->addResponseTagsByObject($entity);
+                $urlData->setProduct($entity);
+                break;
+
+            case 'category':
+                /** @var \Magento\Catalog\Model\Category|CategoryInterface $entity */
+                $entity = $this->categoryRepository->get($urlModel->getEntityId(), $this->getCurrentStoreId());
+                $this->deityHelper->addResponseTagsByObject($entity);
+                $urlData->setCategory($entity);
+                break;
+
+            case 'cms-page':
+                /** @var Page|PageInterface $entity */
+                $entity = $this->pageRepository->getById($urlModel->getEntityId());
+                $this->deityHelper->addResponseTagsByObject($entity);
+                $urlData->setCmsPage($entity);
+                break;
+
+            case 'custom':
+                // Preventing multiple checks
+                if (!$secondCheck) {
+                    return $this->getUrl($urlModel->getTargetPath(), true);
+                }
+                break;
+        }
+
+        if (isset($entity)) {
+            $this->validateEntityAvailableInStore($entity, $urlData->getEntityType());
+        }
+
+        return $urlData;
+    }
+
+    /**
+     * @param $path
+     * @return \Magento\UrlRewrite\Service\V1\Data\UrlRewrite|null
+     * @throws NoSuchEntityException
+     */
+    private function getUrlModel($path)
+    {
+        $urlModel = $this->urlFinder->findOneByData(['request_path' => $path]);
+
+        if (!$urlModel) {
+            $urlModel = $this->urlFinder->findOneByData(['target_path' => $path]);
+        }
+
+        if (!$urlModel) {
+            throw new NoSuchEntityException(__('Requested entity doesn\'t exist'));
+        }
+
+        return $urlModel;
     }
 
     /**
@@ -136,7 +164,7 @@ class Url implements UrlInterface
      *
      * @return int
      */
-    protected function getCurrentStoreId()
+    private function getCurrentStoreId()
     {
         return $this->storeManager->getStore()->getId();
     }
@@ -148,7 +176,7 @@ class Url implements UrlInterface
      * @param string $entityType
      * @throws NoSuchEntityException
      */
-    protected function validateEntityAvailableInStore($entity, $entityType)
+    private function validateEntityAvailableInStore($entity, $entityType)
     {
         switch ($entityType) {
             case 'product':

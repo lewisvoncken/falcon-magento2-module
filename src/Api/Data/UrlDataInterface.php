@@ -5,6 +5,7 @@ namespace Deity\MagentoApi\Api\Data;
 interface UrlDataInterface
 {
     const ENTITY_TYPE = 'entity_type';
+    const ENTITY_ID   = 'entity_id';
     const CMS_PAGE    = 'cms_page';
     const PRODUCT     = 'product';
     const CATEGORY    = 'category';
@@ -15,10 +16,21 @@ interface UrlDataInterface
     public function getEntityType();
 
     /**
-     * @param string $entity
-     * @return $this
+     * @param string $entityType
+     * @return \Deity\MagentoApi\Api\Data\UrlDataInterface
      */
     public function setEntityType($entityType);
+
+    /**
+     * @return int
+     */
+    public function getEntityId();
+
+    /**
+     * @param int $id
+     * @return \Deity\MagentoApi\Api\Data\UrlDataInterface
+     */
+    public function setEntityId($id);
 
     /**
      * @return \Magento\Cms\Api\Data\PageInterface
