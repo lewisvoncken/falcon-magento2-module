@@ -20,6 +20,8 @@ use Magento\Sales\Api\Data\OrderPaymentInterface;
 use Magento\Sales\Api\Data\OrderSearchResultInterface;
 use Magento\Sales\Api\Data\OrderSearchResultInterfaceFactory as SearchResultFactory;
 use Magento\Sales\Api\OrderRepositoryInterface;
+use Magento\Sales\Model\ResourceModel\Order\Payment\Collection as OrderPaymentCollection;
+use Magento\Sales\Model\ResourceModel\Order\Payment\CollectionFactory as OrderPaymentCollectionFactory;
 
 class OrderManagement implements OrderManagementInterface
 {
@@ -45,6 +47,9 @@ class OrderManagement implements OrderManagementInterface
     /** @var Manager */
     private $eventManager;
 
+    /** @var OrderPaymentCollectionFactory */
+    private $orderPaymentCollectionFactory;
+
     /**
      * OrderManagement constructor.
      * @param OrderRepositoryInterface $orderRepository
@@ -54,6 +59,7 @@ class OrderManagement implements OrderManagementInterface
      * @param OrderItemExtension $orderItemExtension
      * @param OrderPaymentExtension $orderPaymentExtension
      * @param Manager $eventManager
+     * @param OrderPaymentCollectionFactory $orderPaymentCollectionFactory
      */
     public function __construct(
         OrderRepositoryInterface $orderRepository,
@@ -62,7 +68,8 @@ class OrderManagement implements OrderManagementInterface
         OrderExtension $orderExtension,
         OrderItemExtension $orderItemExtension,
         OrderPaymentExtension $orderPaymentExtension,
-        Manager $eventManager
+        Manager $eventManager,
+        OrderPaymentCollectionFactory $orderPaymentCollectionFactory
     ) {
         $this->orderRepository = $orderRepository;
         $this->userContext = $userContext;
@@ -71,6 +78,7 @@ class OrderManagement implements OrderManagementInterface
         $this->orderExtension = $orderExtension;
         $this->orderPaymentExtension = $orderPaymentExtension;
         $this->eventManager = $eventManager;
+        $this->orderPaymentCollectionFactory = $orderPaymentCollectionFactory;
     }
 
     /**
@@ -135,6 +143,27 @@ class OrderManagement implements OrderManagementInterface
             $this->addOrderExtensionAttributes($order);
         }
         return $searchResult;
+    }
+
+    /**
+     * Get order id from hash generated when asking for paypal express checkout token
+     *
+     * @param string $paypalHash
+     * @return int
+     */
+    public function getOrderIdFromHash($paypalHash)
+    {
+        /** @var OrderPaymentCollection $collection */
+        $collection = $this->orderPaymentCollectionFactory->create();
+
+        $collection->addFieldToFilter(
+            'additional_information',
+            ['like' => "%\"paypalExpressHash\":\"{$paypalHash}\"%"]
+        );
+        /** @var OrderPaymentInterface $orderPayment */
+        $orderPayment = $collection->getFirstItem();
+
+        return (int)$orderPayment->getParentId();
     }
 
     /**

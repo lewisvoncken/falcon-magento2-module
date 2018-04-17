@@ -2,6 +2,7 @@
 
 namespace Deity\MagentoApi\Model;
 
+use Deity\MagentoApi\Api\Data\OrderInfoInterface;
 use Deity\MagentoApi\Api\QuoteMaskInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\ObjectManagerInterface;
@@ -85,7 +86,7 @@ class QuoteMask implements QuoteMaskInterface
         }
 
         /** @var OrderInfo $result */
-        $result = $this->objectManager->create('\Deity\MagentoApi\Api\Data\OrderInfoInterface');
+        $result = $this->objectManager->create(OrderInfoInterface::class);
         $result->setOrderId($order->getRealOrderId());
         $result->setRevenue($order->getGrandTotal());
         $result->setShipping($order->getShippingInclTax());

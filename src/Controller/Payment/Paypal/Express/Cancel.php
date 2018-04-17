@@ -1,12 +1,26 @@
 <?php
 namespace Deity\MagentoApi\Controller\Payment\Paypal\Express;
 
-use Psr\Log\LoggerInterface;
-use Magento\Paypal\Controller\Express\Cancel as CancelAction;
-use Magento\Quote\Model\QuoteIdMaskFactory;
-use Magento\Quote\Api\CartRepositoryInterface;
+use Deity\MagentoApi\Helper\Data;
+use Magento\Checkout\Model\Session as CheckoutSession;
+use Magento\Customer\Model\Session as CustomerSession;
+use Magento\Customer\Model\Url;
+use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Session\Generic;
+use Magento\Framework\Url\Helper\Data as UrlHelper;
+use Magento\Framework\UrlInterface;
+use Magento\Paypal\Controller\Express\Cancel as CancelAction;
+use Magento\Quote\Api\CartRepositoryInterface;
+use Magento\Quote\Api\Data\CartInterface;
+use Magento\Quote\Model\Quote;
+use Magento\Quote\Model\QuoteIdMaskFactory;
+use Magento\Sales\Model\OrderFactory;
+use Magento\Paypal\Model\Express\Checkout\Factory;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class Cancel
@@ -17,27 +31,37 @@ class Cancel extends CancelAction
     /**
      * @var QuoteIdMaskFactory
      */
-    protected $quoteMaskFactory;
+    private $quoteMaskFactory;
 
     /**
      * @var CartRepositoryInterface
      */
-    protected $cartRepository;
+    private $cartRepository;
 
     /**
      * @var ScopeConfigInterface
      */
-    protected $scopeConfig;
+    private $scopeConfig;
 
     /**
      * @var \Magento\Quote\Model\Quote
      */
-    protected $quote;
+    private $quote;
 
     /**
      * @var LoggerInterface
      */
-    protected $logger;
+    private $logger;
+
+    /**
+     * @var Data
+     */
+    private $deityHelper;
+
+    /**
+     * @var UrlInterface
+     */
+    private $urlBuilder;
 
     /**
      * Cancel constructor.
@@ -53,20 +77,24 @@ class Cancel extends CancelAction
      * @param CartRepositoryInterface $cartRepository
      * @param ScopeConfigInterface $scopeConfig
      * @param LoggerInterface $logger
+     * @param Data $deityHelper
+     * @param UrlInterface $urlBuilder
      */
     public function __construct(
-        \Magento\Framework\App\Action\Context $context,
-        \Magento\Customer\Model\Session $customerSession,
-        \Magento\Checkout\Model\Session $checkoutSession,
-        \Magento\Sales\Model\OrderFactory $orderFactory,
-        \Magento\Paypal\Model\Express\Checkout\Factory $checkoutFactory,
-        \Magento\Framework\Session\Generic $paypalSession,
-        \Magento\Framework\Url\Helper\Data $urlHelper,
-        \Magento\Customer\Model\Url $customerUrl,
+        Context $context,
+        CustomerSession $customerSession,
+        CheckoutSession $checkoutSession,
+        OrderFactory $orderFactory,
+        Factory $checkoutFactory,
+        Generic $paypalSession,
+        UrlHelper $urlHelper,
+        Url $customerUrl,
         QuoteIdMaskFactory $quoteMaskFactory,
         CartRepositoryInterface $cartRepository,
         ScopeConfigInterface $scopeConfig,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        Data $deityHelper,
+        UrlInterface $urlBuilder
     ) {
         parent::__construct(
             $context,
@@ -82,11 +110,13 @@ class Cancel extends CancelAction
         $this->cartRepository = $cartRepository;
         $this->scopeConfig = $scopeConfig;
         $this->logger = $logger;
+        $this->deityHelper = $deityHelper;
+        $this->urlBuilder = $urlBuilder;
     }
 
     /**
      * Quote
-     * @return \Magento\Quote\Model\Quote
+     * @return CartInterface|Quote
      */
     protected function _getQuote()
     {
@@ -94,10 +124,10 @@ class Cancel extends CancelAction
     }
 
     /**
-     * @param \Magento\Quote\Model\Quote $quote
+     * @param CartInterface|Quote $quote
      * @return Cancel
      */
-    public function setQuote(\Magento\Quote\Model\Quote $quote)
+    public function setQuote(CartInterface $quote)
     {
         $this->quote = $quote;
 
@@ -108,13 +138,19 @@ class Cancel extends CancelAction
     /**
      * Initialize Quote based on masked Id
      * @param $cartId
-     * @return \Magento\Quote\Model\Quote
+     * @return CartInterface|Quote
+     * @throws NoSuchEntityException
      */
     protected function initQuote($cartId)
     {
-        // Unmask quote:
-        $quoteMask = $this->quoteMaskFactory->create()->load($cartId, 'masked_id');
-        $this->setQuote($this->cartRepository->getActive($quoteMask->getQuoteId()));
+        if (!ctype_digit($cartId)) {
+            $quoteMask = $this->quoteMaskFactory->create()->load($cartId, 'masked_id');
+            $quoteId = $quoteMask->getQuoteId();
+        } else {
+            $quoteId = $cartId;
+        }
+
+        $this->setQuote($this->cartRepository->getActive($quoteId));
 
         return $this->_getQuote();
     }
@@ -143,7 +179,7 @@ class Cancel extends CancelAction
                 ScopeConfigInterface::SCOPE_TYPE_DEFAULT
             );
 
-        } catch (\Magento\Framework\Exception\LocalizedException $e) {
+        } catch (LocalizedException $e) {
             $this->logger->critical('PayPal Cancel Action: ' . $e->getMessage());
             $redirectUrl = $redirectUrlFailure;
         } catch (\Exception $e) {
@@ -153,11 +189,12 @@ class Cancel extends CancelAction
 
         /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
+        $redirectUrl = $this->deityHelper->prepareFrontendUrl($this->urlBuilder->getUrl($redirectUrl));
 
         if (strpos($redirectUrl, 'http') !== false) {
             return $resultRedirect->setUrl($redirectUrl);
         } else {
-            return $resultRedirect->setPath($redirectUrl);
+            return $resultRedirect->setUrl($redirectUrl);
         }
     }
 }

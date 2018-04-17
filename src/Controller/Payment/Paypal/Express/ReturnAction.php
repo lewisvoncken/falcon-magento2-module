@@ -29,26 +29,40 @@ use Magento\Framework\Url as UrlBuilder;
  */
 class ReturnAction extends \Magento\Paypal\Controller\Express\ReturnAction
 {
-    /** @var QuoteIdMaskFactory */
-    protected $quoteMaskFactory;
+    /**
+     * @var QuoteIdMaskFactory
+     */
+    private $quoteMaskFactory;
 
-    /** @var CartRepositoryInterface */
-    protected $cartRepository;
+    /**
+     * @var CartRepositoryInterface
+     */
+    private $cartRepository;
 
-    /** @var ScopeConfigInterface */
-    protected $scopeConfig;
+    /**
+     * @var ScopeConfigInterface
+     */
+    private $scopeConfig;
 
-    /** @var LoggerInterface */
-    protected $logger;
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
 
-    /** @var \Magento\Framework\Url */
-    protected $urlBuilder;
+    /**
+     * @var \Magento\Framework\Url
+     */
+    private $urlBuilder;
 
-    /** @var StoreManager */
-    protected $storeManager;
+    /**
+     * @var StoreManager
+     */
+    private $storeManager;
 
-    /** @var Data */
-    protected $deityHelper;
+    /**
+     * @var Data
+     */
+    private $deityHelper;
 
     /**
      * ReturnAction constructor.
@@ -132,11 +146,14 @@ class ReturnAction extends \Magento\Paypal\Controller\Express\ReturnAction
      */
     protected function initQuote($cartId)
     {
-        // Unmask quote:
-        $quoteMask = $this->quoteMaskFactory->create()->load($cartId, 'masked_id');
-        $stores = $this->storeManager->getStores();
-        $quote = $this->cartRepository->getActive($quoteMask->getQuoteId(), array_keys($stores));
-        $this->setQuote($quote);
+        if (!ctype_digit($cartId)) {
+            $quoteMask = $this->quoteMaskFactory->create()->load($cartId, 'masked_id');
+            $quoteId = $quoteMask->getQuoteId();
+        } else {
+            $quoteId = $cartId;
+        }
+
+        $this->setQuote($this->cartRepository->getActive($quoteId));
 
         return $this->_quote;
     }
@@ -157,7 +174,6 @@ class ReturnAction extends \Magento\Paypal\Controller\Express\ReturnAction
             'deity_payment/paypal/redirect_failure',
             ScopeConfigInterface::SCOPE_TYPE_DEFAULT
         );
-        $redirectUrl = false;
         $message = __('');
         $orderId = '';
 

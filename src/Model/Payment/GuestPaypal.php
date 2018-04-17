@@ -2,7 +2,7 @@
 namespace Deity\MagentoApi\Model\Payment;
 
 use Deity\MagentoApi\Api\Payment\Data\PaypalDataInterface;
-use Deity\MagentoApi\Api\Payment\PaypalInterface;
+use Deity\MagentoApi\Api\Payment\GuestPaypalInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\UrlInterface;
 use Deity\MagentoApi\Model\Payment\PaypalDataFactory;
@@ -22,7 +22,7 @@ use Magento\Paypal\Model\Express\Checkout;
  * Class Payment
  * @package Deity\MagentoApi\Model\Payment
  */
-class Paypal implements PaypalInterface
+class GuestPaypal implements GuestPaypalInterface
 {
     /**
      * Config mode type
@@ -143,7 +143,7 @@ class Paypal implements PaypalInterface
 
     /**
      * @param CartInterface|Quote $quote
-     * @return PaypalInterface
+     * @return GuestPaypalInterface
      */
     public function setQuote(CartInterface $quote)
     {
@@ -231,7 +231,9 @@ class Paypal implements PaypalInterface
      */
     protected function initQuote($cartId)
     {
-        $this->setQuote($this->cartRepository->getActive($cartId));
+        // Unmask quote:
+        $quoteMask = $this->quoteMaskFactory->create()->load($cartId, 'masked_id');
+        $this->setQuote($this->cartRepository->getActive($quoteMask->getQuoteId()));
 
         return $this->getQuote();
     }
