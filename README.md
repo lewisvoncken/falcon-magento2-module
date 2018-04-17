@@ -127,8 +127,10 @@ Custom commands:
 
 We have currently 2 main branches of development:
 
-- release-1.0.1.x - this branch contains changes that are in sync with deity-core 1.2.x releases
+- release-1.0.1.x - this branch contains changes that are in sync with deity-core 1.2.x releases.
 - master - main branch with changes ready for deity-core releases 1.3 and 2.0 (graph support).
+
+In order to make Deity PWA frontend to work you need to install either latest version in 1.0.1.x line for deity-core 1.2.x or master (1.0.x) for deity-core devel branch.
 
 
 ## GrumPHP
