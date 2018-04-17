@@ -18,6 +18,7 @@ use Magento\Catalog\Model\ResourceModel\Product as ResourceProduct;
 use Magento\Catalog\Model\ResourceModel\Category as ResourceCategory;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory as ProductCollectionFactory;
 use Magento\Catalog\Model\ResourceModel\Product\Collection as ProductCollection;
+use Magento\CatalogInventory\Helper\Stock as StockHelper;
 use Magento\Framework\Api\Data\ImageContentInterfaceFactory;
 use Magento\Framework\Api\ImageContentValidatorInterface;
 use Magento\Framework\Api\ImageProcessorInterface;
@@ -35,26 +36,45 @@ use Magento\Store\Model\StoreManagerInterface;
 
 class ProductRepository extends \Magento\Catalog\Model\ProductRepository implements ProductRepositoryInterface
 {
-    /** @var CategoryFactory */
-    protected $categoryFactory;
+    /**
+     * @var CategoryFactory
+     */
+    private $categoryFactory;
 
-    /** @var ResourceCategory */
-    protected $categoryResource;
+    /**
+     * @var ResourceCategory
+     */
+    private $categoryResource;
 
-    /** @var ResourceConnection */
-    protected $resource;
+    /**
+     * @var ResourceConnection
+     */
+    private $resource;
 
-    /** @var AdapterInterface */
-    protected $connection;
+    /**
+     * @var AdapterInterface
+     */
+    private $connection;
 
-    /** @var Filter */
-    protected $filter;
+    /**
+     * @var Filter
+     */
+    private $filter;
 
-    /** @var ProductList */
-    protected $productListHelper;
+    /**
+     * @var ProductList
+     */
+    private $productListHelper;
 
-    /** @var string[] List of filters that are not regular attributes */
-    protected $specialFilters = ['in_category'];
+    /**
+     * @var StockHelper
+     */
+    private $stockHelper;
+
+    /**
+     * @var string[] List of filters that are not regular attributes
+     */
+    private $specialFilters = ['in_category', 'in_stock'];
 
     /**
      * ProductRepository constructor.
@@ -83,6 +103,7 @@ class ProductRepository extends \Magento\Catalog\Model\ProductRepository impleme
      * @param ResourceConnection $resource
      * @param Filter $filter
      * @param ProductList $productListHelper
+     * @param StockHelper $stockHelper
      */
     public function __construct(
         ProductFactory $productFactory,
@@ -109,15 +130,38 @@ class ProductRepository extends \Magento\Catalog\Model\ProductRepository impleme
         ResourceCategory $categoryResource,
         ResourceConnection $resource,
         Filter $filter,
-        ProductList $productListHelper
+        ProductList $productListHelper,
+        StockHelper $stockHelper
     ) {
-        parent::__construct($productFactory, $initializationHelper, $searchResultsFactory, $collectionFactory, $searchCriteriaBuilder, $attributeRepository, $resourceModel, $linkInitializer, $linkTypeProvider, $storeManager, $filterBuilder, $metadataServiceInterface, $extensibleDataObjectConverter, $optionConverter, $fileSystem, $contentValidator, $contentFactory, $mimeTypeExtensionMap, $imageProcessor, $extensionAttributesJoinProcessor);
+        parent::__construct(
+            $productFactory,
+            $initializationHelper,
+            $searchResultsFactory,
+            $collectionFactory,
+            $searchCriteriaBuilder,
+            $attributeRepository,
+            $resourceModel,
+            $linkInitializer,
+            $linkTypeProvider,
+            $storeManager,
+            $filterBuilder,
+            $metadataServiceInterface,
+            $extensibleDataObjectConverter,
+            $optionConverter,
+            $fileSystem,
+            $contentValidator,
+            $contentFactory,
+            $mimeTypeExtensionMap,
+            $imageProcessor,
+            $extensionAttributesJoinProcessor
+        );
         $this->categoryFactory = $categoryFactory;
         $this->categoryResource = $categoryResource;
         $this->resource = $resource;
         $this->connection = $this->resource->getConnection();
         $this->filter = $filter;
         $this->productListHelper = $productListHelper;
+        $this->stockHelper = $stockHelper;
     }
 
     /**
@@ -329,6 +373,10 @@ class ProductRepository extends \Magento\Catalog\Model\ProductRepository impleme
                 $categoryFilter[$conditionType][] = $filter->getValue();
                 continue;
             }
+            if ($filter->getField() === 'in_stock' && (int)$filter->getValue() === 1) {
+                $this->stockHelper->addInStockFilterToCollection($collection);
+            }
+
             if (!in_array($filter->getField(), $this->specialFilters)) {
                 $fields[] = ['attribute' => $filter->getField(), $conditionType => $filter->getValue()];
             }
