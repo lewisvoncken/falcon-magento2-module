@@ -5,7 +5,6 @@ namespace Deity\MagentoApi\Model;
 use Deity\MagentoApi\Api\UrlInterface;
 use Deity\MagentoApi\Helper\Data as DeityHelper;
 use Deity\MagentoApi\Helper\Product as DeityProductHelper;
-use Deity\MagentoApi\Model\UrlDataFactory;
 use Magento\Catalog\Api\Data\CategoryInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Product;
@@ -24,29 +23,50 @@ use Magento\UrlRewrite\Model\UrlFinderInterface;
  */
 class Url implements UrlInterface
 {
-    protected $pageRepository;
+    /**
+     * @var PageRepositoryInterface
+     */
+    private $pageRepository;
 
-    protected $dataFactory;
+    /**
+     * @var DataObjectHelper
+     */
+    private $dataFactory;
 
-    protected $urlFinder;
+    /**
+     * @var UrlFinderInterface
+     */
+    private $urlFinder;
 
-    /** @var \Magento\Catalog\Api\ProductRepositoryInterface */
-    protected $productRepository;
+    /**
+     * @var \Magento\Catalog\Api\ProductRepositoryInterface
+     */
+    private $productRepository;
 
-    /** @var \Magento\Catalog\Api\CategoryRepository */
-    protected $categoryRepository;
+    /**
+     * @var \Magento\Catalog\Api\CategoryRepositoryInterface
+     */
+    private $categoryRepository;
 
-    /** @var \Deity\MagentoApi\Model\UrlDataFactory */
-    protected $urlDataFactory;
+    /**
+     * @var \Deity\MagentoApi\Model\UrlDataFactory
+     */
+    private $urlDataFactory;
 
-    /** @var DeityHelper */
-    protected $deityHelper;
+    /**
+     * @var DeityHelper
+     */
+    private $deityHelper;
 
-    /** @var DeityProductHelper */
-    protected $deityProductHelper;
+    /**
+     * @var DeityProductHelper
+     */
+    private $deityProductHelper;
 
-    /** @var StoreManagerInterface */
-    protected $storeManager;
+    /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
 
     /**
      * Url constructor.
