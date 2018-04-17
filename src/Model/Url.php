@@ -2,6 +2,7 @@
 
 namespace Deity\MagentoApi\Model;
 
+use Deity\MagentoApi\Api\Data\UrlDataInterface;
 use Deity\MagentoApi\Api\UrlInterface;
 use Deity\MagentoApi\Helper\Data as DeityHelper;
 use Deity\MagentoApi\Helper\Product as DeityProductHelper;
@@ -14,6 +15,7 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Cms\Model\Page;
 use Magento\Framework\Api\DataObjectHelper;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\UrlRewrite\Model\UrlFinderInterface;
@@ -39,17 +41,17 @@ class Url implements UrlInterface
     private $urlFinder;
 
     /**
-     * @var \Magento\Catalog\Api\ProductRepositoryInterface
+     * @var ProductRepositoryInterface
      */
     private $productRepository;
 
     /**
-     * @var \Magento\Catalog\Api\CategoryRepositoryInterface
+     * @var CategoryRepositoryInterface
      */
     private $categoryRepository;
 
     /**
-     * @var \Deity\MagentoApi\Model\UrlDataFactory
+     * @var UrlDataFactory
      */
     private $urlDataFactory;
 
@@ -75,7 +77,7 @@ class Url implements UrlInterface
      * @param PageRepositoryInterface $pageRepository
      * @param ProductRepositoryInterface $productRepository
      * @param CategoryRepositoryInterface $categoryRepository
-     * @param \Deity\MagentoApi\Model\UrlDataFactory $urlDataFactory
+     * @param UrlDataFactory $urlDataFactory
      * @param DeityHelper $deityHelper
      * @param DeityProductHelper $deityProductHelper
      * @param StoreManagerInterface $storeManager
@@ -106,9 +108,9 @@ class Url implements UrlInterface
      * @param string $requestPath
      * @param bool $loadEntityData
      * @param bool $secondCheck
-     * @return \Deity\MagentoApi\Api\Data\UrlDataInterface|UrlData
+     * @return UrlDataInterface|UrlData
      * @throws NoSuchEntityException
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function getUrl($requestPath, $loadEntityData = true, $secondCheck = false)
     {
