@@ -3,11 +3,12 @@
 namespace Deity\MagentoApi\Model;
 
 use Deity\MagentoApi\Api\Data\UrlDataInterface;
+use Magento\Framework\DataObject;
 
 /**
  * @package Deity\MagentoApi\Model
  */
-class UrlData extends \Magento\Framework\DataObject implements UrlDataInterface
+class UrlData extends DataObject implements UrlDataInterface
 {
     /**
      * @inheritdoc
@@ -23,6 +24,22 @@ class UrlData extends \Magento\Framework\DataObject implements UrlDataInterface
     public function setEntityType($entityType)
     {
         return $this->setData(self::ENTITY_TYPE, $entityType);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getEntityId()
+    {
+        return $this->getData(self::ENTITY_ID);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setEntityId($id)
+    {
+        return $this->setData(self::ENTITY_ID, $id);
     }
 
     /**
