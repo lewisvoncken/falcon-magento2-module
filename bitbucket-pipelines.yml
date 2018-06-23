@@ -1,15 +1,17 @@
-image: markoshust/magento-php:7.1-fpm
+image: mageinferno/magento2-php:7.1-fpm-0
+
 pipelines:
   default:
     - step:
+        name: Integration Tests
         caches:
           - composer
         script:
-          - apt-get update && apt-get install -y unzip
+          - apt-get update && apt-get install -y git mysql-client zip unzip libcurl4-openssl-dev
+          - docker-php-ext-install curl
           - ./bin/pipelines-test.sh
         services:
           - db
-          - app
 definitions:
   services:
     db:
@@ -17,5 +19,3 @@ definitions:
       environment:
         MYSQL_DATABASE: magento
         MYSQL_ROOT_PASSWORD: magento
-    app:
-      image: markoshust/magento-nginx:1.13
