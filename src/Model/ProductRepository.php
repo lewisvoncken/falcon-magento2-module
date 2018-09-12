@@ -19,6 +19,7 @@ use Magento\Catalog\Model\ResourceModel\Category as ResourceCategory;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory as ProductCollectionFactory;
 use Magento\Catalog\Model\ResourceModel\Product\Collection as ProductCollection;
 use Magento\CatalogInventory\Helper\Stock as StockHelper;
+use Magento\Customer\Api\Data\GroupInterface;
 use Magento\Framework\Api\Data\ImageContentInterfaceFactory;
 use Magento\Framework\Api\ImageContentValidatorInterface;
 use Magento\Framework\Api\ImageProcessorInterface;
@@ -309,7 +310,7 @@ class ProductRepository extends \Magento\Catalog\Model\ProductRepository impleme
         if (!$searchCriteria->getPageSize()) {
             $searchCriteria->setPageSize($this->getDefaultPageSize());
         }
-        $collection->addPriceData();
+        $collection->addPriceData(GroupInterface::NOT_LOGGED_IN_ID);
         $collection->setCurPage($searchCriteria->getCurrentPage());
         $collection->setPageSize($searchCriteria->getPageSize());
     }
