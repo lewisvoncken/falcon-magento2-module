@@ -5,7 +5,6 @@ namespace Deity\MagentoApi\Model;
 use Deity\MagentoApi\Api\Data\UrlDataInterface;
 use Deity\MagentoApi\Api\UrlInterface;
 use Deity\MagentoApi\Helper\Data as DeityHelper;
-use Deity\MagentoApi\Helper\Product as DeityProductHelper;
 use Magento\Catalog\Api\Data\CategoryInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Product;
@@ -61,11 +60,6 @@ class Url implements UrlInterface
     private $deityHelper;
 
     /**
-     * @var DeityProductHelper
-     */
-    private $deityProductHelper;
-
-    /**
      * @var StoreManagerInterface
      */
     private $storeManager;
@@ -79,7 +73,6 @@ class Url implements UrlInterface
      * @param CategoryRepositoryInterface $categoryRepository
      * @param UrlDataFactory $urlDataFactory
      * @param DeityHelper $deityHelper
-     * @param DeityProductHelper $deityProductHelper
      * @param StoreManagerInterface $storeManager
      */
     public function __construct(
@@ -90,7 +83,6 @@ class Url implements UrlInterface
         CategoryRepositoryInterface $categoryRepository,
         UrlDataFactory $urlDataFactory,
         DeityHelper $deityHelper,
-        DeityProductHelper $deityProductHelper,
         StoreManagerInterface $storeManager
     ) {
         $this->dataFactory = $dataFactory;
@@ -100,7 +92,6 @@ class Url implements UrlInterface
         $this->categoryRepository = $categoryRepository;
         $this->urlDataFactory = $urlDataFactory;
         $this->deityHelper = $deityHelper;
-        $this->deityProductHelper = $deityProductHelper;
         $this->storeManager = $storeManager;
     }
 
