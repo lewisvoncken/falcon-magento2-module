@@ -1,9 +1,11 @@
 {
-    "name": "deity-core/deity-magento-api",
-    "description": "Deity Magento Rest API",
+    "name": "deity/falcon-magento",
+    "description": "Deity Magento API",
     "type": "magento2-module",
     "version": "1.0.2",
-    "license": "proprietary",
+    "license": [
+        "OSL-3.0"
+    ],
     "autoload": {
         "files": [
             "src/registration.php"
