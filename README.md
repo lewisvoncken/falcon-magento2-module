@@ -30,11 +30,14 @@ When the module is setup, create one extra magento admin user for Deity Falcon t
 bin/magento  admin:user:create  --admin-user='your-admin-username' --admin-password='your-admin-password' --admin-email='admin@deity.test' --admin-firstname='node' --admin-lastname='Deity'
 ```
 
+## Documentation
 
+Check out integration documentation for the module. 
+[Integration_notes.md](docs/Integration_notes.md)
 
 ## Versioning
 
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags). 
+We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/deity-io/falcon-magento2-module/tags). 
 
 ## License
 
